@@ -1,0 +1,41 @@
+export const common = {
+  brand: {
+    name: 'SAIKI',
+    tagline: 'Beyond Your Needs',
+    description: 'SAIKI Group — Consultancy, Branding, and Technology for the present.',
+  },
+  nav: {
+    home: 'Home',
+    about: 'About',
+    services: 'Services',
+    consultancy: 'Consultancy',
+    imagery: 'Imagery',
+    technology: 'Technology',
+    insights: 'Insights',
+    contact: 'Contact',
+  },
+  cta: {
+    learnMore: 'Learn More',
+    getStarted: 'Get Started',
+    contactUs: 'Contact Us',
+    readMore: 'Read More',
+    viewAll: 'View All',
+    sendInquiry: 'Send Inquiry',
+    explore: 'Explore',
+    discoverMore: 'Discover More',
+  },
+  footer: {
+    tagline: 'Moving in the present. Building what matters.',
+    rights: 'All rights reserved.',
+    privacy: 'Privacy Policy',
+    terms: 'Terms & Conditions',
+    followUs: 'Follow Us',
+    quickLinks: 'Quick Links',
+    contact: 'Contact',
+    businessLines: 'Business Lines',
+  },
+  lang: {
+    switch: 'Switch Language',
+    current: 'English',
+  },
+};

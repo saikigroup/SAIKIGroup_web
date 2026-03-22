@@ -1,0 +1,45 @@
+export const insights = {
+  hero: {
+    eyebrow: 'Insights',
+    headline: 'Perspectives &\nThoughts.',
+    body: 'Articles, analyses, and viewpoints from the SAIKI team on careers, branding, technology, and current business dynamics.',
+  },
+  articles: [
+    {
+      slug: 'why-personal-branding-matters',
+      title: 'Why Personal Branding Matters More Than Your CV in 2025',
+      excerpt: 'In the digital era, first impressions happen before the interview starts. Personal branding is not a trend — it is a strategic necessity.',
+      category: 'Career',
+      categoryKey: 'consultancy',
+      date: 'Mar 15, 2025',
+      readTime: '5 min read',
+      featured: true,
+    },
+    {
+      slug: 'brand-identity-is-not-a-logo',
+      title: 'Brand Identity Is Not Just a Logo: What You Actually Need',
+      excerpt: 'A logo is one element. Brand identity is a complete system. Understand the difference before you start the branding process.',
+      category: 'Branding',
+      categoryKey: 'imagery',
+      date: 'Mar 8, 2025',
+      readTime: '7 min read',
+      featured: true,
+    },
+    {
+      slug: 'custom-vs-off-the-shelf',
+      title: 'Custom Software vs Off-the-Shelf: When to Choose Which',
+      excerpt: 'The right technology decision starts from understanding business needs, not from the latest software features.',
+      category: 'Technology',
+      categoryKey: 'technology',
+      date: 'Mar 1, 2025',
+      readTime: '6 min read',
+      featured: false,
+    },
+  ],
+  categories: {
+    all: 'All',
+    consultancy: 'Career',
+    imagery: 'Branding',
+    technology: 'Technology',
+  },
+};
