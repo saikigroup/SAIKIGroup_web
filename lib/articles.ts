@@ -58,6 +58,7 @@ export async function getArticles(locale: Locale): Promise<ArticleData[]> {
 
     const dbArticles: ArticleData[] = data.map((row) => ({
       slug: row.saikiweb_slug,
+      layout: (row.saikiweb_layout as ArticleLayout) || undefined,
       title: row.saikiweb_title,
       excerpt: row.saikiweb_excerpt,
       body: row.saikiweb_body,
@@ -105,6 +106,7 @@ export async function getArticle(slug: string, locale: Locale): Promise<ArticleD
       if (!error && data) {
         return {
           slug: data.saikiweb_slug,
+          layout: (data.saikiweb_layout as ArticleLayout) || undefined,
           title: data.saikiweb_title,
           excerpt: data.saikiweb_excerpt,
           body: data.saikiweb_body,
