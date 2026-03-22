@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSupabase, TABLES } from '@/lib/supabase';
+import { getSupabaseAdmin, TABLES } from '@/lib/supabase';
 
 export async function GET(request: NextRequest) {
   const password = request.headers.get('x-admin-password');
@@ -12,10 +12,10 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  const supabase = getSupabase();
+  const supabase = getSupabaseAdmin();
   if (!supabase) {
     return NextResponse.json(
-      { success: false, error: 'Supabase not configured' },
+      { success: false, error: 'Supabase not configured. Check SUPABASE_SERVICE_ROLE_KEY.' },
       { status: 500 }
     );
   }
