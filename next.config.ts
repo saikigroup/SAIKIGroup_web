@@ -8,6 +8,16 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
   },
+
+  // Rewrite English routes to Indonesian route directories
+  async rewrites() {
+    return [
+      { source: '/en/about', destination: '/en/tentang' },
+      { source: '/en/services', destination: '/en/layanan' },
+      { source: '/en/services/:path*', destination: '/en/layanan/:path*' },
+      { source: '/en/contact', destination: '/en/kontak' },
+    ];
+  },
 };
 
 export default nextConfig;

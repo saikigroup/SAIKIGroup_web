@@ -7,6 +7,7 @@ import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { SectionHeading, IconConsultancy, IconImagery, IconTechnology } from '@/components/shared';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
+import { TiltCard } from '@/components/interactive/TiltCard';
 import { serviceAccentColors, type ServiceKey } from '@/lib/utils';
 
 interface ServiceData {
@@ -67,10 +68,7 @@ export function ServiceOverviewGrid({
 
             return (
               <StaggerItem key={key}>
-                <motion.div
-                  whileHover={{ y: -8, scale: 1.02 }}
-                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                >
+                <TiltCard tiltAmount={8} className="h-full">
                   <Link
                     href={getLocalizedPath(key, locale)}
                     className={`group block glass-strong rounded-2xl p-8 md:p-10 h-full hover:shadow-xl hover:shadow-brand-teal/5 transition-all duration-300 relative overflow-hidden`}
@@ -112,7 +110,7 @@ export function ServiceOverviewGrid({
                       </span>
                     </div>
                   </Link>
-                </motion.div>
+                </TiltCard>
               </StaggerItem>
             );
           })}

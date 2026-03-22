@@ -10,6 +10,7 @@ import {
   OperatingModel,
   JournalPreview,
   ContactCTA,
+  MarqueeBanner,
 } from '@/components/sections';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -17,9 +18,13 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   return generatePageMetadata('home', locale as Locale);
 }
 
+const marqueeItemsId = ['Konsultansi', 'Branding', 'Teknologi', 'Karier', 'Inovasi', 'Strategi', 'Digital'];
+const marqueeItemsEn = ['Consultancy', 'Branding', 'Technology', 'Career', 'Innovation', 'Strategy', 'Digital'];
+
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   const t = getHome(locale as Locale);
+  const marqueeItems = locale === 'id' ? marqueeItemsId : marqueeItemsEn;
 
   return (
     <>
@@ -31,6 +36,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         ctaSecondary={t.hero.ctaSecondary}
         locale={locale as Locale}
       />
+
+      <MarqueeBanner items={marqueeItems} variant="light" />
 
       <BrandStatement
         eyebrow={t.brand.eyebrow}
@@ -53,6 +60,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         headline={t.why.headline}
         body={t.why.body}
         points={t.why.points}
+      />
+
+      <MarqueeBanner
+        items={locale === 'id'
+          ? ['Bergerak Sekarang', 'Percaya Diri', 'Dampak Nyata', 'Masa Kini']
+          : ['Move Now', 'With Confidence', 'Real Impact', 'For the Present']
+        }
+        variant="gradient"
       />
 
       <CapabilityScenarios

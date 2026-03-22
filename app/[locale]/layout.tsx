@@ -4,6 +4,7 @@ import { isValidLocale, type Locale } from '@/lib/i18n';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
 import { AnalyticsProvider } from '@/components/layout/Analytics';
+import { ScrollProgress } from '@/components/interactive';
 import { organizationSchema, websiteSchema } from '@/lib/metadata';
 
 export function generateStaticParams() {
@@ -41,6 +42,7 @@ export default async function LocaleLayout({
         />
       </head>
       <body className="min-h-full flex flex-col bg-brand-white text-text-primary">
+        <ScrollProgress />
         <AnalyticsProvider locale={locale} />
         <SiteHeader locale={locale as Locale} />
         <main className="flex-grow pt-16 md:pt-20">{children}</main>
