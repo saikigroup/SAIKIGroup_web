@@ -181,6 +181,35 @@ export default function AdminArticlesPage() {
       .trim();
   };
 
+  const formatReadTime = (raw: string, locale: string) => {
+    if (!raw) return '';
+    if (!raw.includes('|')) return raw; // already formatted
+    const [num, unit] = raw.split('|');
+    if (!num) return '';
+    const n = parseInt(num, 10);
+    if (locale === 'id') {
+      return `${n} ${unit}`;
+    }
+    const enUnits: Record<string, string> = { detik: 'sec read', menit: 'min read', jam: 'hour read' };
+    return `${n} ${enUnits[unit] || unit}`;
+  };
+
+  const formatDateForLocale = (dateStr: string, locale: string) => {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return dateStr;
+      if (locale === 'id') {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      }
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    } catch {
+      return dateStr;
+    }
+  };
+
   const saveArticle = async (pw: string, payload: Record<string, unknown>, method: string) => {
     const res = await fetch('/api/admin/articles', {
       method,
@@ -219,9 +248,12 @@ export default function AdminArticlesPage() {
       const catOpt = categoryOptions.find((c) => c.key === form.categoryKey);
 
       // Save ID version
+      const saveLocale = editingId ? form.locale : 'id';
       const idPayload = {
         ...form,
-        locale: 'id',
+        locale: saveLocale,
+        date: formatDateForLocale(form.date, saveLocale),
+        readTime: formatReadTime(form.readTime, saveLocale),
         category: catOpt?.labelId || form.category,
         keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
         ...(editingId ? { id: editingId } : {}),
@@ -245,8 +277,8 @@ export default function AdminArticlesPage() {
           body: enFields.body,
           category: catOpt?.labelEn || form.category,
           categoryKey: form.categoryKey,
-          date: form.date,
-          readTime: enFields.readTime || form.readTime,
+          date: formatDateForLocale(form.date, 'en'),
+          readTime: formatReadTime(form.readTime, 'en'),
           featured: form.featured,
           published: form.published,
           metaTitle: enFields.metaTitle || null,
@@ -278,6 +310,30 @@ export default function AdminArticlesPage() {
     setSaving(false);
   };
 
+  const parseReadTimeToInput = (readTime: string) => {
+    if (!readTime) return '';
+    if (readTime.includes('|')) return readTime;
+    const num = readTime.replace(/\D/g, '');
+    if (!num) return readTime;
+    if (readTime.includes('jam') || readTime.includes('hour')) return `${num}|jam`;
+    if (readTime.includes('detik') || readTime.includes('sec')) return `${num}|detik`;
+    return `${num}|menit`;
+  };
+
+  const parseDateToInput = (dateStr: string) => {
+    if (!dateStr) return '';
+    // Already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    // Try parsing display format
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+    } catch { /* fall through */ }
+    return '';
+  };
+
   const handleEdit = (article: Article) => {
     setForm({
       slug: article.saikiweb_slug,
@@ -287,8 +343,8 @@ export default function AdminArticlesPage() {
       body: article.saikiweb_body,
       category: article.saikiweb_category,
       categoryKey: article.saikiweb_category_key,
-      date: article.saikiweb_date,
-      readTime: article.saikiweb_read_time,
+      date: parseDateToInput(article.saikiweb_date),
+      readTime: parseReadTimeToInput(article.saikiweb_read_time),
       featured: article.saikiweb_featured,
       published: article.saikiweb_published,
       metaTitle: article.saikiweb_meta_title || '',
@@ -637,27 +693,49 @@ export default function AdminArticlesPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div title="Tanggal publikasi yang ditampilkan di artikel. Format bebas, akan ditampilkan apa adanya. Contoh ID: '15 Mar 2025'. Contoh EN: 'Mar 15, 2025'.">
+                  <div title="Tanggal publikasi artikel. Otomatis diformat sesuai locale: ID = '15 Mar 2025', EN = 'Mar 15, 2025'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date</label>
                     <input
-                      type="text"
+                      type="date"
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      placeholder="Mar 15, 2025"
-                      title="Tanggal publikasi. Contoh: '15 Mar 2025' atau 'Mar 15, 2025'"
+                      title="Pilih tanggal publikasi"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
-                  <div title="Estimasi waktu baca artikel. Tampil di card dan halaman artikel. Contoh ID: '5 menit'. Contoh EN: '5 min read'.">
+                  <div title="Estimasi waktu baca artikel. Pilih angka dan satuan. Otomatis diformat sesuai locale: ID = '5 menit', EN = '5 min read'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Read Time</label>
-                    <input
-                      type="text"
-                      value={form.readTime}
-                      onChange={(e) => setForm({ ...form, readTime: e.target.value })}
-                      placeholder="5 min read"
-                      title="Estimasi waktu baca. Contoh: '5 menit' atau '5 min read'"
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        max="120"
+                        value={form.readTime.replace(/\D/g, '') || ''}
+                        onChange={(e) => {
+                          const num = e.target.value;
+                          const unit = form.readTime.includes('jam') || form.readTime.includes('hour') ? 'jam'
+                            : form.readTime.includes('detik') || form.readTime.includes('sec') ? 'detik'
+                            : 'menit';
+                          setForm({ ...form, readTime: num ? `${num}|${unit}` : '' });
+                        }}
+                        placeholder="5"
+                        title="Angka waktu baca"
+                        className="w-16 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition text-center"
+                      />
+                      <select
+                        value={form.readTime.includes('|') ? form.readTime.split('|')[1] : 'menit'}
+                        onChange={(e) => {
+                          const num = form.readTime.replace(/\D/g, '') || form.readTime.split('|')[0] || '';
+                          setForm({ ...form, readTime: num ? `${num}|${e.target.value}` : '' });
+                        }}
+                        title="Satuan waktu"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
+                      >
+                        <option value="detik">Detik</option>
+                        <option value="menit">Menit</option>
+                        <option value="jam">Jam</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
