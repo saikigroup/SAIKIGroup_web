@@ -22,12 +22,15 @@ export async function generateMetadata({
 
   if (!article) return {};
 
+  const seoTitle = article.seo?.metaTitle || `${article.title} | SAIKI Insights`;
+  const seoDescription = article.seo?.metaDescription || article.excerpt;
+
   return {
-    title: `${article.title} | SAIKI Insights`,
-    description: article.excerpt,
+    title: seoTitle,
+    description: seoDescription,
     openGraph: {
-      title: article.title,
-      description: article.excerpt,
+      title: seoTitle,
+      description: seoDescription,
       url: `${BASE_URL}/${locale}/insights/${slug}`,
       siteName: 'SAIKI Group',
       locale: locale === 'id' ? 'id_ID' : 'en_US',
@@ -35,12 +38,21 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
+      title: seoTitle,
+      description: seoDescription,
     },
     alternates: {
       canonical: `${BASE_URL}/${locale}/insights/${slug}`,
+      languages: {
+        'id': `${BASE_URL}/id/insights/${slug}`,
+        'en': `${BASE_URL}/en/insights/${slug}`,
+      },
     },
+    robots: {
+      index: true,
+      follow: true,
+    },
+    keywords: article.seo?.keywords,
   };
 }
 
