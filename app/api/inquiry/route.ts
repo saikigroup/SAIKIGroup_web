@@ -34,10 +34,9 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true, data: null });
     }
 
-    const { data, error } = await supabase
+    const { error } = await supabase
       .from(TABLES.INQUIRIES)
-      .insert([inquiry])
-      .select();
+      .insert([inquiry]);
 
     if (error) {
       console.error('Supabase insert error:', error);
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
       });
     });
 
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true });
   } catch (err) {
     console.error('API error:', err);
     return NextResponse.json(
