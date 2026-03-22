@@ -449,7 +449,7 @@ export default function AdminArticlesPage() {
             {/* Main editor */}
             <div className="lg:col-span-2 space-y-6">
               {/* Title */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Judul utama artikel yang tampil di halaman detail dan card. Buat menarik dan mengandung keyword utama. Contoh: '5 Kesalahan Fatal Saat Bikin Brand Identity'">
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                   Title {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
                 </label>
@@ -464,6 +464,7 @@ export default function AdminArticlesPage() {
                       }
                     }}
                     placeholder="Judul artikel..."
+                    title="Judul artikel dalam Bahasa Indonesia. Contoh: 'Mengapa Personal Branding Lebih Penting dari CV di 2025'"
                     className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
                   />
                 ) : (
@@ -475,13 +476,14 @@ export default function AdminArticlesPage() {
                       if (!enSlug) setEnSlug(generateSlug(e.target.value));
                     }}
                     placeholder="Article title (English)..."
+                    title="Article title in English. Example: 'Why Personal Branding Matters More Than Your CV in 2025'"
                     className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
                   />
                 )}
               </div>
 
               {/* Excerpt */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Ringkasan singkat 1-2 kalimat yang muncul di card insight dan di bawah judul halaman artikel. Harus bikin orang penasaran untuk klik dan baca. Contoh: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal.'">
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                   Excerpt {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
                 </label>
@@ -490,6 +492,7 @@ export default function AdminArticlesPage() {
                     value={form.excerpt}
                     onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
                     placeholder="Ringkasan singkat untuk card..."
+                    title="Ringkasan artikel dalam Bahasa Indonesia. Tampil di card dan hero artikel."
                     rows={2}
                     className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
                   />
@@ -498,6 +501,7 @@ export default function AdminArticlesPage() {
                     value={enFields.excerpt}
                     onChange={(e) => setEnFields({ ...enFields, excerpt: e.target.value })}
                     placeholder="Brief summary for cards (English)..."
+                    title="Article excerpt in English. Shown on cards and article hero."
                     rows={2}
                     className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
                   />
@@ -505,7 +509,7 @@ export default function AdminArticlesPage() {
               </div>
 
               {/* Body editor */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" title="Isi lengkap artikel. Tulis langsung atau paste HTML dari editor lain. Tag yang didukung: <p> untuk paragraf, <h2> untuk heading section, <h3> untuk sub-heading, <blockquote> untuk kutipan yang di-highlight, <ul>/<ol> untuk list, <strong> untuk bold, <em> untuk italic, <a> untuk link, <hr> untuk garis pemisah.">
                 <div className="flex items-center gap-0 border-b border-gray-200">
                   <button
                     onClick={() => setEditorTab('write')}
@@ -564,7 +568,7 @@ export default function AdminArticlesPage() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
                 <h3 className="text-sm font-bold text-gray-900">Publish Settings</h3>
 
-                <div>
+                <div title="Bagian URL artikel setelah /insights/. Otomatis dibuat dari judul. Gunakan huruf kecil, tanpa spasi (pakai strip). Contoh: 'kesalahan-fatal-brand-identity'">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
                     Slug (ID)
                   </label>
@@ -573,12 +577,13 @@ export default function AdminArticlesPage() {
                     value={form.slug}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
                     placeholder="slug-artikel-indonesia"
+                    title="URL slug Bahasa Indonesia. Contoh: 'mengapa-personal-branding-penting'"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                 </div>
 
                 {dualLocale && !editingId && (
-                  <div>
+                  <div title="URL slug untuk versi Bahasa Inggris. Harus berbeda dari slug ID. Contoh: 'why-personal-branding-matters'">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
                       Slug (EN)
                     </label>
@@ -587,17 +592,19 @@ export default function AdminArticlesPage() {
                       value={enSlug}
                       onChange={(e) => setEnSlug(e.target.value)}
                       placeholder="english-article-slug"
+                      title="English URL slug. Example: 'why-personal-branding-matters'"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 )}
 
                 {!dualLocale && (
-                  <div>
+                  <div title="Bahasa artikel. ID = Bahasa Indonesia, EN = English. Artikel yang sama perlu dibuat terpisah untuk tiap bahasa, atau gunakan mode dual-locale.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
                     <select
                       value={form.locale}
                       onChange={(e) => setForm({ ...form, locale: e.target.value })}
+                      title="Pilih bahasa artikel"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                     >
                       <option value="id">Indonesian (ID)</option>
@@ -606,7 +613,7 @@ export default function AdminArticlesPage() {
                   </div>
                 )}
 
-                <div>
+                <div title="Kategori layanan SAIKI yang relevan dengan artikel. Menentukan warna tag dan pengelompokan. Karier = SAIKI Consultancy, Branding = SAIKI Imagery, Teknologi = SAIKI Technology.">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
                   <select
                     value={form.categoryKey}
@@ -618,6 +625,7 @@ export default function AdminArticlesPage() {
                         category: form.locale === 'id' ? (opt?.labelId || '') : (opt?.labelEn || ''),
                       });
                     }}
+                    title="Pilih kategori yang paling relevan"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                   >
                     {categoryOptions.map((c) => (
@@ -629,30 +637,32 @@ export default function AdminArticlesPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div>
+                  <div title="Tanggal publikasi yang ditampilkan di artikel. Format bebas, akan ditampilkan apa adanya. Contoh ID: '15 Mar 2025'. Contoh EN: 'Mar 15, 2025'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date</label>
                     <input
                       type="text"
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
                       placeholder="Mar 15, 2025"
+                      title="Tanggal publikasi. Contoh: '15 Mar 2025' atau 'Mar 15, 2025'"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
-                  <div>
+                  <div title="Estimasi waktu baca artikel. Tampil di card dan halaman artikel. Contoh ID: '5 menit'. Contoh EN: '5 min read'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Read Time</label>
                     <input
                       type="text"
                       value={form.readTime}
                       onChange={(e) => setForm({ ...form, readTime: e.target.value })}
                       placeholder="5 min read"
+                      title="Estimasi waktu baca. Contoh: '5 menit' atau '5 min read'"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 </div>
 
                 <div className="flex items-center gap-6 pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel featured ditampilkan lebih besar (2 kolom) di halaman Insights. Gunakan untuk artikel unggulan yang mau ditonjolkan. Biasanya cukup 1-2 artikel yang di-featured.">
                     <input
                       type="checkbox"
                       checked={form.featured}
@@ -661,7 +671,7 @@ export default function AdminArticlesPage() {
                     />
                     <span className="text-sm text-gray-700">Featured</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel yang di-publish akan tampil di website publik. Jika tidak dicentang, artikel tersimpan sebagai draft dan hanya bisa dilihat di admin.">
                     <input
                       type="checkbox"
                       checked={form.published}
@@ -675,11 +685,11 @@ export default function AdminArticlesPage() {
 
               {/* SEO */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-gray-900">
+                <h3 className="text-sm font-bold text-gray-900" title="Pengaturan SEO menentukan bagaimana artikel muncul di hasil pencarian Google. Isi semua field untuk hasil terbaik.">
                   SEO Settings {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
                 </h3>
 
-                <div>
+                <div title="Judul yang muncul di tab browser dan hasil pencarian Google. Idealnya 50-60 karakter. Harus mengandung keyword utama dan nama brand. Contoh: 'Personal Branding vs CV: Mana Lebih Penting di 2025? | SAIKI'">
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Title</label>
                     <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
@@ -701,7 +711,7 @@ export default function AdminArticlesPage() {
                   />
                 </div>
 
-                <div>
+                <div title="Deskripsi yang muncul di bawah judul di hasil pencarian Google. Idealnya 150-160 karakter. Harus mengandung keyword dan call-to-action. Contoh: '70% recruiter cek media sosial sebelum wawancara. Pelajari 5 langkah membangun personal branding yang kuat.'">
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Description</label>
                     <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
@@ -718,12 +728,13 @@ export default function AdminArticlesPage() {
                       }
                     }}
                     placeholder="Compelling description with keywords..."
+                    title="Deskripsi untuk hasil pencarian Google. Max 160 karakter."
                     rows={3}
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition resize-none"
                   />
                 </div>
 
-                <div>
+                <div title="Kata kunci yang relevan dengan artikel, dipisah koma. Membantu mesin pencari memahami topik artikel. Contoh: 'personal branding, tips karier, LinkedIn, SAIKI Consultancy'">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Keywords</label>
                   <input
                     type="text"
