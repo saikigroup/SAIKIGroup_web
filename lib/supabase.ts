@@ -42,6 +42,7 @@ export interface SaikiwebArticle {
   saikiweb_category_key: string;
   saikiweb_date: string;
   saikiweb_read_time: string;
+  saikiweb_layout?: string;
   saikiweb_featured: boolean;
   saikiweb_published: boolean;
   saikiweb_meta_title?: string;

@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS saikiweb_articles (
   saikiweb_category_key TEXT NOT NULL,
   saikiweb_date TEXT NOT NULL,
   saikiweb_read_time TEXT NOT NULL,
+  saikiweb_layout TEXT DEFAULT 'editorial',
   saikiweb_featured BOOLEAN DEFAULT false,
   saikiweb_published BOOLEAN DEFAULT false,
   saikiweb_meta_title TEXT,

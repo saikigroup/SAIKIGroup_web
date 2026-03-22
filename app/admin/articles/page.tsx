@@ -1,6 +1,18 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, type ReactNode } from 'react';
+
+function Tip({ children }: { children: ReactNode }) {
+  return (
+    <span className="group/tip relative inline-flex ml-1 cursor-help">
+      <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gray-200 text-gray-500 text-[10px] font-bold leading-none hover:bg-teal-100 hover:text-teal-600 transition">?</span>
+      <span className="invisible group-hover/tip:visible opacity-0 group-hover/tip:opacity-100 transition-all duration-200 absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 text-xs text-white bg-gray-800 rounded-lg shadow-lg w-56 text-left font-normal normal-case tracking-normal leading-relaxed pointer-events-none">
+        {children}
+        <span className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-800" />
+      </span>
+    </span>
+  );
+}
 
 interface Article {
   saikiweb_article_id: number;
@@ -13,6 +25,7 @@ interface Article {
   saikiweb_category_key: string;
   saikiweb_date: string;
   saikiweb_read_time: string;
+  saikiweb_layout: string | null;
   saikiweb_featured: boolean;
   saikiweb_published: boolean;
   saikiweb_meta_title: string | null;
@@ -36,6 +49,7 @@ interface LocaleFields {
 interface ArticleForm {
   slug: string;
   locale: string;
+  layout: string;
   title: string;
   excerpt: string;
   body: string;
@@ -61,9 +75,16 @@ const emptyLocaleFields: LocaleFields = {
   category: '',
 };
 
+const layoutOptions = [
+  { value: 'editorial', label: 'Editorial', desc: 'Klasik, teks kiri, gradient mesh hero' },
+  { value: 'magazine', label: 'Magazine', desc: 'Hero centered, excerpt card melayang' },
+  { value: 'bold', label: 'Bold', desc: 'Hero gelap, gradient accent bar' },
+];
+
 const emptyForm: ArticleForm = {
   slug: '',
   locale: 'id',
+  layout: 'editorial',
   title: '',
   excerpt: '',
   body: '',
@@ -105,7 +126,7 @@ export default function AdminArticlesPage() {
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
 
   // Tab state for editor
-  const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
+  const [editorTab, setEditorTab] = useState<'write' | 'visual' | 'preview'>('visual');
 
   // Dual locale mode
   const [dualLocale, setDualLocale] = useState(false);
@@ -251,6 +272,7 @@ export default function AdminArticlesPage() {
       const saveLocale = editingId ? form.locale : 'id';
       const idPayload = {
         ...form,
+        layout: form.layout,
         locale: saveLocale,
         date: formatDateForLocale(form.date, saveLocale),
         readTime: formatReadTime(form.readTime, saveLocale),
@@ -272,6 +294,7 @@ export default function AdminArticlesPage() {
         const enPayload = {
           slug: enSlug,
           locale: 'en',
+          layout: form.layout,
           title: enFields.title,
           excerpt: enFields.excerpt,
           body: enFields.body,
@@ -338,6 +361,7 @@ export default function AdminArticlesPage() {
     setForm({
       slug: article.saikiweb_slug,
       locale: article.saikiweb_locale,
+      layout: article.saikiweb_layout || 'editorial',
       title: article.saikiweb_title,
       excerpt: article.saikiweb_excerpt,
       body: article.saikiweb_body,
@@ -505,9 +529,10 @@ export default function AdminArticlesPage() {
             {/* Main editor */}
             <div className="lg:col-span-2 space-y-6">
               {/* Title */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Judul utama artikel yang tampil di halaman detail dan card. Buat menarik dan mengandung keyword utama. Contoh: '5 Kesalahan Fatal Saat Bikin Brand Identity'">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                   Title {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                  <Tip>Judul utama yang tampil di halaman dan card. Buat menarik dan mengandung keyword. Contoh: &quot;5 Kesalahan Fatal Saat Bikin Brand Identity&quot;</Tip>
                 </label>
                 {(!dualLocale || activeLocaleTab === 'id') ? (
                   <input
@@ -520,7 +545,7 @@ export default function AdminArticlesPage() {
                       }
                     }}
                     placeholder="Judul artikel..."
-                    title="Judul artikel dalam Bahasa Indonesia. Contoh: 'Mengapa Personal Branding Lebih Penting dari CV di 2025'"
+                   
                     className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
                   />
                 ) : (
@@ -532,23 +557,24 @@ export default function AdminArticlesPage() {
                       if (!enSlug) setEnSlug(generateSlug(e.target.value));
                     }}
                     placeholder="Article title (English)..."
-                    title="Article title in English. Example: 'Why Personal Branding Matters More Than Your CV in 2025'"
+                   
                     className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
                   />
                 )}
               </div>
 
               {/* Excerpt */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Ringkasan singkat 1-2 kalimat yang muncul di card insight dan di bawah judul halaman artikel. Harus bikin orang penasaran untuk klik dan baca. Contoh: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal.'">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
                 <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                   Excerpt {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                  <Tip>Ringkasan 1-2 kalimat yang muncul di card dan hero. Harus bikin penasaran. Contoh: &quot;Banyak bisnis habis jutaan untuk logo tapi tetap nggak dikenal.&quot;</Tip>
                 </label>
                 {(!dualLocale || activeLocaleTab === 'id') ? (
                   <textarea
                     value={form.excerpt}
                     onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
                     placeholder="Ringkasan singkat untuk card..."
-                    title="Ringkasan artikel dalam Bahasa Indonesia. Tampil di card dan hero artikel."
+                   
                     rows={2}
                     className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
                   />
@@ -557,7 +583,7 @@ export default function AdminArticlesPage() {
                     value={enFields.excerpt}
                     onChange={(e) => setEnFields({ ...enFields, excerpt: e.target.value })}
                     placeholder="Brief summary for cards (English)..."
-                    title="Article excerpt in English. Shown on cards and article hero."
+                   
                     rows={2}
                     className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
                   />
@@ -565,27 +591,120 @@ export default function AdminArticlesPage() {
               </div>
 
               {/* Body editor */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" title="Isi lengkap artikel. Tulis langsung atau paste HTML dari editor lain. Tag yang didukung: <p> untuk paragraf, <h2> untuk heading section, <h3> untuk sub-heading, <blockquote> untuk kutipan yang di-highlight, <ul>/<ol> untuk list, <strong> untuk bold, <em> untuk italic, <a> untuk link, <hr> untuk garis pemisah.">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                {/* Tabs */}
                 <div className="flex items-center gap-0 border-b border-gray-200">
-                  <button
-                    onClick={() => setEditorTab('write')}
-                    className={`px-5 py-3 text-sm font-medium transition ${editorTab === 'write' ? 'text-teal-700 border-b-2 border-teal-600 bg-teal-50/50' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    Write HTML
-                  </button>
-                  <button
-                    onClick={() => setEditorTab('preview')}
-                    className={`px-5 py-3 text-sm font-medium transition ${editorTab === 'preview' ? 'text-teal-700 border-b-2 border-teal-600 bg-teal-50/50' : 'text-gray-500 hover:text-gray-700'}`}
-                  >
-                    Preview
-                  </button>
-                  <div className="flex-1" />
-                  <div className="px-4 text-xs text-gray-400">
-                    HTML supported. Use &lt;h2&gt;, &lt;p&gt;, &lt;blockquote&gt;, &lt;ul&gt;, &lt;ol&gt;, &lt;strong&gt;, &lt;em&gt;
-                  </div>
+                  {(['visual', 'write', 'preview'] as const).map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setEditorTab(tab)}
+                      className={`px-5 py-3 text-sm font-medium transition ${editorTab === tab ? 'text-teal-700 border-b-2 border-teal-600 bg-teal-50/50' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                      {tab === 'visual' ? 'Visual Editor' : tab === 'write' ? 'HTML Code' : 'Preview'}
+                    </button>
+                  ))}
                 </div>
 
-                {editorTab === 'write' ? (
+                {/* Visual editor toolbar */}
+                {editorTab === 'visual' && (
+                  <div className="flex items-center gap-1 px-4 py-2 border-b border-gray-100 bg-gray-50/50 flex-wrap">
+                    {[
+                      { cmd: 'formatBlock', val: 'p', label: 'P', tip: 'Paragraf' },
+                      { cmd: 'formatBlock', val: 'h2', label: 'H2', tip: 'Heading' },
+                      { cmd: 'formatBlock', val: 'h3', label: 'H3', tip: 'Sub-heading' },
+                      { cmd: 'formatBlock', val: 'blockquote', label: '\u201C', tip: 'Kutipan / Pull Quote' },
+                    ].map((btn) => (
+                      <button
+                        key={btn.label}
+                        title={btn.tip}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          document.execCommand(btn.cmd, false, btn.val);
+                        }}
+                        className="px-2.5 py-1.5 text-xs font-bold text-gray-600 hover:bg-teal-100 hover:text-teal-700 rounded transition"
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                    <span className="w-px h-5 bg-gray-200 mx-1" />
+                    {[
+                      { cmd: 'bold', label: 'B', tip: 'Bold', cls: 'font-black' },
+                      { cmd: 'italic', label: 'I', tip: 'Italic', cls: 'italic' },
+                      { cmd: 'underline', label: 'U', tip: 'Underline', cls: 'underline' },
+                    ].map((btn) => (
+                      <button
+                        key={btn.cmd}
+                        title={btn.tip}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          document.execCommand(btn.cmd);
+                        }}
+                        className={`px-2.5 py-1.5 text-xs text-gray-600 hover:bg-teal-100 hover:text-teal-700 rounded transition ${btn.cls}`}
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                    <span className="w-px h-5 bg-gray-200 mx-1" />
+                    {[
+                      { cmd: 'insertUnorderedList', label: '\u2022 List', tip: 'Bullet list' },
+                      { cmd: 'insertOrderedList', label: '1. List', tip: 'Numbered list' },
+                    ].map((btn) => (
+                      <button
+                        key={btn.cmd}
+                        title={btn.tip}
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          document.execCommand(btn.cmd);
+                        }}
+                        className="px-2.5 py-1.5 text-xs text-gray-600 hover:bg-teal-100 hover:text-teal-700 rounded transition"
+                      >
+                        {btn.label}
+                      </button>
+                    ))}
+                    <span className="w-px h-5 bg-gray-200 mx-1" />
+                    <button
+                      title="Sisipkan garis pemisah"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        document.execCommand('insertHorizontalRule');
+                      }}
+                      className="px-2.5 py-1.5 text-xs text-gray-600 hover:bg-teal-100 hover:text-teal-700 rounded transition"
+                    >
+                      HR
+                    </button>
+                    <button
+                      title="Hapus formatting"
+                      onMouseDown={(e) => {
+                        e.preventDefault();
+                        document.execCommand('removeFormat');
+                      }}
+                      className="px-2.5 py-1.5 text-xs text-gray-600 hover:bg-red-100 hover:text-red-600 rounded transition"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                )}
+
+                {/* Visual editor (contentEditable) */}
+                {editorTab === 'visual' && (
+                  <div
+                    contentEditable
+                    suppressContentEditableWarning
+                    className="p-6 min-h-[500px] text-sm text-gray-800 outline-none article-preview prose max-w-none leading-relaxed focus:ring-0"
+                    dangerouslySetInnerHTML={{ __html: (!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body }}
+                    onBlur={(e) => {
+                      const html = e.currentTarget.innerHTML;
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm((f) => ({ ...f, body: html }));
+                      } else {
+                        setEnFields((f) => ({ ...f, body: html }));
+                      }
+                    }}
+                  />
+                )}
+
+                {/* HTML code editor */}
+                {editorTab === 'write' && (
                   <textarea
                     value={(!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body}
                     onChange={(e) => {
@@ -595,15 +714,15 @@ export default function AdminArticlesPage() {
                         setEnFields({ ...enFields, body: e.target.value });
                       }
                     }}
-                    placeholder={(!dualLocale || activeLocaleTab === 'id')
-                      ? `Tulis isi artikel di sini. Bisa paste HTML langsung.\n\nContoh:\n<p>Paragraf pembuka...</p>\n\n<h2>Heading Section</h2>\n<p>Isi section...</p>\n\n<blockquote>Quote yang di-highlight.</blockquote>`
-                      : `Write your article body here (English). Paste HTML directly.\n\nExample:\n<p>Opening paragraph...</p>\n\n<h2>Section Heading</h2>\n<p>Section content...</p>\n\n<blockquote>A highlighted quote.</blockquote>`
-                    }
+                    placeholder={`<p>Paragraf pembuka...</p>\n\n<h2>Heading Section</h2>\n<p>Isi section...</p>\n\n<blockquote>Kutipan yang di-highlight.</blockquote>\n\n<ul>\n  <li>Point satu</li>\n  <li>Point dua</li>\n</ul>`}
                     rows={24}
                     className="w-full p-6 text-sm text-gray-800 font-mono border-none outline-none resize-y placeholder:text-gray-300 leading-relaxed"
                     spellCheck={false}
                   />
-                ) : (
+                )}
+
+                {/* Read-only preview */}
+                {editorTab === 'preview' && (
                   <div className="p-6 min-h-[400px]">
                     {((!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body) ? (
                       <div
@@ -611,7 +730,7 @@ export default function AdminArticlesPage() {
                         dangerouslySetInnerHTML={{ __html: (!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body }}
                       />
                     ) : (
-                      <p className="text-gray-400 italic">Nothing to preview yet...</p>
+                      <p className="text-gray-400 italic">Belum ada konten...</p>
                     )}
                   </div>
                 )}
@@ -624,43 +743,43 @@ export default function AdminArticlesPage() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
                 <h3 className="text-sm font-bold text-gray-900">Publish Settings</h3>
 
-                <div title="Bagian URL artikel setelah /insights/. Otomatis dibuat dari judul. Gunakan huruf kecil, tanpa spasi (pakai strip). Contoh: 'kesalahan-fatal-brand-identity'">
+                <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
                     Slug (ID)
+                    <Tip>Bagian URL setelah /insights/. Otomatis dari judul. Huruf kecil, pakai strip. Contoh: kesalahan-fatal-brand-identity</Tip>
                   </label>
                   <input
                     type="text"
                     value={form.slug}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
                     placeholder="slug-artikel-indonesia"
-                    title="URL slug Bahasa Indonesia. Contoh: 'mengapa-personal-branding-penting'"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                 </div>
 
                 {dualLocale && !editingId && (
-                  <div title="URL slug untuk versi Bahasa Inggris. Harus berbeda dari slug ID. Contoh: 'why-personal-branding-matters'">
+                  <div>
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-                      Slug (EN)
+                      Slug (EN) <Tip>URL slug versi English. Contoh: why-personal-branding-matters</Tip>
                     </label>
                     <input
                       type="text"
                       value={enSlug}
                       onChange={(e) => setEnSlug(e.target.value)}
                       placeholder="english-article-slug"
-                      title="English URL slug. Example: 'why-personal-branding-matters'"
+                     
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
                 )}
 
                 {!dualLocale && (
-                  <div title="Bahasa artikel. ID = Bahasa Indonesia, EN = English. Artikel yang sama perlu dibuat terpisah untuk tiap bahasa, atau gunakan mode dual-locale.">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale <Tip>Bahasa artikel. Gunakan mode dual-locale untuk buat ID dan EN sekaligus.</Tip></label>
                     <select
                       value={form.locale}
                       onChange={(e) => setForm({ ...form, locale: e.target.value })}
-                      title="Pilih bahasa artikel"
+                     
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                     >
                       <option value="id">Indonesian (ID)</option>
@@ -669,8 +788,24 @@ export default function AdminArticlesPage() {
                   </div>
                 )}
 
-                <div title="Kategori layanan SAIKI yang relevan dengan artikel. Menentukan warna tag dan pengelompokan. Karier = SAIKI Consultancy, Branding = SAIKI Imagery, Teknologi = SAIKI Technology.">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Layout <Tip>Gaya visual halaman artikel. Tiap layout punya hero dan nuansa yang berbeda supaya tidak monoton.</Tip></label>
+                  <select
+                    value={form.layout}
+                    onChange={(e) => setForm({ ...form, layout: e.target.value })}
+                   
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
+                  >
+                    {layoutOptions.map((l) => (
+                      <option key={l.value} value={l.value}>
+                        {l.label} — {l.desc}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Category <Tip>Menentukan warna tag. Karier = Consultancy, Branding = Imagery, Teknologi = Technology.</Tip></label>
                   <select
                     value={form.categoryKey}
                     onChange={(e) => {
@@ -681,7 +816,7 @@ export default function AdminArticlesPage() {
                         category: form.locale === 'id' ? (opt?.labelId || '') : (opt?.labelEn || ''),
                       });
                     }}
-                    title="Pilih kategori yang paling relevan"
+                   
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                   >
                     {categoryOptions.map((c) => (
@@ -693,18 +828,18 @@ export default function AdminArticlesPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div title="Tanggal publikasi artikel. Otomatis diformat sesuai locale: ID = '15 Mar 2025', EN = 'Mar 15, 2025'.">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date</label>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date <Tip>Otomatis diformat: ID = &quot;15 Mar 2025&quot;, EN = &quot;Mar 15, 2025&quot;</Tip></label>
                     <input
                       type="date"
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      title="Pilih tanggal publikasi"
+                     
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
-                  <div title="Estimasi waktu baca artikel. Pilih angka dan satuan. Otomatis diformat sesuai locale: ID = '5 menit', EN = '5 min read'.">
-                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Read Time</label>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Read Time <Tip>Estimasi waktu baca. Otomatis diformat: ID = &quot;5 menit&quot;, EN = &quot;5 min read&quot;</Tip></label>
                     <div className="flex gap-2">
                       <input
                         type="number"
@@ -719,7 +854,7 @@ export default function AdminArticlesPage() {
                           setForm({ ...form, readTime: num ? `${num}|${unit}` : '' });
                         }}
                         placeholder="5"
-                        title="Angka waktu baca"
+                       
                         className="w-16 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition text-center"
                       />
                       <select
@@ -728,7 +863,7 @@ export default function AdminArticlesPage() {
                           const num = form.readTime.replace(/\D/g, '') || form.readTime.split('|')[0] || '';
                           setForm({ ...form, readTime: num ? `${num}|${e.target.value}` : '' });
                         }}
-                        title="Satuan waktu"
+                       
                         className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                       >
                         <option value="detik">Detik</option>
@@ -740,36 +875,37 @@ export default function AdminArticlesPage() {
                 </div>
 
                 <div className="flex items-center gap-6 pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel featured ditampilkan lebih besar (2 kolom) di halaman Insights. Gunakan untuk artikel unggulan yang mau ditonjolkan. Biasanya cukup 1-2 artikel yang di-featured.">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={form.featured}
                       onChange={(e) => setForm({ ...form, featured: e.target.checked })}
                       className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
                     />
-                    <span className="text-sm text-gray-700">Featured</span>
+                    <span className="text-sm text-gray-700">Featured <Tip>Tampil lebih besar (2 kolom) di halaman Insights. Untuk 1-2 artikel unggulan.</Tip></span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel yang di-publish akan tampil di website publik. Jika tidak dicentang, artikel tersimpan sebagai draft dan hanya bisa dilihat di admin.">
+                  <label className="flex items-center gap-2 cursor-pointer">
                     <input
                       type="checkbox"
                       checked={form.published}
                       onChange={(e) => setForm({ ...form, published: e.target.checked })}
                       className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
                     />
-                    <span className="text-sm text-gray-700">Published</span>
+                    <span className="text-sm text-gray-700">Published <Tip>Centang = tampil di website publik. Tidak centang = draft, hanya di admin.</Tip></span>
                   </label>
                 </div>
               </div>
 
               {/* SEO */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-gray-900" title="Pengaturan SEO menentukan bagaimana artikel muncul di hasil pencarian Google. Isi semua field untuk hasil terbaik.">
+                <h3 className="text-sm font-bold text-gray-900">
                   SEO Settings {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                  <Tip>Menentukan tampilan artikel di hasil pencarian Google. Isi semua field untuk SEO terbaik.</Tip>
                 </h3>
 
-                <div title="Judul yang muncul di tab browser dan hasil pencarian Google. Idealnya 50-60 karakter. Harus mengandung keyword utama dan nama brand. Contoh: 'Personal Branding vs CV: Mana Lebih Penting di 2025? | SAIKI'">
+                <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Title</label>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Title <Tip>Judul di Google. Idealnya 50-60 karakter, ada keyword + brand. Contoh: &quot;Personal Branding vs CV | SAIKI&quot;</Tip></label>
                     <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
                       {((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0}/60
                     </span>
@@ -789,9 +925,9 @@ export default function AdminArticlesPage() {
                   />
                 </div>
 
-                <div title="Deskripsi yang muncul di bawah judul di hasil pencarian Google. Idealnya 150-160 karakter. Harus mengandung keyword dan call-to-action. Contoh: '70% recruiter cek media sosial sebelum wawancara. Pelajari 5 langkah membangun personal branding yang kuat.'">
+                <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Description</label>
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Description <Tip>Deskripsi di bawah judul Google. 150-160 karakter, ada keyword + CTA.</Tip></label>
                     <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
                       {((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0}/160
                     </span>
@@ -806,14 +942,14 @@ export default function AdminArticlesPage() {
                       }
                     }}
                     placeholder="Compelling description with keywords..."
-                    title="Deskripsi untuk hasil pencarian Google. Max 160 karakter."
+                   
                     rows={3}
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition resize-none"
                   />
                 </div>
 
-                <div title="Kata kunci yang relevan dengan artikel, dipisah koma. Membantu mesin pencari memahami topik artikel. Contoh: 'personal branding, tips karier, LinkedIn, SAIKI Consultancy'">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Keywords</label>
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Keywords <Tip>Kata kunci dipisah koma. Contoh: personal branding, tips karier, SAIKI Consultancy</Tip></label>
                   <input
                     type="text"
                     value={(!dualLocale || activeLocaleTab === 'id') ? form.keywords : enFields.keywords}
