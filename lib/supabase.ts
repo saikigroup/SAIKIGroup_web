@@ -2,8 +2,10 @@ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 let _supabase: SupabaseClient | null = null;
+let _supabaseAdmin: SupabaseClient | null = null;
 
 export function getSupabase(): SupabaseClient | null {
   if (!supabaseUrl || !supabaseAnonKey) return null;
@@ -11,6 +13,15 @@ export function getSupabase(): SupabaseClient | null {
     _supabase = createClient(supabaseUrl, supabaseAnonKey);
   }
   return _supabase;
+}
+
+/** Server-side only: bypasses RLS using the service role key */
+export function getSupabaseAdmin(): SupabaseClient | null {
+  if (!supabaseUrl || !supabaseServiceKey) return null;
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+  }
+  return _supabaseAdmin;
 }
 
 // Table and column names follow the saikiweb prefix convention
