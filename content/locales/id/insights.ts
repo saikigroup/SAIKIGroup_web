@@ -1,0 +1,45 @@
+export const insights = {
+  hero: {
+    eyebrow: 'Insights',
+    headline: 'Perspektif &\nPemikiran.',
+    body: 'Artikel, analisis, dan sudut pandang dari tim SAIKI tentang karier, branding, teknologi, dan dinamika bisnis saat ini.',
+  },
+  articles: [
+    {
+      slug: 'mengapa-personal-branding-penting',
+      title: 'Mengapa Personal Branding Lebih Penting dari CV di 2025',
+      excerpt: 'Di era digital, kesan pertama terjadi sebelum interview dimulai. Personal branding bukan tren — ini adalah kebutuhan strategis.',
+      category: 'Karier',
+      categoryKey: 'consultancy',
+      date: '15 Mar 2025',
+      readTime: '5 menit',
+      featured: true,
+    },
+    {
+      slug: 'brand-identity-bukan-logo',
+      title: 'Brand Identity Bukan Sekadar Logo: Apa yang Sebenarnya Anda Butuhkan',
+      excerpt: 'Logo adalah satu elemen. Brand identity adalah sistem yang lengkap. Pahami perbedaannya sebelum Anda memulai proses branding.',
+      category: 'Branding',
+      categoryKey: 'imagery',
+      date: '8 Mar 2025',
+      readTime: '7 menit',
+      featured: true,
+    },
+    {
+      slug: 'custom-vs-off-the-shelf',
+      title: 'Custom Software vs Off-the-Shelf: Kapan Harus Memilih yang Mana',
+      excerpt: 'Keputusan teknologi yang tepat dimulai dari memahami kebutuhan bisnis, bukan dari fitur software yang paling baru.',
+      category: 'Teknologi',
+      categoryKey: 'technology',
+      date: '1 Mar 2025',
+      readTime: '6 menit',
+      featured: false,
+    },
+  ],
+  categories: {
+    all: 'Semua',
+    consultancy: 'Karier',
+    imagery: 'Branding',
+    technology: 'Teknologi',
+  },
+};

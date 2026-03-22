@@ -1,0 +1,41 @@
+export const common = {
+  brand: {
+    name: 'SAIKI',
+    tagline: 'Beyond Your Needs',
+    description: 'SAIKI Group — Konsultansi, Branding, dan Teknologi untuk masa kini.',
+  },
+  nav: {
+    home: 'Beranda',
+    about: 'Tentang',
+    services: 'Layanan',
+    consultancy: 'Consultancy',
+    imagery: 'Imagery',
+    technology: 'Technology',
+    insights: 'Insights',
+    contact: 'Kontak',
+  },
+  cta: {
+    learnMore: 'Pelajari Lebih Lanjut',
+    getStarted: 'Mulai Sekarang',
+    contactUs: 'Hubungi Kami',
+    readMore: 'Baca Selengkapnya',
+    viewAll: 'Lihat Semua',
+    sendInquiry: 'Kirim Pertanyaan',
+    explore: 'Jelajahi',
+    discoverMore: 'Temukan Lebih',
+  },
+  footer: {
+    tagline: 'Bergerak di masa kini. Membangun yang relevan.',
+    rights: 'Hak cipta dilindungi.',
+    privacy: 'Kebijakan Privasi',
+    terms: 'Syarat & Ketentuan',
+    followUs: 'Ikuti Kami',
+    quickLinks: 'Tautan Cepat',
+    contact: 'Kontak',
+    businessLines: 'Lini Bisnis',
+  },
+  lang: {
+    switch: 'Ganti Bahasa',
+    current: 'Bahasa Indonesia',
+  },
+};
