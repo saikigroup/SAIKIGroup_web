@@ -92,11 +92,14 @@ IMPORTANT FORMATTING RULES:
 
 CONTENT GUIDELINES:
 - Write from SAIKI Group's perspective as industry experts
-- Include practical, actionable advice
-- Use real-world examples and scenarios
-- Avoid generic filler content
-- Make it insightful and worth reading, not just informative
-- The first paragraph should hook the reader immediately${keyPointsList ? `\n\nKey points to cover:\n${keyPointsList}` : ''}${config.avoidTopics ? `\n\nTopics/words to AVOID: ${config.avoidTopics}` : ''}${config.cta ? `\n\nEnd with a call-to-action related to: ${config.cta}` : ''}
+- ALL information must be factually accurate and verifiable. Do NOT make up statistics, studies, or claims. If referencing data, use real sources
+- Include practical, actionable advice with real-world examples
+- Offer a fresh, unconventional perspective. Challenge common assumptions. Do NOT write generic advice that could be found on any blog
+- The writing must sound completely human. Vary sentence length naturally. Use conversational transitions. Include occasional rhetorical questions. Add personal observations. AVOID: repetitive sentence structures, overly formal phrasing, "in conclusion", "it is important to note", "furthermore", "in today's world", or any other AI-sounding patterns
+- NEVER use emdashes (--) anywhere. Use commas, periods, colons, or restructure the sentence
+- Make it insightful and worth reading, not just informative. Every paragraph should either teach something, challenge something, or make the reader think differently
+- The first paragraph should hook the reader immediately with a story, scenario, or provocative statement
+- Write as if you are having a smart conversation with the reader, not lecturing them${keyPointsList ? `\n\nKey points to cover:\n${keyPointsList}` : ''}${config.avoidTopics ? `\n\nTopics/words to AVOID: ${config.avoidTopics}` : ''}${config.cta ? `\n\nEnd with a call-to-action related to: ${config.cta}` : ''}
 
 ALSO PROVIDE (outside the HTML body, clearly labeled):
 1. **Title**: A compelling, SEO-friendly article title (max 70 characters)
