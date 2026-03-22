@@ -42,7 +42,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
         <div className="container-editorial relative">
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {t.articles.map((article) => (
-              <StaggerItem key={article.slug}>
+              <StaggerItem key={article.slug} className={article.featured ? 'md:col-span-2' : ''}>
                 <JournalCard
                   {...article}
                   locale={locale}
