@@ -7,6 +7,7 @@ export const insights = {
   articles: [
     {
       slug: 'mengapa-personal-branding-penting',
+      layout: 'editorial' as const,
       title: 'Mengapa Personal Branding Lebih Penting dari CV di 2025',
       excerpt: 'Recruiter sudah Google nama Anda sebelum baca CV. Kabar baiknya: Anda bisa kontrol apa yang mereka temukan. Begini caranya.',
       seo: {
@@ -100,6 +101,7 @@ export const insights = {
     },
     {
       slug: 'brand-identity-bukan-logo',
+      layout: 'magazine' as const,
       title: 'Brand Anda Lebih dari Sekadar Logo: Yang Sebenarnya Anda Butuhkan',
       excerpt: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal. Masalahnya bukan di logo, tapi di sistem brand yang belum lengkap.',
       seo: {
@@ -193,6 +195,7 @@ export const insights = {
     },
     {
       slug: 'custom-vs-off-the-shelf',
+      layout: 'bold' as const,
       title: 'Custom Software vs Off-the-Shelf: Mana yang Tepat untuk Bisnis Anda?',
       excerpt: 'Sebelum pilih teknologi, jawab dulu: apa masalah yang mau diselesaikan? Panduan praktis untuk keputusan yang sering bikin bingung.',
       seo: {

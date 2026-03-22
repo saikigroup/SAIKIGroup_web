@@ -7,6 +7,7 @@ export const insights = {
   articles: [
     {
       slug: 'why-personal-branding-matters',
+      layout: 'editorial' as const,
       title: 'Why Personal Branding Matters More Than Your CV in 2025',
       excerpt: 'Recruiters Google your name before reading your CV. The good news: you can control what they find. Here\'s how.',
       seo: {
@@ -100,6 +101,7 @@ export const insights = {
     },
     {
       slug: 'brand-identity-is-not-a-logo',
+      layout: 'magazine' as const,
       title: 'Your Brand Is More Than a Logo: What You Actually Need',
       excerpt: 'Many businesses spend millions on a beautiful logo but still go unnoticed. The problem isn\'t the logo, it\'s the incomplete brand system.',
       seo: {
@@ -193,6 +195,7 @@ export const insights = {
     },
     {
       slug: 'custom-vs-off-the-shelf',
+      layout: 'bold' as const,
       title: 'Custom Software vs Off-the-Shelf: Which Is Right for Your Business?',
       excerpt: 'Before choosing technology, answer this first: what problem are you solving? A practical guide for the decision that often causes confusion.',
       seo: {

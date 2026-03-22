@@ -1,5 +1,6 @@
 import { type Locale } from '@/lib/i18n';
 import { getInsights } from '@/lib/content';
+import { getArticles } from '@/lib/articles';
 import { generatePageMetadata } from '@/lib/metadata';
 import { FadeIn, StaggerGroup, StaggerItem } from '@/components/motion';
 import { Eyebrow, JournalCard } from '@/components/shared';
@@ -13,6 +14,7 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
   const { locale: l } = await params;
   const locale = l as Locale;
   const t = getInsights(locale);
+  const articles = await getArticles(locale);
 
   return (
     <>
@@ -41,10 +43,17 @@ export default async function InsightsPage({ params }: { params: Promise<{ local
       <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
         <div className="container-editorial relative">
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {t.articles.map((article) => (
+            {articles.map((article) => (
               <StaggerItem key={article.slug} className={article.featured ? 'md:col-span-2' : ''}>
                 <JournalCard
-                  {...article}
+                  slug={article.slug}
+                  title={article.title}
+                  excerpt={article.excerpt}
+                  category={article.category}
+                  categoryKey={article.categoryKey}
+                  date={article.date}
+                  readTime={article.readTime}
+                  featured={article.featured}
                   locale={locale}
                 />
               </StaggerItem>
