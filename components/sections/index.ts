@@ -6,3 +6,4 @@ export { CapabilityScenarios } from './CapabilityScenarios';
 export { OperatingModel } from './OperatingModel';
 export { JournalPreview } from './JournalPreview';
 export { ContactCTA } from './ContactCTA';
+export { MarqueeBanner } from './MarqueeBanner';

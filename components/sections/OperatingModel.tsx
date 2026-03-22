@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { SectionHeading } from '@/components/shared';
+import { AnimatedCounter } from '@/components/interactive/AnimatedCounter';
+import { TiltCard } from '@/components/interactive/TiltCard';
 
 interface Stat {
   value: string;
@@ -41,20 +43,21 @@ export function OperatingModel({ eyebrow, headline, body, stats }: OperatingMode
             <StaggerGroup className="space-y-6">
               {stats.map((stat, i) => (
                 <StaggerItem key={i}>
-                  <motion.div
-                    whileHover={{ scale: 1.05, x: 4 }}
-                    className="glass-strong rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
-                  >
-                    <span
-                      className="heading-display text-5xl md:text-6xl"
-                      style={{ color: statColors[i] }}
+                  <TiltCard tiltAmount={12} glare>
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      className="glass-strong rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
                     >
-                      {stat.value}
-                    </span>
-                    <p className="text-sm font-medium text-text-secondary mt-1 uppercase tracking-wide">
-                      {stat.label}
-                    </p>
-                  </motion.div>
+                      <AnimatedCounter
+                        value={stat.value}
+                        className="heading-display text-5xl md:text-6xl"
+                        duration={1.5}
+                      />
+                      <p className="text-sm font-medium text-text-secondary mt-1 uppercase tracking-wide">
+                        {stat.label}
+                      </p>
+                    </motion.div>
+                  </TiltCard>
                 </StaggerItem>
               ))}
             </StaggerGroup>

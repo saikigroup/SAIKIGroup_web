@@ -1,14 +1,14 @@
 export const insights = {
   hero: {
     eyebrow: 'Insights',
-    headline: 'Perspectives &\nThoughts.',
-    body: 'Articles, analyses, and viewpoints from the SAIKI team on careers, branding, technology, and current business dynamics.',
+    headline: 'Tips & Stories\nfor You.',
+    body: 'We share experiences, lessons, and perspectives from the field. So you can make better decisions for your career, brand, and business.',
   },
   articles: [
     {
       slug: 'why-personal-branding-matters',
       title: 'Why Personal Branding Matters More Than Your CV in 2025',
-      excerpt: 'In the digital era, first impressions happen before the interview starts. Personal branding is not a trend  - it is a strategic necessity.',
+      excerpt: 'Recruiters Google your name before reading your CV. The good news: you can control what they find. Here\'s how.',
       category: 'Career',
       categoryKey: 'consultancy',
       date: 'Mar 15, 2025',
@@ -17,8 +17,8 @@ export const insights = {
     },
     {
       slug: 'brand-identity-is-not-a-logo',
-      title: 'Brand Identity Is Not Just a Logo: What You Actually Need',
-      excerpt: 'A logo is one element. Brand identity is a complete system. Understand the difference before you start the branding process.',
+      title: 'Your Brand Is More Than a Logo: What You Actually Need',
+      excerpt: 'Many businesses spend millions on a beautiful logo but still go unnoticed. The problem isn\'t the logo, it\'s the incomplete brand system.',
       category: 'Branding',
       categoryKey: 'imagery',
       date: 'Mar 8, 2025',
@@ -27,8 +27,8 @@ export const insights = {
     },
     {
       slug: 'custom-vs-off-the-shelf',
-      title: 'Custom Software vs Off-the-Shelf: When to Choose Which',
-      excerpt: 'The right technology decision starts from understanding business needs, not from the latest software features.',
+      title: 'Custom Software vs Off-the-Shelf: Which Is Right for Your Business?',
+      excerpt: 'Before choosing technology, answer this first: what problem are you solving? A practical guide for the decision that often causes confusion.',
       category: 'Technology',
       categoryKey: 'technology',
       date: 'Mar 1, 2025',

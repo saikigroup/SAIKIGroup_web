@@ -2,7 +2,7 @@ export const common = {
   brand: {
     name: 'SAIKI',
     tagline: 'Beyond Your Needs',
-    description: 'SAIKI Group  - Consultancy, Branding, and Technology for the present.',
+    description: 'SAIKI Group - Career, Branding, and Technology for You.',
   },
   nav: {
     home: 'Home',
@@ -25,7 +25,7 @@ export const common = {
     discoverMore: 'Discover More',
   },
   footer: {
-    tagline: 'Moving in the present. Building what matters.',
+    tagline: 'Moving now. Building what matters for you.',
     rights: 'All rights reserved.',
     privacy: 'Privacy Policy',
     terms: 'Terms & Conditions',

@@ -1,14 +1,14 @@
 export const insights = {
   hero: {
     eyebrow: 'Insights',
-    headline: 'Perspektif &\nPemikiran.',
-    body: 'Artikel, analisis, dan sudut pandang dari tim SAIKI tentang karier, branding, teknologi, dan dinamika bisnis saat ini.',
+    headline: 'Tips & Cerita\nuntuk Anda.',
+    body: 'Kami berbagi pengalaman, pelajaran, dan perspektif dari lapangan. Supaya Anda bisa mengambil keputusan yang lebih baik untuk karier, brand, dan bisnis Anda.',
   },
   articles: [
     {
       slug: 'mengapa-personal-branding-penting',
       title: 'Mengapa Personal Branding Lebih Penting dari CV di 2025',
-      excerpt: 'Di era digital, kesan pertama terjadi sebelum interview dimulai. Personal branding bukan tren  - ini adalah kebutuhan strategis.',
+      excerpt: 'Recruiter sudah Google nama Anda sebelum baca CV. Kabar baiknya: Anda bisa kontrol apa yang mereka temukan. Begini caranya.',
       category: 'Karier',
       categoryKey: 'consultancy',
       date: '15 Mar 2025',
@@ -17,8 +17,8 @@ export const insights = {
     },
     {
       slug: 'brand-identity-bukan-logo',
-      title: 'Brand Identity Bukan Sekadar Logo: Apa yang Sebenarnya Anda Butuhkan',
-      excerpt: 'Logo adalah satu elemen. Brand identity adalah sistem yang lengkap. Pahami perbedaannya sebelum Anda memulai proses branding.',
+      title: 'Brand Anda Lebih dari Sekadar Logo: Yang Sebenarnya Anda Butuhkan',
+      excerpt: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal. Masalahnya bukan di logo, tapi di sistem brand yang belum lengkap.',
       category: 'Branding',
       categoryKey: 'imagery',
       date: '8 Mar 2025',
@@ -27,8 +27,8 @@ export const insights = {
     },
     {
       slug: 'custom-vs-off-the-shelf',
-      title: 'Custom Software vs Off-the-Shelf: Kapan Harus Memilih yang Mana',
-      excerpt: 'Keputusan teknologi yang tepat dimulai dari memahami kebutuhan bisnis, bukan dari fitur software yang paling baru.',
+      title: 'Custom Software vs Off-the-Shelf: Mana yang Tepat untuk Bisnis Anda?',
+      excerpt: 'Sebelum pilih teknologi, jawab dulu: apa masalah yang mau diselesaikan? Panduan praktis untuk keputusan yang sering bikin bingung.',
       category: 'Teknologi',
       categoryKey: 'technology',
       date: '1 Mar 2025',

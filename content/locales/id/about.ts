@@ -1,40 +1,40 @@
 export const about = {
   hero: {
     eyebrow: 'Tentang SAIKI',
-    headline: 'Dibangun untuk\nMasa Kini.',
-    body: 'SAIKI lahir dari keyakinan sederhana: momen terbaik untuk bertindak adalah sekarang. Kami adalah grup yang menggabungkan keahlian konsultansi, branding, dan teknologi dalam satu ekosistem yang terintegrasi.',
+    headline: 'Kami Ada\nuntuk Anda.',
+    body: 'Setiap orang yang datang ke SAIKI punya cerita yang berbeda. Ada yang sedang mencari arah baru, ada yang ingin bisnisnya dikenal lebih luas, ada yang butuh sistem yang lebih baik. Satu hal yang sama: mereka siap bergerak sekarang.',
   },
   story: {
-    eyebrow: 'Cerita Kami',
-    headline: 'Dari Ide Menjadi Ekosistem.',
-    body: 'SAIKI bermula dari pengamatan sederhana  - terlalu banyak individu dan organisasi yang menunggu "waktu yang tepat" untuk bergerak. Kami percaya bahwa waktu yang tepat adalah sekarang. Nama kami sendiri adalah komitmen: SAIKI, dari kata Jawa "sekarang", menegaskan urgensi untuk bertindak tanpa menunda.',
-    body2: 'Dari satu ide tentang relevansi, SAIKI berkembang menjadi ekosistem tiga lini bisnis yang saling memperkuat  - masing-masing berdiri dengan keahlian spesifik, namun terhubung dalam satu visi strategis.',
+    eyebrow: 'Bagaimana Semua Bermula',
+    headline: 'Lahir dari Frustrasi\nyang Kami Rasakan Sendiri.',
+    body: 'Kami pernah di posisi Anda. Pernah bingung soal karier. Pernah frustrasi melihat bisnis bagus tapi tidak dikenal. Pernah kewalahan dengan proses manual yang harusnya bisa lebih simpel. Dari pengalaman itu, SAIKI lahir.',
+    body2: 'Nama SAIKI berasal dari bahasa Jawa yang berarti "sekarang". Bukan sekadar nama, tapi filosofi kami: jangan tunggu besok kalau bisa mulai hari ini.',
   },
   values: {
-    eyebrow: 'Nilai Kami',
-    headline: 'Yang Kami Percaya.',
+    eyebrow: 'Prinsip Kami',
+    headline: 'Yang Membuat Kami\nBerbeda dari yang Lain.',
     items: [
       {
-        title: 'Relevansi',
-        description: 'Setiap keputusan, layanan, dan produk dirancang untuk konteks saat ini  - bukan untuk dunia yang sudah berlalu.',
+        title: 'Anda Selalu Jadi Prioritas',
+        description: 'Setiap solusi kami mulai dari pertanyaan "apa yang paling dibutuhkan klien saat ini?", bukan dari produk yang ingin kami jual.',
       },
       {
-        title: 'Integrasi',
-        description: 'Tiga lini bisnis bukan tiga perusahaan terpisah. Mereka adalah satu sistem yang saling menguatkan.',
+        title: 'Satu Pintu, Semua Solusi',
+        description: 'Tidak perlu cari vendor terpisah untuk karier, branding, dan teknologi. Di SAIKI, semuanya terhubung dalam satu ekosistem yang saling mendukung.',
       },
       {
-        title: 'Kejelasan',
-        description: 'Kami tidak menjual kompleksitas. Kami membuat hal yang rumit menjadi jelas dan dapat ditindaklanjuti.',
+        title: 'Jelas dan Tanpa Basa-Basi',
+        description: 'Kami bicara apa adanya. Kalau ada yang tidak kami bisa, kami bilang. Kalau ada cara yang lebih efisien, kami usulkan. Anda selalu tahu di mana posisi Anda.',
       },
       {
-        title: 'Dampak',
-        description: 'Hasil yang terukur, bukan janji yang abstrak. Setiap engagement dirancang untuk menghasilkan perubahan nyata.',
+        title: 'Dampak yang Bisa Dirasakan',
+        description: 'Kami tidak mengukur keberhasilan dari jumlah meeting atau tebalnya laporan. Ukuran kami: apakah hidup atau bisnis Anda berubah jadi lebih baik.',
       },
     ],
   },
   approach: {
-    eyebrow: 'Pendekatan',
-    headline: 'Satu Grup. Tiga Keahlian.',
-    body: 'Struktur SAIKI memungkinkan klien mengakses keahlian lintas disiplin tanpa fragmentasi. Butuh branding sekaligus platform digital? Butuh konsultansi karier yang didukung narasi brand personal? Ekosistem kami dirancang untuk itu.',
+    eyebrow: 'Cara Kami Bekerja',
+    headline: 'Satu Percakapan,\nBanyak Kemungkinan.',
+    body: 'Ceritakan saja tantangan Anda. Apakah itu soal karier, brand, atau operasional, kami akan bantu petakan solusi terbaik. Dan kalau ternyata Anda butuh kombinasi dari ketiganya, itu justru kekuatan kami.',
   },
 };

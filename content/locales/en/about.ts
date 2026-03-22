@@ -1,40 +1,40 @@
 export const about = {
   hero: {
     eyebrow: 'About SAIKI',
-    headline: 'Built for\nthe Present.',
-    body: 'SAIKI was born from a simple belief: the best moment to act is now. We are a group combining consultancy, branding, and technology expertise in one integrated ecosystem.',
+    headline: 'We Exist\nfor You.',
+    body: 'Every person who comes to SAIKI has a different story. Some are looking for a new direction, some want their business to be better known, some need better systems. One thing is the same: they\'re ready to move now.',
   },
   story: {
-    eyebrow: 'Our Story',
-    headline: 'From Idea to Ecosystem.',
-    body: 'SAIKI began with a simple observation  - too many individuals and organizations wait for "the right time" to move. We believe the right time is now. Our name itself is a commitment: SAIKI, from the Javanese word for "now", affirms the urgency to act without delay.',
-    body2: 'From one idea about relevance, SAIKI evolved into an ecosystem of three business lines that reinforce each other  - each standing with specific expertise, yet connected through one strategic vision.',
+    eyebrow: 'How It All Started',
+    headline: 'Born from Frustrations\nWe Felt Ourselves.',
+    body: 'We\'ve been in your shoes. We\'ve been confused about careers. We\'ve been frustrated seeing great businesses go unnoticed. We\'ve been overwhelmed by manual processes that should be simpler. From that experience, SAIKI was born.',
+    body2: 'The name SAIKI comes from Javanese, meaning "now". It\'s not just a name, it\'s our philosophy: don\'t wait for tomorrow if you can start today.',
   },
   values: {
-    eyebrow: 'Our Values',
-    headline: 'What We Believe.',
+    eyebrow: 'Our Principles',
+    headline: 'What Makes Us\nDifferent from the Rest.',
     items: [
       {
-        title: 'Relevance',
-        description: 'Every decision, service, and product is designed for the current context  - not for a world that has already passed.',
+        title: 'You Always Come First',
+        description: 'Every solution starts with the question "what does the client need most right now?", not from products we want to sell.',
       },
       {
-        title: 'Integration',
-        description: 'Three business lines are not three separate companies. They are one system that strengthens each other.',
+        title: 'One Door, Every Solution',
+        description: 'No need to find separate vendors for career, branding, and technology. At SAIKI, everything connects in one ecosystem that supports each other.',
       },
       {
-        title: 'Clarity',
-        description: 'We do not sell complexity. We make the complex clear and actionable.',
+        title: 'Clear and No Nonsense',
+        description: 'We speak it as it is. If there\'s something we can\'t do, we say so. If there\'s a more efficient way, we suggest it. You always know where you stand.',
       },
       {
-        title: 'Impact',
-        description: 'Measurable results, not abstract promises. Every engagement is designed to create real change.',
+        title: 'Impact You Can Feel',
+        description: 'We don\'t measure success by the number of meetings or report thickness. Our measure: has your life or business actually improved.',
       },
     ],
   },
   approach: {
-    eyebrow: 'Approach',
-    headline: 'One Group. Three Expertises.',
-    body: 'SAIKI\'s structure lets clients access cross-disciplinary expertise without fragmentation. Need branding alongside a digital platform? Need career consultancy supported by personal brand narrative? Our ecosystem is designed for that.',
+    eyebrow: 'How We Work',
+    headline: 'One Conversation,\nMany Possibilities.',
+    body: 'Just tell us your challenge. Whether it\'s about career, brand, or operations, we\'ll help map out the best solution. And if it turns out you need a combination of all three, that\'s actually our strength.',
   },
 };
