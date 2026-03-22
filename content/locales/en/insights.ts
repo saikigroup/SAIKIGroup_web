@@ -29,6 +29,10 @@ export const insights = {
           content: 'That is the reality of recruitment in 2025. A CareerBuilder survey found that 70% of companies check candidates\' social media before scheduling an interview. Not after. Before. Your first impression is formed long before you sit down in front of an interviewer.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Your first impression is formed long before you sit down in front of an interviewer.',
+        },
+        {
           type: 'heading' as const,
           content: 'Your CV Is No Longer Enough',
         },
@@ -77,6 +81,10 @@ export const insights = {
           content: 'Fifth, build meaningful connections. Follow people in your field. Comment on their posts with substantive thoughts, not just "Agree!" or emojis. Become part of the professional conversation in your industry.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Consistency matters far more than quantity.',
+        },
+        {
           type: 'heading' as const,
           content: 'This Is an Investment, Not a One-Time Project',
         },
@@ -116,6 +124,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'The problem is not the logo. The problem is treating the logo as if it were the only brand element. In reality, a logo is just one small part of a much larger system.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'A logo is just one small part of a much larger system.',
         },
         {
           type: 'heading' as const,
@@ -160,6 +172,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'From this audit, you might discover that what you need is not a new logo, but clear brand guidelines. A document that explains how your brand should look, sound, and feel in every situation. With these guidelines, anyone creating content for your business will produce consistent output.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Every customer interaction with your business is part of your brand.',
         },
         {
           type: 'heading' as const,
@@ -223,6 +239,10 @@ export const insights = {
           content: 'There is also the question of data control. With SaaS, your data lives on someone else\'s server. For some industries, this can be a regulatory issue. For others, it is about comfort: what if the service raises its prices significantly? What if they shut down? What if a feature you depend on suddenly gets removed?',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Problems arise when your business has unique processes.',
+        },
+        {
           type: 'heading' as const,
           content: 'The Advantages of Custom Software',
         },
@@ -253,6 +273,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'Do I have the budget and patience for a development process that takes months? Custom software is not a project that finishes in a week. There are discovery, design, development, testing, and iteration phases that need to happen.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Custom software is a business asset. You have full control over data, features, and future development.',
         },
         {
           type: 'heading' as const,

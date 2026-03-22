@@ -7,7 +7,9 @@ import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { Eyebrow, ServiceTag, JournalCard } from '@/components/shared';
 import { ArticleBody } from '@/components/shared/ArticleBody';
 import { BackToInsights } from '@/components/shared/BackToInsights';
+import { ShareButton } from '@/components/shared/ShareButton';
 import type { ServiceKey } from '@/lib/utils';
+import { Clock, Calendar } from 'lucide-react';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id';
 
@@ -104,44 +106,83 @@ export default async function InsightArticlePage({
       />
 
       {/* Hero */}
-      <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
-        <div className="absolute top-20 right-0 w-96 h-96 bg-brand-violet/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-brand-teal/10 rounded-full blur-3xl" />
+      <section className="relative overflow-hidden">
+        {/* Background */}
+        <div className="absolute inset-0 bg-mesh" />
+        <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-brand-violet/8 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-teal/8 rounded-full blur-[100px]" />
 
-        <div className="container-editorial relative">
-          <div className="max-w-3xl">
-            <FadeIn>
-              <BackToInsights label={t.backToInsights} locale={locale} />
+        <div className="container-editorial relative pt-16 md:pt-24 pb-20 md:pb-32">
+          <FadeIn>
+            <BackToInsights label={t.backToInsights} locale={locale} />
+          </FadeIn>
 
-              <div className="flex items-center gap-4 mt-8 mb-6">
+          <div className="max-w-4xl mt-10 md:mt-14">
+            <FadeIn delay={0.1}>
+              <div className="flex flex-wrap items-center gap-3 mb-8">
                 <ServiceTag
                   service={article.categoryKey as ServiceKey}
                   label={article.category}
                 />
-                <span className="text-sm text-text-muted">{article.date}</span>
-                <span className="text-sm text-text-muted">{article.readTime}</span>
+                <span className="w-1 h-1 rounded-full bg-text-muted" />
+                <span className="inline-flex items-center gap-1.5 text-sm text-text-muted">
+                  <Calendar className="w-3.5 h-3.5" />
+                  {article.date}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-text-muted" />
+                <span className="inline-flex items-center gap-1.5 text-sm text-text-muted">
+                  <Clock className="w-3.5 h-3.5" />
+                  {article.readTime}
+                </span>
               </div>
+            </FadeIn>
 
-              <h1 className="heading-display text-4xl md:text-5xl lg:text-6xl text-brand-black leading-tight">
+            <FadeIn delay={0.2}>
+              <h1 className="heading-display text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl text-brand-black leading-[1.08]">
                 {article.title}
               </h1>
+            </FadeIn>
 
-              <div className="editorial-divider-bold w-20 mt-8" />
-
-              <p className="text-lg md:text-xl text-text-secondary leading-relaxed mt-8">
+            <FadeIn delay={0.3}>
+              <div className="editorial-divider-bold w-20 mt-10" />
+              <p className="text-lg md:text-xl lg:text-[1.35rem] text-text-secondary leading-relaxed mt-8 max-w-2xl">
                 {article.excerpt}
               </p>
             </FadeIn>
           </div>
         </div>
+
+        {/* Bottom edge decoration */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
       </section>
 
       {/* Article body */}
-      <section className="py-16 md:py-24 bg-white relative">
-        <div className="container-editorial relative">
+      <section className="relative bg-white">
+        {/* Subtle side decoration */}
+        <div className="absolute top-0 left-0 w-px h-full bg-gradient-to-b from-brand-teal/20 via-transparent to-brand-violet/20 hidden lg:block" style={{ left: 'calc(50% - 400px)' }} />
+
+        <div className="container-editorial py-16 md:py-24">
           <div className="max-w-3xl mx-auto">
             <FadeIn delay={0.1}>
               <ArticleBody blocks={article.body} />
+            </FadeIn>
+
+            {/* Article footer */}
+            <FadeIn delay={0.1}>
+              <div className="mt-16 pt-8 border-t border-border-subtle/50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-teal flex items-center justify-center text-white font-bold text-sm">
+                      SG
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-brand-black">SAIKI Group</p>
+                      <p className="text-xs text-text-muted">{article.date}</p>
+                    </div>
+                  </div>
+                  <ShareButton label={t.shareArticle} />
+                </div>
+              </div>
             </FadeIn>
           </div>
         </div>
@@ -150,10 +191,12 @@ export default async function InsightArticlePage({
       {/* Related articles */}
       {relatedArticles.length > 0 && (
         <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
+          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border-subtle to-transparent" />
+
           <div className="container-editorial relative">
             <FadeIn>
               <Eyebrow>{t.relatedArticles}</Eyebrow>
-              <div className="editorial-divider-bold w-16 mt-4 mb-10" />
+              <div className="editorial-divider-bold w-16 mt-4 mb-12" />
             </FadeIn>
 
             <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-6">

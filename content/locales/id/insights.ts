@@ -29,6 +29,10 @@ export const insights = {
           content: 'Itulah kenyataan rekrutmen di tahun 2025. Sebuah survei dari CareerBuilder menunjukkan bahwa 70% perusahaan melakukan pengecekan media sosial kandidat sebelum menjadwalkan wawancara. Bukan setelah. Sebelum. Artinya, kesan pertama Anda terbentuk jauh sebelum Anda duduk di depan pewawancara.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Kesan pertama Anda terbentuk jauh sebelum Anda duduk di depan pewawancara.',
+        },
+        {
           type: 'heading' as const,
           content: 'CV Sudah Tidak Cukup',
         },
@@ -77,6 +81,10 @@ export const insights = {
           content: 'Kelima, bangun koneksi yang bermakna. Follow orang-orang di bidang Anda. Komentari posting mereka dengan pemikiran yang substantif, bukan sekadar "Setuju!" atau emoji. Jadilah bagian dari percakapan profesional di industri Anda.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Konsistensi jauh lebih penting daripada kuantitas.',
+        },
+        {
           type: 'heading' as const,
           content: 'Ini Investasi, Bukan Proyek Sekali Jadi',
         },
@@ -116,6 +124,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'Masalahnya bukan di logo. Masalahnya adalah memperlakukan logo seolah-olah itu satu-satunya elemen brand. Padahal logo hanyalah satu bagian kecil dari sebuah sistem yang jauh lebih besar.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Logo hanyalah satu bagian kecil dari sebuah sistem yang jauh lebih besar.',
         },
         {
           type: 'heading' as const,
@@ -160,6 +172,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'Dari audit ini, Anda mungkin menemukan bahwa yang Anda butuhkan bukan logo baru, melainkan panduan brand yang jelas. Sebuah dokumen yang menjelaskan bagaimana brand Anda seharusnya terlihat, terdengar, dan terasa di setiap situasi. Dengan panduan ini, siapapun yang membuat konten untuk bisnis Anda akan menghasilkan output yang konsisten.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Setiap interaksi pelanggan dengan bisnis Anda adalah bagian dari brand.',
         },
         {
           type: 'heading' as const,
@@ -223,6 +239,10 @@ export const insights = {
           content: 'Ada juga masalah kontrol data. Dengan SaaS, data Anda ada di server orang lain. Untuk beberapa industri, ini bisa jadi masalah regulasi. Untuk bisnis lain, ini soal kenyamanan: bagaimana jika layanan tersebut menaikkan harga secara signifikan? Bagaimana jika mereka tutup? Bagaimana jika fitur yang Anda andalkan tiba-tiba dihapus?',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Masalah muncul ketika bisnis Anda punya proses yang unik.',
+        },
+        {
           type: 'heading' as const,
           content: 'Kelebihan Custom Software',
         },
@@ -253,6 +273,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'Apakah saya punya budget dan kesabaran untuk proses development yang memakan waktu berbulan-bulan? Custom software bukan proyek yang selesai dalam seminggu. Ada proses discovery, desain, development, testing, dan iterasi yang perlu dilalui.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Software custom adalah aset bisnis. Anda punya kontrol penuh atas data, fitur, dan pengembangan ke depan.',
         },
         {
           type: 'heading' as const,
