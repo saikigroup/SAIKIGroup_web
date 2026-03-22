@@ -4,7 +4,9 @@ const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
 const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
-const fromEmail = process.env.EMAIL_FROM || smtpUser;
+const smtpSecure = process.env.SMTP_SECURE === 'true' || smtpPort === 465;
+const fromName = process.env.MAIL_FROM_NAME || 'SAIKI Group';
+const fromEmail = process.env.MAIL_FROM_EMAIL || process.env.EMAIL_FROM || smtpUser;
 const adminEmail = process.env.ADMIN_EMAIL || 'saikigroup.id@gmail.com';
 
 function getTransporter() {
@@ -12,7 +14,7 @@ function getTransporter() {
   return nodemailer.createTransport({
     host: smtpHost,
     port: smtpPort,
-    secure: smtpPort === 465,
+    secure: smtpSecure,
     auth: { user: smtpUser, pass: smtpPass },
   });
 }
@@ -121,7 +123,7 @@ export async function sendVisitorConfirmation(data: {
     `;
 
   await transporter.sendMail({
-    from: `"SAIKI Group" <${fromEmail}>`,
+    from: `"${fromName}" <${fromEmail}>`,
     to: data.email,
     subject,
     html,
@@ -211,7 +213,7 @@ export async function sendAdminNotification(data: {
   `;
 
   await transporter.sendMail({
-    from: `"SAIKI Web" <${fromEmail}>`,
+    from: `"${fromName}" <${fromEmail}>`,
     to: adminEmail,
     subject,
     html,
