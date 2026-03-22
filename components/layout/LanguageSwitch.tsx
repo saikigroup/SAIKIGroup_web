@@ -2,8 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { switchLocale, localeNames, type Locale } from '@/lib/i18n';
+import { switchLocale, type Locale } from '@/lib/i18n';
 import { analytics } from '@/lib/analytics';
 
 interface LanguageSwitchProps {
@@ -13,12 +12,10 @@ interface LanguageSwitchProps {
 
 export function LanguageSwitch({ locale, className = '' }: LanguageSwitchProps) {
   const pathname = usePathname();
-  const targetLocale: Locale = locale === 'id' ? 'en' : 'id';
-  const targetPath = switchLocale(pathname, targetLocale);
 
   return (
     <div
-      className={`inline-flex items-center border border-border-subtle ${className}`}
+      className={`inline-flex items-center rounded-full bg-white/10 backdrop-blur-sm border border-border-subtle/30 ${className}`}
       role="group"
       aria-label="Language selector"
     >
@@ -26,8 +23,11 @@ export function LanguageSwitch({ locale, className = '' }: LanguageSwitchProps) 
         href={locale === 'id' ? pathname : switchLocale(pathname, 'id')}
         onClick={() => locale !== 'id' && analytics.languageSwitch(locale, 'id')}
         className={`
-          relative px-3 py-1.5 text-xs font-semibold tracking-wider transition-colors duration-200
-          ${locale === 'id' ? 'bg-brand-teal text-white' : 'text-text-secondary hover:text-brand-teal'}
+          relative px-3.5 py-1.5 text-xs font-semibold tracking-wider rounded-full transition-all duration-300
+          ${locale === 'id'
+            ? 'bg-brand-teal text-white shadow-sm'
+            : 'text-text-secondary hover:text-brand-teal'
+          }
         `}
         aria-current={locale === 'id' ? 'true' : undefined}
         aria-label="Bahasa Indonesia"
@@ -38,8 +38,11 @@ export function LanguageSwitch({ locale, className = '' }: LanguageSwitchProps) 
         href={locale === 'en' ? pathname : switchLocale(pathname, 'en')}
         onClick={() => locale !== 'en' && analytics.languageSwitch(locale, 'en')}
         className={`
-          relative px-3 py-1.5 text-xs font-semibold tracking-wider transition-colors duration-200
-          ${locale === 'en' ? 'bg-brand-teal text-white' : 'text-text-secondary hover:text-brand-teal'}
+          relative px-3.5 py-1.5 text-xs font-semibold tracking-wider rounded-full transition-all duration-300
+          ${locale === 'en'
+            ? 'bg-brand-teal text-white shadow-sm'
+            : 'text-text-secondary hover:text-brand-teal'
+          }
         `}
         aria-current={locale === 'en' ? 'true' : undefined}
         aria-label="English"

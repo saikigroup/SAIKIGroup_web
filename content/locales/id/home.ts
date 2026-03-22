@@ -9,7 +9,7 @@ export const home = {
   brand: {
     eyebrow: 'Siapa Kami',
     headline: 'SAIKI berarti sekarang.',
-    body: 'Kami percaya bahwa momen terbaik untuk bergerak adalah sekarang. SAIKI hadir sebagai mitra strategis yang menggabungkan keahlian konsultansi karier, kekuatan branding & pemasaran, dan kemampuan teknologi — dalam satu ekosistem yang saling mendukung.',
+    body: 'Kami percaya bahwa momen terbaik untuk bergerak adalah sekarang. SAIKI hadir sebagai mitra strategis yang menggabungkan keahlian konsultansi karier, kekuatan branding & pemasaran, dan kemampuan teknologi  - dalam satu ekosistem yang saling mendukung.',
     body2: 'Tidak ada waktu yang lebih tepat dari sekarang. Tidak ada alasan untuk menunggu tanpa arah.',
   },
   services: {
@@ -34,7 +34,7 @@ export const home = {
   why: {
     eyebrow: 'Pendekatan',
     headline: 'Mengapa Sekarang?',
-    body: 'Pasar bergerak cepat. Karier berubah arah. Teknologi berkembang tanpa henti. Yang membedakan adalah keberanian untuk bergerak saat ini — dengan partner yang tepat.',
+    body: 'Pasar bergerak cepat. Karier berubah arah. Teknologi berkembang tanpa henti. Yang membedakan adalah keberanian untuk bergerak saat ini  - dengan partner yang tepat.',
     points: [
       {
         title: 'Praktis, Bukan Teoritis',
@@ -42,7 +42,7 @@ export const home = {
       },
       {
         title: 'Terintegrasi',
-        description: 'Tiga lini bisnis yang saling memperkuat — karier, brand, dan teknologi bekerja sebagai satu ekosistem.',
+        description: 'Tiga lini bisnis yang saling memperkuat  - karier, brand, dan teknologi bekerja sebagai satu ekosistem.',
       },
       {
         title: 'Relevan untuk Sekarang',
@@ -62,19 +62,19 @@ export const home = {
       {
         context: 'Anda membangun bisnis',
         need: 'yang butuh identitas brand dan strategi pemasaran yang koheren.',
-        solution: 'SAIKI Imagery merancang sistem brand yang bekerja — dari visual hingga narasi.',
+        solution: 'SAIKI Imagery merancang sistem brand yang bekerja  - dari visual hingga narasi.',
       },
       {
         context: 'Anda menjalankan operasi',
         need: 'yang butuh sistem digital internal atau platform software khusus.',
-        solution: 'SAIKI Technology membangun solusi yang pas — bukan software generik, tapi alat yang benar-benar bekerja untuk bisnis Anda.',
+        solution: 'SAIKI Technology membangun solusi yang pas  - bukan software generik, tapi alat yang benar-benar bekerja untuk bisnis Anda.',
       },
     ],
   },
   operating: {
     eyebrow: 'Model Operasi',
     headline: 'Bagaimana Kami Bekerja.',
-    body: 'SAIKI beroperasi sebagai grup terintegrasi. Setiap lini bisnis berdiri mandiri dengan keahlian spesifik, namun terhubung dalam satu pendekatan strategis. Klien mendapat akses ke seluruh ekosistem — bukan silo yang terpisah.',
+    body: 'SAIKI beroperasi sebagai grup terintegrasi. Setiap lini bisnis berdiri mandiri dengan keahlian spesifik, namun terhubung dalam satu pendekatan strategis. Klien mendapat akses ke seluruh ekosistem  - bukan silo yang terpisah.',
     stats: [
       { value: '3', label: 'Lini Bisnis' },
       { value: '1', label: 'Ekosistem' },

@@ -16,11 +16,11 @@ interface CTAButtonProps {
 
 const variants = {
   primary:
-    'bg-brand-teal text-white hover:bg-brand-black border-brand-teal hover:border-brand-black',
+    'bg-gradient-to-r from-brand-teal to-teal-500 text-white border-transparent hover:shadow-lg hover:shadow-teal-500/25',
   secondary:
-    'bg-transparent text-brand-teal border-brand-teal hover:bg-brand-teal hover:text-white',
+    'bg-white/80 backdrop-blur-sm text-brand-teal border-brand-teal/20 hover:bg-brand-teal hover:text-white hover:border-brand-teal',
   ghost:
-    'bg-transparent text-brand-teal border-transparent hover:border-brand-teal',
+    'bg-transparent text-brand-teal border-transparent hover:bg-brand-teal/5',
 };
 
 const sizes = {
@@ -40,8 +40,8 @@ export function CTAButton({
 }: CTAButtonProps) {
   return (
     <motion.div
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      whileHover={{ scale: 1.03, y: -2 }}
+      whileTap={{ scale: 0.97 }}
       className="inline-block"
     >
       <Link
@@ -49,7 +49,7 @@ export function CTAButton({
         onClick={onClick}
         className={`
           inline-flex items-center gap-2.5 font-semibold tracking-tight
-          border-2 transition-colors duration-300
+          border rounded-xl transition-all duration-300
           ${variants[variant]} ${sizes[size]} ${className}
         `}
       >

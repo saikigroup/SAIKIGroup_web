@@ -2,7 +2,7 @@ export const common = {
   brand: {
     name: 'SAIKI',
     tagline: 'Beyond Your Needs',
-    description: 'SAIKI Group — Consultancy, Branding, and Technology for the present.',
+    description: 'SAIKI Group  - Consultancy, Branding, and Technology for the present.',
   },
   nav: {
     home: 'Home',

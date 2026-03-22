@@ -39,9 +39,9 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled
-            ? 'bg-white/95 backdrop-blur-md shadow-sm'
+            ? 'glass-strong shadow-sm'
             : 'bg-transparent'
         }`}
       >
@@ -52,24 +52,25 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             </Link>
 
             {/* Desktop nav */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
                 <Link
                   key={item.key}
                   href={getLocalizedPath(item.key, locale)}
-                  className="relative text-sm font-medium text-brand-black hover:text-brand-teal transition-colors duration-200 group"
+                  className="relative px-4 py-2 text-sm font-medium text-brand-black/80 hover:text-brand-teal rounded-lg hover:bg-brand-teal/5 transition-all duration-200"
                 >
                   {item.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-teal transition-all duration-300 group-hover:w-full" />
                 </Link>
               ))}
-              <LanguageSwitch locale={locale} />
+              <div className="ml-3">
+                <LanguageSwitch locale={locale} />
+              </div>
             </div>
 
             {/* Mobile toggle */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden relative z-50 p-2"
+              className="md:hidden relative z-50 p-2 rounded-xl hover:bg-black/5 transition-colors"
               aria-label={isOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={isOpen}
             >
@@ -91,7 +92,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-40 bg-brand-teal"
+            className="fixed inset-0 z-40 bg-gradient-dark"
           >
             <div className="flex flex-col justify-center items-start h-full container-editorial">
               <motion.div
@@ -101,7 +102,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                   hidden: {},
                   visible: { transition: { staggerChildren: 0.08, delayChildren: 0.15 } },
                 }}
-                className="space-y-6"
+                className="space-y-4"
               >
                 {navItems.map((item) => (
                   <motion.div
@@ -114,7 +115,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                     <Link
                       href={getLocalizedPath(item.key, locale)}
                       onClick={() => setIsOpen(false)}
-                      className="block text-3xl md:text-4xl font-bold text-white hover:text-white/70 transition-colors"
+                      className="block text-3xl md:text-4xl font-bold text-white hover:text-brand-teal-light transition-colors"
                     >
                       {item.label}
                     </Link>
@@ -127,7 +128,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                   }}
                   className="pt-6"
                 >
-                  <LanguageSwitch locale={locale} className="border-white/30" />
+                  <LanguageSwitch locale={locale} className="border-white/20" />
                 </motion.div>
               </motion.div>
             </div>

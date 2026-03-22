@@ -8,7 +8,7 @@ export const insights = {
     {
       slug: 'mengapa-personal-branding-penting',
       title: 'Mengapa Personal Branding Lebih Penting dari CV di 2025',
-      excerpt: 'Di era digital, kesan pertama terjadi sebelum interview dimulai. Personal branding bukan tren — ini adalah kebutuhan strategis.',
+      excerpt: 'Di era digital, kesan pertama terjadi sebelum interview dimulai. Personal branding bukan tren  - ini adalah kebutuhan strategis.',
       category: 'Karier',
       categoryKey: 'consultancy',
       date: '15 Mar 2025',

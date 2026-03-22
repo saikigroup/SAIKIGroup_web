@@ -7,8 +7,8 @@ export const about = {
   story: {
     eyebrow: 'Our Story',
     headline: 'From Idea to Ecosystem.',
-    body: 'SAIKI began with a simple observation — too many individuals and organizations wait for "the right time" to move. We believe the right time is now. Our name itself is a commitment: SAIKI, from the Javanese word for "now", affirms the urgency to act without delay.',
-    body2: 'From one idea about relevance, SAIKI evolved into an ecosystem of three business lines that reinforce each other — each standing with specific expertise, yet connected through one strategic vision.',
+    body: 'SAIKI began with a simple observation  - too many individuals and organizations wait for "the right time" to move. We believe the right time is now. Our name itself is a commitment: SAIKI, from the Javanese word for "now", affirms the urgency to act without delay.',
+    body2: 'From one idea about relevance, SAIKI evolved into an ecosystem of three business lines that reinforce each other  - each standing with specific expertise, yet connected through one strategic vision.',
   },
   values: {
     eyebrow: 'Our Values',
@@ -16,7 +16,7 @@ export const about = {
     items: [
       {
         title: 'Relevance',
-        description: 'Every decision, service, and product is designed for the current context — not for a world that has already passed.',
+        description: 'Every decision, service, and product is designed for the current context  - not for a world that has already passed.',
       },
       {
         title: 'Integration',

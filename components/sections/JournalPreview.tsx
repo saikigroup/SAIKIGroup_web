@@ -1,7 +1,5 @@
 'use client';
 
-import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { SectionHeading, JournalCard, CTAButton } from '@/components/shared';
@@ -19,8 +17,10 @@ export function JournalPreview({ eyebrow, headline, viewAll, locale }: JournalPr
   const { articles } = getInsights(locale);
 
   return (
-    <section className="py-20 md:py-32 bg-white">
-      <div className="container-editorial">
+    <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+      <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-coral/5 rounded-full blur-3xl" />
+
+      <div className="container-editorial relative">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
           <FadeIn>
             <SectionHeading eyebrow={eyebrow} headline={headline} size="xl" />

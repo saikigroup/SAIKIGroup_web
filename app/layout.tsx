@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     default: 'SAIKI Group',
     template: '%s | SAIKI Group',
   },
-  description: 'SAIKI Group — Consultancy, Branding & Technology',
+  description: 'SAIKI Group | Consultancy, Branding & Technology',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id'),
 };
 

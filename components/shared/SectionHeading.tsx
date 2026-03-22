@@ -5,7 +5,7 @@ interface SectionHeadingProps {
   headline: string;
   body?: string;
   eyebrowColor?: string;
-  headlineStyle?: 'editorial' | 'sans';
+  headlineStyle?: 'display' | 'sans';
   align?: 'left' | 'center';
   size?: 'lg' | 'xl' | '2xl';
   className?: string;
@@ -22,14 +22,14 @@ export function SectionHeading({
   headline,
   body,
   eyebrowColor,
-  headlineStyle = 'editorial',
+  headlineStyle = 'display',
   align = 'left',
   size = 'xl',
   className = '',
 }: SectionHeadingProps) {
   const alignClass = align === 'center' ? 'text-center' : 'text-left';
   const headlineClass =
-    headlineStyle === 'editorial' ? 'heading-editorial' : 'heading-sans';
+    headlineStyle === 'display' ? 'heading-display' : 'heading-sans';
 
   return (
     <div className={`${alignClass} ${className}`}>

@@ -9,7 +9,7 @@ export const home = {
   brand: {
     eyebrow: 'Who We Are',
     headline: 'SAIKI means now.',
-    body: 'We believe the best time to move is now. SAIKI is a strategic partner combining career consultancy, branding & marketing strength, and technology capability — in one ecosystem that reinforces itself.',
+    body: 'We believe the best time to move is now. SAIKI is a strategic partner combining career consultancy, branding & marketing strength, and technology capability  - in one ecosystem that reinforces itself.',
     body2: 'There is no better time than now. There is no reason to wait without direction.',
   },
   services: {
@@ -34,19 +34,19 @@ export const home = {
   why: {
     eyebrow: 'Approach',
     headline: 'Why Now?',
-    body: 'Markets shift fast. Careers change direction. Technology evolves relentlessly. The difference is the courage to move now — with the right partner.',
+    body: 'Markets shift fast. Careers change direction. Technology evolves relentlessly. The difference is the courage to move now  - with the right partner.',
     points: [
       {
         title: 'Practical, Not Theoretical',
-        description: 'Every service is designed for measurable impact — not just recommendations on paper.',
+        description: 'Every service is designed for measurable impact  - not just recommendations on paper.',
       },
       {
         title: 'Integrated',
-        description: 'Three business lines that reinforce each other — career, brand, and technology working as one ecosystem.',
+        description: 'Three business lines that reinforce each other  - career, brand, and technology working as one ecosystem.',
       },
       {
         title: 'Relevant for Now',
-        description: 'An approach calibrated to the current Indonesian market — not a generic formula from elsewhere.',
+        description: 'An approach calibrated to the current Indonesian market  - not a generic formula from elsewhere.',
       },
     ],
   },
@@ -62,19 +62,19 @@ export const home = {
       {
         context: 'You are building a business',
         need: 'that needs a coherent brand identity and marketing strategy.',
-        solution: 'SAIKI Imagery designs brand systems that work — from visual to narrative.',
+        solution: 'SAIKI Imagery designs brand systems that work  - from visual to narrative.',
       },
       {
         context: 'You are running operations',
         need: 'that need internal digital systems or custom software platforms.',
-        solution: 'SAIKI Technology builds solutions that fit — not generic software, but tools that actually work for your business.',
+        solution: 'SAIKI Technology builds solutions that fit  - not generic software, but tools that actually work for your business.',
       },
     ],
   },
   operating: {
     eyebrow: 'Operating Model',
     headline: 'How We Work.',
-    body: 'SAIKI operates as an integrated group. Each business line stands independently with specific expertise, yet connected through one strategic approach. Clients get access to the whole ecosystem — not isolated silos.',
+    body: 'SAIKI operates as an integrated group. Each business line stands independently with specific expertise, yet connected through one strategic approach. Clients get access to the whole ecosystem  - not isolated silos.',
     stats: [
       { value: '3', label: 'Business Lines' },
       { value: '1', label: 'Ecosystem' },

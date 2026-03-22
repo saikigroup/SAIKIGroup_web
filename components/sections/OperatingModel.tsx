@@ -17,10 +17,14 @@ interface OperatingModelProps {
   stats: Stat[];
 }
 
+const statColors = ['#0d9488', '#8b5cf6', '#f97316'];
+
 export function OperatingModel({ eyebrow, headline, body, stats }: OperatingModelProps) {
   return (
-    <section className="py-20 md:py-32 bg-surface-light">
-      <div className="container-editorial">
+    <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-violet/5 rounded-full blur-3xl" />
+
+      <div className="container-editorial relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           <div className="lg:col-span-7">
             <FadeIn>
@@ -34,14 +38,17 @@ export function OperatingModel({ eyebrow, headline, body, stats }: OperatingMode
           </div>
 
           <div className="lg:col-span-4 lg:col-start-9">
-            <StaggerGroup className="space-y-8">
+            <StaggerGroup className="space-y-6">
               {stats.map((stat, i) => (
                 <StaggerItem key={i}>
                   <motion.div
-                    whileHover={{ x: 4 }}
-                    className="border-l-2 border-brand-teal pl-6"
+                    whileHover={{ scale: 1.05, x: 4 }}
+                    className="glass-strong rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
                   >
-                    <span className="heading-editorial text-5xl md:text-6xl text-brand-teal">
+                    <span
+                      className="heading-display text-5xl md:text-6xl"
+                      style={{ color: statColors[i] }}
+                    >
                       {stat.value}
                     </span>
                     <p className="text-sm font-medium text-text-secondary mt-1 uppercase tracking-wide">
