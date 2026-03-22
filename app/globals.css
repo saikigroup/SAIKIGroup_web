@@ -382,121 +382,34 @@ body {
   animation: shimmer 3s infinite;
 }
 
-/* Article HTML body styles (from Supabase HTML editor) */
-.article-html-body h2 {
-  font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: 1.5rem;
-  line-height: 1.15;
-  letter-spacing: -0.02em;
-  color: var(--color-brand-black);
-  margin-top: 3rem;
-  margin-bottom: 1.5rem;
-  padding-left: 1.5rem;
-  border-left: 3px solid var(--color-brand-teal);
-}
-
-.article-html-body h3 {
-  font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1.25rem;
-  line-height: 1.3;
-  color: var(--color-brand-black);
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-}
-
-.article-html-body p {
-  color: var(--color-text-secondary);
-  font-size: 1.065rem;
-  line-height: 1.85;
-  margin-bottom: 1.5rem;
-}
-
-.article-html-body p:first-child::first-letter {
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 3.5rem;
-  color: var(--color-brand-teal);
-  float: left;
-  margin-right: 0.75rem;
-  margin-top: 0.25rem;
-  line-height: 1;
-}
-
-.article-html-body blockquote {
-  margin: 3rem 0;
-  padding: 2rem 2.5rem;
-  border-radius: 1rem;
-  background: linear-gradient(135deg, var(--color-surface-cream), #fff, var(--color-surface-violet));
-  position: relative;
-}
-
-.article-html-body blockquote::before {
-  content: '\201C';
-  position: absolute;
-  top: 0.75rem;
-  left: 1.25rem;
-  font-family: var(--font-display);
-  font-weight: 900;
-  font-size: 4rem;
-  color: rgba(13, 148, 136, 0.15);
-  line-height: 1;
-}
-
-.article-html-body blockquote p {
-  font-size: 1.25rem;
-  font-weight: 500;
-  font-style: italic;
-  color: var(--color-brand-black);
-  line-height: 1.6;
-  margin-bottom: 0;
-}
-
-.article-html-body ul,
-.article-html-body ol {
-  color: var(--color-text-secondary);
-  font-size: 1.065rem;
-  line-height: 1.85;
-  margin-bottom: 1.5rem;
+/* Article list block styles (rendered via dangerouslySetInnerHTML) */
+.article-list-block ul,
+.article-list-block ol {
   padding-left: 1.5rem;
 }
 
-.article-html-body ul li,
-.article-html-body ol li {
+.article-list-block ul li,
+.article-list-block ol li {
   margin-bottom: 0.5rem;
 }
 
-.article-html-body ul li::marker {
+.article-list-block ul li::marker {
   color: var(--color-brand-teal);
 }
 
-.article-html-body strong {
+.article-list-block strong {
   color: var(--color-brand-black);
   font-weight: 600;
 }
 
-.article-html-body em {
-  font-style: italic;
-}
-
-.article-html-body a {
+.article-list-block a {
   color: var(--color-brand-teal);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.article-html-body a:hover {
+.article-list-block a:hover {
   color: var(--color-brand-black);
-}
-
-.article-html-body hr {
-  border: none;
-  height: 3px;
-  width: 4rem;
-  margin: 3rem auto;
-  background: linear-gradient(90deg, var(--color-brand-teal), var(--color-accent-imagery));
-  border-radius: 2px;
 }
 
 /* Admin article preview styles */
@@ -560,20 +473,3 @@ body {
   border-radius: 1px;
 }
 
-@media (min-width: 768px) {
-  .article-html-body h2 {
-    font-size: 1.875rem;
-  }
-
-  .article-html-body p:first-child::first-letter {
-    font-size: 4rem;
-  }
-
-  .article-html-body blockquote {
-    padding: 2.5rem 3rem;
-  }
-
-  .article-html-body blockquote p {
-    font-size: 1.5rem;
-  }
-}
