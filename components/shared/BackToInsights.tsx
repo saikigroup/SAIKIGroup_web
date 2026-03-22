@@ -13,7 +13,7 @@ export function BackToInsights({ label, locale }: BackToInsightsProps) {
   return (
     <Link
       href={getLocalizedPath('insights', locale)}
-      className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-brand-teal transition-colors duration-200"
+      className="inline-flex items-center gap-2 text-sm text-text-muted hover:text-brand-teal transition-colors duration-200 [.bg-gradient-dark_&]:text-white/50 [.bg-gradient-dark_&]:hover:text-brand-teal-light"
     >
       <ArrowLeft className="w-4 h-4" />
       {label}

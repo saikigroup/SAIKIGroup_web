@@ -27,7 +27,29 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 // Table and column names follow the saikiweb prefix convention
 export const TABLES = {
   INQUIRIES: 'saikiweb_inquiries',
+  ARTICLES: 'saikiweb_articles',
 } as const;
+
+// Type for the saikiweb_articles table
+export interface SaikiwebArticle {
+  saikiweb_article_id?: number;
+  saikiweb_slug: string;
+  saikiweb_locale: string;
+  saikiweb_title: string;
+  saikiweb_excerpt: string;
+  saikiweb_body: string;
+  saikiweb_category: string;
+  saikiweb_category_key: string;
+  saikiweb_date: string;
+  saikiweb_read_time: string;
+  saikiweb_featured: boolean;
+  saikiweb_published: boolean;
+  saikiweb_meta_title?: string;
+  saikiweb_meta_description?: string;
+  saikiweb_keywords?: string[];
+  saikiweb_created_at?: string;
+  saikiweb_updated_at?: string;
+}
 
 // Type for the saikiweb_inquiries table
 export interface SaikiwebInquiry {
