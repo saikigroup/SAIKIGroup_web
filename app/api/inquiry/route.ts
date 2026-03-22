@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     if (error) {
       console.error('Supabase insert error:', error);
       return NextResponse.json(
-        { success: false, error: 'Failed to submit inquiry' },
+        { success: false, error: 'Failed to submit inquiry', detail: error.message, code: error.code },
         { status: 500 }
       );
     }
