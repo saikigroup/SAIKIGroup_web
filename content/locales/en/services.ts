@@ -2,7 +2,7 @@ export const services = {
   overview: {
     eyebrow: 'Services',
     headline: 'What We Do.',
-    body: 'Three business lines, one purpose: helping you move with confidence. Every service is designed for real impact — not just deliverables.',
+    body: 'Three business lines, one purpose: helping you move with confidence. Every service is designed for real impact  - not just deliverables.',
   },
   consultancy: {
     hero: {
@@ -35,7 +35,7 @@ export const services = {
     approach: {
       eyebrow: 'Approach',
       headline: 'Not Theory. Practice.',
-      body: 'Every SAIKI consultancy session focuses on concrete action. You do not get a list of generic advice — you get a plan that can be executed immediately.',
+      body: 'Every SAIKI consultancy session focuses on concrete action. You do not get a list of generic advice  - you get a plan that can be executed immediately.',
     },
     useCases: {
       eyebrow: 'Who We Help',
@@ -114,7 +114,7 @@ export const services = {
       items: [
         {
           title: 'Custom Software Development',
-          description: 'Applications and platforms built specifically for your business needs — from concept to production.',
+          description: 'Applications and platforms built specifically for your business needs  - from concept to production.',
         },
         {
           title: 'White-Label Software',

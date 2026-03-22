@@ -2,7 +2,7 @@ import { type Locale } from '@/lib/i18n';
 import { getServices, getHome } from '@/lib/content';
 import { generatePageMetadata } from '@/lib/metadata';
 import { FadeIn } from '@/components/motion';
-import { SectionHeading, Eyebrow } from '@/components/shared';
+import { Eyebrow } from '@/components/shared';
 import { ServiceOverviewGrid, ContactCTA } from '@/components/sections';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -19,12 +19,15 @@ export default async function ServicesPage({ params }: { params: Promise<{ local
   return (
     <>
       {/* Hero */}
-      <section className="py-20 md:py-32 bg-surface-cream">
-        <div className="container-editorial">
+      <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
+        <div className="absolute top-20 -left-32 w-96 h-96 bg-brand-teal/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-0 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+
+        <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
               <Eyebrow>{t.overview.eyebrow}</Eyebrow>
-              <h1 className="heading-editorial text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4">
+              <h1 className="heading-display text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4">
                 {t.overview.headline}
               </h1>
               <div className="editorial-divider-bold w-20 mt-8" />

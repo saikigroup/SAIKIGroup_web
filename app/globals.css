@@ -1,23 +1,174 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 @import "tailwindcss";
 
-@theme inline {
-  --color-brand-teal: #2f4f50;
-  --color-brand-grey: #6a7b8d;
-  --color-brand-black: #1d1d1b;
-  --color-brand-white: #ffffff;
-  --color-accent-consultancy: #660e36;
-  --color-accent-imagery: #117a8c;
-  --color-accent-technology: #1a3a5c;
-  --color-surface-cream: #faf8f5;
-  --color-surface-light: #f5f3f0;
-  --color-border-subtle: #e5e2dd;
-  --color-text-primary: #1d1d1b;
-  --color-text-secondary: #6a7b8d;
-  --color-text-muted: #9ca3af;
+/* Gantari Font Family */
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
 
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', Georgia, serif;
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-SemiBoldItalic.ttf') format('truetype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-ExtraBoldItalic.ttf') format('truetype');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gantari';
+  src: url('/fonts/Gantari-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@theme inline {
+  --color-brand-teal: #0d9488;
+  --color-brand-teal-light: #5eead4;
+  --color-brand-coral: #f97316;
+  --color-brand-violet: #8b5cf6;
+  --color-brand-lime: #84cc16;
+  --color-brand-pink: #ec4899;
+  --color-brand-black: #0f172a;
+  --color-brand-white: #ffffff;
+
+  --color-accent-consultancy: #f43f5e;
+  --color-accent-imagery: #06b6d4;
+  --color-accent-technology: #8b5cf6;
+
+  --color-surface-cream: #f0fdfa;
+  --color-surface-light: #f8fafc;
+  --color-surface-warm: #fff7ed;
+  --color-surface-violet: #f5f3ff;
+
+  --color-border-subtle: #e2e8f0;
+  --color-border-glass: rgba(255, 255, 255, 0.2);
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #64748b;
+  --color-text-muted: #94a3b8;
+
+  --color-glass-white: rgba(255, 255, 255, 0.7);
+  --color-glass-white-strong: rgba(255, 255, 255, 0.85);
+  --color-glass-dark: rgba(15, 23, 42, 0.6);
+
+  --font-sans: 'Gantari', system-ui, -apple-system, sans-serif;
+  --font-display: 'Gantari', system-ui, sans-serif;
 }
 
 /* Base styles */
@@ -34,37 +185,94 @@ body {
   line-height: 1.6;
 }
 
-/* Editorial typography */
-.font-serif {
-  font-family: var(--font-serif);
+/* Font classes */
+.font-display {
+  font-family: var(--font-display);
 }
 
 .font-sans {
   font-family: var(--font-sans);
 }
 
-/* Editorial heading styles */
-.heading-editorial {
-  font-family: var(--font-serif);
-  font-weight: 600;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+/* Modern heading styles */
+.heading-display {
+  font-family: var(--font-display);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .heading-sans {
   font-family: var(--font-sans);
   font-weight: 700;
   line-height: 1.15;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
 }
 
 /* Eyebrow / label style */
 .eyebrow {
   font-family: var(--font-sans);
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+/* Glassmorphism utilities */
+.glass {
+  background: var(--color-glass-white);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-border-glass);
+}
+
+.glass-strong {
+  background: var(--color-glass-white-strong);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.glass-dark {
+  background: var(--color-glass-dark);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Gradient backgrounds */
+.bg-gradient-hero {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 30%, #f5f3ff 60%, #fff7ed 100%);
+}
+
+.bg-gradient-warm {
+  background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 50%, #fce7f3 100%);
+}
+
+.bg-gradient-cool {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #ede9fe 100%);
+}
+
+.bg-gradient-dark {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1a1a2e 100%);
+}
+
+.bg-gradient-teal {
+  background: linear-gradient(135deg, #0d9488 0%, #06b6d4 100%);
+}
+
+.bg-gradient-vibrant {
+  background: linear-gradient(135deg, #0d9488 0%, #8b5cf6 50%, #f43f5e 100%);
+}
+
+/* Mesh gradient for hero */
+.bg-mesh {
+  background:
+    radial-gradient(at 20% 20%, rgba(13, 148, 136, 0.15) 0px, transparent 50%),
+    radial-gradient(at 80% 10%, rgba(139, 92, 246, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 80%, rgba(249, 115, 22, 0.08) 0px, transparent 50%),
+    radial-gradient(at 90% 70%, rgba(236, 72, 153, 0.08) 0px, transparent 50%),
+    #f8fafc;
 }
 
 /* Editorial divider */
@@ -74,14 +282,16 @@ body {
 }
 
 .editorial-divider-bold {
-  height: 2px;
-  background: var(--color-brand-teal);
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-brand-teal), var(--color-accent-imagery));
+  border-radius: 2px;
 }
 
 /* Focus visible */
 *:focus-visible {
   outline: 2px solid var(--color-brand-teal);
   outline-offset: 2px;
+  border-radius: 4px;
 }
 
 /* Selection */
@@ -117,4 +327,57 @@ body {
     padding-left: 4rem;
     padding-right: 4rem;
   }
+}
+
+/* Decorative blob */
+.blob {
+  border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+  animation: blob-morph 8s ease-in-out infinite;
+}
+
+@keyframes blob-morph {
+  0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+  25% { border-radius: 60% 40% 30% 70% / 50% 60% 40% 60%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 30% 60% 40%; }
+  75% { border-radius: 50% 40% 50% 60% / 30% 60% 40% 70%; }
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.animate-float-slow {
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 4s;
+}
+
+/* Gradient text */
+.text-gradient {
+  background: linear-gradient(135deg, #0d9488, #06b6d4, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s infinite;
 }

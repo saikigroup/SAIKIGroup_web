@@ -2,7 +2,7 @@ export const services = {
   overview: {
     eyebrow: 'Layanan',
     headline: 'Apa yang Kami Lakukan.',
-    body: 'Tiga lini bisnis, satu tujuan: membantu Anda bergerak dengan percaya diri. Setiap layanan dirancang untuk menghasilkan dampak nyata — bukan sekadar deliverable.',
+    body: 'Tiga lini bisnis, satu tujuan: membantu Anda bergerak dengan percaya diri. Setiap layanan dirancang untuk menghasilkan dampak nyata  - bukan sekadar deliverable.',
   },
   consultancy: {
     hero: {
@@ -35,7 +35,7 @@ export const services = {
     approach: {
       eyebrow: 'Pendekatan',
       headline: 'Bukan Teori. Praktik.',
-      body: 'Setiap sesi konsultansi SAIKI berfokus pada aksi konkret. Anda tidak mendapat daftar saran generik — Anda mendapat rencana yang bisa langsung dieksekusi.',
+      body: 'Setiap sesi konsultansi SAIKI berfokus pada aksi konkret. Anda tidak mendapat daftar saran generik  - Anda mendapat rencana yang bisa langsung dieksekusi.',
     },
     useCases: {
       eyebrow: 'Siapa yang Kami Bantu',
@@ -114,7 +114,7 @@ export const services = {
       items: [
         {
           title: 'Custom Software Development',
-          description: 'Aplikasi dan platform yang dibangun khusus sesuai kebutuhan bisnis Anda — dari konsep hingga produksi.',
+          description: 'Aplikasi dan platform yang dibangun khusus sesuai kebutuhan bisnis Anda  - dari konsep hingga produksi.',
         },
         {
           title: 'White-Label Software',

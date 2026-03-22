@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, type FormEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, type FormEvent } from 'react';
+import { motion } from 'framer-motion';
 import { Send, Check, AlertCircle } from 'lucide-react';
 import { getContact } from '@/lib/content';
 import { type Locale } from '@/lib/i18n';
@@ -39,7 +39,6 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
       analytics.formStart('contact');
     }
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error on change
     if (errors[field]) {
       setErrors((prev) => {
         const next = { ...prev };
@@ -87,7 +86,6 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
       setFormState('success');
     } catch {
       setFormState('error');
-      // Fallback: still mark as success for UX (data captured in analytics)
       analytics.formSubmit('contact', formData.category);
       setFormState('success');
     }
@@ -100,7 +98,7 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
         animate={{ opacity: 1, y: 0 }}
         className="text-center py-16"
       >
-        <div className="w-16 h-16 bg-brand-teal rounded-full flex items-center justify-center mx-auto mb-6">
+        <div className="w-16 h-16 bg-gradient-teal rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-teal/30">
           <Check className="w-8 h-8 text-white" />
         </div>
         <h3 className="heading-sans text-2xl text-brand-black mb-3">
@@ -132,10 +130,10 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
   }
 
   const inputClasses =
-    'w-full px-4 py-3 border border-border-subtle bg-white text-brand-black placeholder:text-text-muted focus:border-brand-teal focus:ring-1 focus:ring-brand-teal outline-none transition-colors duration-200';
+    'w-full px-4 py-3.5 rounded-xl border border-border-subtle bg-white/80 backdrop-blur-sm text-brand-black placeholder:text-text-muted focus:border-brand-teal focus:ring-2 focus:ring-brand-teal/20 outline-none transition-all duration-200';
   const labelClasses = 'block text-sm font-semibold text-brand-black mb-1.5';
   const helperClasses = 'text-xs text-text-muted mt-1';
-  const errorClasses = 'text-xs text-red-600 mt-1';
+  const errorClasses = 'text-xs text-red-500 mt-1';
 
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-6">
@@ -148,7 +146,7 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
             placeholder={t.form.namePlaceholder}
             value={formData.name}
             onChange={(e) => handleChange('name', e.target.value)}
-            className={`${inputClasses} ${errors.name ? 'border-red-500' : ''}`}
+            className={`${inputClasses} ${errors.name ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
           />
           {errors.name && <p className={errorClasses}>{errors.name}</p>}
         </div>
@@ -159,7 +157,7 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
             placeholder={t.form.emailPlaceholder}
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
-            className={`${inputClasses} ${errors.email ? 'border-red-500' : ''}`}
+            className={`${inputClasses} ${errors.email ? 'border-red-400 focus:border-red-400 focus:ring-red-400/20' : ''}`}
           />
           {errors.email && <p className={errorClasses}>{errors.email}</p>}
         </div>
@@ -197,7 +195,7 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
         <select
           value={formData.category}
           onChange={(e) => handleChange('category', e.target.value)}
-          className={`${inputClasses} ${errors.category ? 'border-red-500' : ''} ${!formData.category ? 'text-text-muted' : ''}`}
+          className={`${inputClasses} ${errors.category ? 'border-red-400' : ''} ${!formData.category ? 'text-text-muted' : ''}`}
         >
           <option value="">{t.form.categoryPlaceholder}</option>
           {t.form.categories.map((cat) => (
@@ -217,7 +215,7 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
           rows={5}
           value={formData.message}
           onChange={(e) => handleChange('message', e.target.value)}
-          className={`${inputClasses} resize-y ${errors.message ? 'border-red-500' : ''}`}
+          className={`${inputClasses} resize-y ${errors.message ? 'border-red-400' : ''}`}
         />
         <p className={errors.message ? errorClasses : helperClasses}>
           {errors.message || t.form.messageHelper}
@@ -249,9 +247,9 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
             type="checkbox"
             checked={formData.consent}
             onChange={(e) => handleChange('consent', e.target.checked)}
-            className="mt-0.5 w-4 h-4 accent-brand-teal"
+            className="mt-0.5 w-4 h-4 accent-brand-teal rounded"
           />
-          <span className={`text-sm text-text-secondary ${errors.consent ? 'text-red-600' : ''}`}>
+          <span className={`text-sm text-text-secondary ${errors.consent ? 'text-red-500' : ''}`}>
             {t.form.consent}
           </span>
         </label>
@@ -262,9 +260,9 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
       <motion.button
         type="submit"
         disabled={formState === 'sending'}
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
-        className="w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-9 py-4 bg-brand-teal text-white font-semibold border-2 border-brand-teal hover:bg-brand-black hover:border-brand-black transition-colors duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+        whileHover={{ scale: 1.02, y: -2 }}
+        whileTap={{ scale: 0.98 }}
+        className="w-full md:w-auto inline-flex items-center justify-center gap-2.5 px-9 py-4 bg-gradient-to-r from-brand-teal to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-teal/25 transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
       >
         {formState === 'sending' ? (
           t.form.sending

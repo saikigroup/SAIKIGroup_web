@@ -12,13 +12,17 @@ interface BrandStatementProps {
 
 export function BrandStatement({ eyebrow, headline, body, body2 }: BrandStatementProps) {
   return (
-    <section className="py-20 md:py-32 bg-white">
-      <div className="container-editorial">
+    <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+      {/* Subtle mesh bg */}
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-teal/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-violet/5 rounded-full blur-3xl" />
+
+      <div className="container-editorial relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           <div className="lg:col-span-4">
             <FadeIn>
               <Eyebrow>{eyebrow}</Eyebrow>
-              <h2 className="heading-editorial text-4xl md:text-5xl text-brand-black mt-4">
+              <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4">
                 {headline}
               </h2>
             </FadeIn>
@@ -30,7 +34,7 @@ export function BrandStatement({ eyebrow, headline, body, body2 }: BrandStatemen
               <p className="text-lg md:text-xl text-text-secondary leading-relaxed mb-6">
                 {body}
               </p>
-              <p className="text-lg text-brand-black font-medium leading-relaxed">
+              <p className="text-lg text-brand-black font-medium leading-relaxed glass rounded-xl p-6">
                 {body2}
               </p>
             </FadeIn>

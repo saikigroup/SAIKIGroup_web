@@ -2,7 +2,7 @@
 
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
-import { Eyebrow, CTAButton } from '@/components/shared';
+import { Eyebrow, CTAButton, IconConsultancy, IconImagery, IconTechnology, IconCheck } from '@/components/shared';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
 import type { ServiceKey } from '@/lib/utils';
 import { serviceAccentColors } from '@/lib/utils';
@@ -22,6 +22,14 @@ interface ServicePageTemplateProps {
   locale: Locale;
 }
 
+const ServiceIcon = ({ serviceKey, className }: { serviceKey: ServiceKey; className?: string }) => {
+  switch (serviceKey) {
+    case 'consultancy': return <IconConsultancy className={className} size={36} />;
+    case 'imagery': return <IconImagery className={className} size={36} />;
+    case 'technology': return <IconTechnology className={className} size={36} />;
+  }
+};
+
 export function ServicePageTemplate({
   serviceKey,
   hero,
@@ -36,17 +44,26 @@ export function ServicePageTemplate({
   return (
     <>
       {/* Hero */}
-      <section className="py-20 md:py-32 bg-surface-cream">
-        <div className="container-editorial">
+      <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
+        <div className="absolute top-20 -left-32 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: `${colors.hex}15` }} />
+        <div className="absolute bottom-10 right-0 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+
+        <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
-              <Eyebrow color={colors.text}>{hero.eyebrow}</Eyebrow>
-              <h1 className="heading-editorial text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4 whitespace-pre-line">
+              <div
+                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
+                style={{ backgroundColor: `${colors.hex}15` }}
+              >
+                <ServiceIcon serviceKey={serviceKey} />
+              </div>
+              <Eyebrow color={`text-[${colors.hex}]`}>{hero.eyebrow}</Eyebrow>
+              <h1 className="heading-display text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4 whitespace-pre-line">
                 {hero.headline}
               </h1>
               <div
-                className="w-20 h-0.5 mt-8"
-                style={{ backgroundColor: colors.hex }}
+                className="w-20 h-1 mt-8 rounded-full"
+                style={{ background: `linear-gradient(90deg, ${colors.hex}, ${colors.hex}60)` }}
               />
               <p className="text-lg md:text-xl text-text-secondary leading-relaxed mt-8">
                 {hero.body}
@@ -62,27 +79,31 @@ export function ServicePageTemplate({
       </section>
 
       {/* Scope */}
-      <section className="py-20 md:py-32 bg-white">
+      <section className="py-20 md:py-32 bg-white relative overflow-hidden">
         <div className="container-editorial">
           <FadeIn>
-            <Eyebrow color={colors.text}>{scope.eyebrow}</Eyebrow>
-            <h2 className="heading-editorial text-4xl md:text-5xl text-brand-black mt-4">
+            <Eyebrow>{scope.eyebrow}</Eyebrow>
+            <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4">
               {scope.headline}
             </h2>
           </FadeIn>
 
-          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-14">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
             {scope.items.map((item, i) => (
               <StaggerItem key={i}>
-                <div
-                  className="border-l-2 pl-6 md:pl-8"
-                  style={{ borderColor: colors.hex }}
-                >
-                  <span className="eyebrow text-brand-grey">0{i + 1}</span>
-                  <h3 className="heading-sans text-xl text-brand-black mt-2 mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-text-secondary leading-relaxed">
+                <div className="glass-strong rounded-2xl p-6 md:p-8 hover:shadow-lg transition-all duration-300 h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
+                      style={{ backgroundColor: colors.hex }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="heading-sans text-xl text-brand-black">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p className="text-text-secondary leading-relaxed pl-11">
                     {item.description}
                   </p>
                 </div>
@@ -93,13 +114,13 @@ export function ServicePageTemplate({
       </section>
 
       {/* Approach */}
-      <section className="py-20 md:py-32 bg-surface-light">
+      <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
         <div className="container-editorial">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5">
               <FadeIn>
-                <Eyebrow color={colors.text}>{approach.eyebrow}</Eyebrow>
-                <h2 className="heading-editorial text-4xl md:text-5xl text-brand-black mt-4">
+                <Eyebrow>{approach.eyebrow}</Eyebrow>
+                <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4">
                   {approach.headline}
                 </h2>
               </FadeIn>
@@ -107,8 +128,8 @@ export function ServicePageTemplate({
             <div className="lg:col-span-6 lg:col-start-7">
               <FadeIn delay={0.2}>
                 <div
-                  className="w-16 h-0.5 mb-8"
-                  style={{ backgroundColor: colors.hex }}
+                  className="w-16 h-1 mb-8 rounded-full"
+                  style={{ background: `linear-gradient(90deg, ${colors.hex}, ${colors.hex}60)` }}
                 />
                 <p className="text-lg text-text-secondary leading-relaxed">
                   {approach.body}
@@ -123,20 +144,17 @@ export function ServicePageTemplate({
       <section className="py-20 md:py-32 bg-white">
         <div className="container-editorial">
           <FadeIn>
-            <Eyebrow color={colors.text}>{useCases.eyebrow}</Eyebrow>
-            <h2 className="heading-editorial text-4xl md:text-5xl text-brand-black mt-4 mb-12">
+            <Eyebrow>{useCases.eyebrow}</Eyebrow>
+            <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4 mb-12">
               {useCases.headline}
             </h2>
           </FadeIn>
 
-          <StaggerGroup className="space-y-4">
+          <StaggerGroup className="space-y-3">
             {useCases.items.map((item, i) => (
               <StaggerItem key={i}>
-                <div className="flex items-start gap-4 py-4 border-b border-border-subtle">
-                  <span
-                    className="mt-2 w-2 h-2 rounded-full shrink-0"
-                    style={{ backgroundColor: colors.hex }}
-                  />
+                <div className="flex items-start gap-4 glass-strong rounded-xl py-4 px-5 hover:shadow-sm transition-all duration-300">
+                  <span style={{ color: colors.hex }}><IconCheck size={22} className="shrink-0 mt-0.5" /></span>
                   <p className="text-lg text-brand-black">{item}</p>
                 </div>
               </StaggerItem>
@@ -147,12 +165,14 @@ export function ServicePageTemplate({
 
       {/* CTA */}
       <section
-        className="py-20 md:py-32 text-white"
-        style={{ backgroundColor: colors.hex }}
+        className="py-20 md:py-32 text-white relative overflow-hidden"
       >
-        <div className="container-editorial text-center max-w-3xl mx-auto">
+        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.hex}, ${colors.hex}cc)` }} />
+        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+
+        <div className="container-editorial text-center max-w-3xl mx-auto relative">
           <FadeIn>
-            <h2 className="heading-editorial text-4xl md:text-5xl text-white">
+            <h2 className="heading-display text-4xl md:text-5xl text-white">
               {cta.headline}
             </h2>
             <p className="text-lg text-white/80 leading-relaxed mt-6 mb-10">
@@ -161,7 +181,7 @@ export function ServicePageTemplate({
             <CTAButton
               href={getLocalizedPath('contact', locale)}
               variant="secondary"
-              className="border-white text-white hover:bg-white hover:text-brand-black"
+              className="border-white/30 text-white hover:bg-white hover:text-brand-black backdrop-blur-sm"
             >
               {cta.button}
             </CTAButton>

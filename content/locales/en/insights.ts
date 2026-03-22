@@ -8,7 +8,7 @@ export const insights = {
     {
       slug: 'why-personal-branding-matters',
       title: 'Why Personal Branding Matters More Than Your CV in 2025',
-      excerpt: 'In the digital era, first impressions happen before the interview starts. Personal branding is not a trend — it is a strategic necessity.',
+      excerpt: 'In the digital era, first impressions happen before the interview starts. Personal branding is not a trend  - it is a strategic necessity.',
       category: 'Career',
       categoryKey: 'consultancy',
       date: 'Mar 15, 2025',

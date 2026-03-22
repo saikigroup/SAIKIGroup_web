@@ -5,9 +5,9 @@ interface LogoProps {
 }
 
 export function Logo({ variant = 'dark', className = '', showText = true }: LogoProps) {
-  const fill = variant === 'white' ? '#ffffff' : '#2f4f50';
-  const fillSecondary = variant === 'white' ? '#ffffff' : '#6a7b8d';
-  const textFill = variant === 'white' ? '#ffffff' : '#1d1d1b';
+  const fill = variant === 'white' ? '#ffffff' : '#0d9488';
+  const fillSecondary = variant === 'white' ? 'rgba(255,255,255,0.6)' : '#06b6d4';
+  const textFill = variant === 'white' ? '#ffffff' : '#0f172a';
 
   return (
     <div className={`flex items-center gap-3 ${className}`}>
@@ -43,7 +43,7 @@ export function Logo({ variant = 'dark', className = '', showText = true }: Logo
       </svg>
       {showText && (
         <span
-          className="text-xl font-bold tracking-[0.15em]"
+          className="text-xl font-bold tracking-[0.12em] font-display"
           style={{ color: textFill }}
         >
           SAIKI

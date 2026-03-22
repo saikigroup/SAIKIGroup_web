@@ -16,15 +16,20 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const t = getAbout(locale);
   const homeT = getHome(locale);
 
+  const valueColors = ['#0d9488', '#8b5cf6', '#f97316', '#f43f5e'];
+
   return (
     <>
       {/* Hero */}
-      <section className="py-20 md:py-32 bg-surface-cream">
-        <div className="container-editorial">
+      <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
+        <div className="absolute top-20 -right-32 w-96 h-96 bg-brand-teal/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-0 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+
+        <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
               <Eyebrow>{t.hero.eyebrow}</Eyebrow>
-              <h1 className="heading-editorial text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4 whitespace-pre-line">
+              <h1 className="heading-display text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4 whitespace-pre-line">
                 {t.hero.headline}
               </h1>
               <div className="editorial-divider-bold w-20 mt-8" />
@@ -37,8 +42,10 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Story */}
-      <section className="py-20 md:py-32 bg-white">
-        <div className="container-editorial">
+      <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-coral/5 rounded-full blur-3xl" />
+
+        <div className="container-editorial relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-4">
               <FadeIn>
@@ -51,7 +58,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 <p className="text-lg text-text-secondary leading-relaxed mb-6">
                   {t.story.body}
                 </p>
-                <p className="text-lg text-text-secondary leading-relaxed">
+                <p className="text-lg text-brand-black font-medium leading-relaxed glass rounded-xl p-6">
                   {t.story.body2}
                 </p>
               </FadeIn>
@@ -61,20 +68,29 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Values */}
-      <section className="py-20 md:py-32 bg-surface-light">
-        <div className="container-editorial">
+      <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-brand-teal/5 rounded-full blur-3xl" />
+
+        <div className="container-editorial relative">
           <FadeIn>
             <SectionHeading eyebrow={t.values.eyebrow} headline={t.values.headline} />
           </FadeIn>
-          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-14">
+          <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
             {t.values.items.map((item, i) => (
               <StaggerItem key={i}>
-                <div className="border-l-2 border-brand-teal pl-6 md:pl-8">
-                  <span className="eyebrow text-brand-grey">0{i + 1}</span>
-                  <h3 className="heading-sans text-xl text-brand-black mt-2 mb-3">
-                    {item.title}
-                  </h3>
-                  <p className="text-text-secondary leading-relaxed">{item.description}</p>
+                <div className="glass-strong rounded-2xl p-6 md:p-8 hover:shadow-lg transition-all duration-300 h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <span
+                      className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
+                      style={{ backgroundColor: valueColors[i % valueColors.length] }}
+                    >
+                      {String(i + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="heading-sans text-xl text-brand-black">
+                      {item.title}
+                    </h3>
+                  </div>
+                  <p className="text-text-secondary leading-relaxed pl-11">{item.description}</p>
                 </div>
               </StaggerItem>
             ))}
@@ -83,8 +99,8 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
       </section>
 
       {/* Approach */}
-      <section className="py-20 md:py-32 bg-white">
-        <div className="container-editorial max-w-3xl">
+      <section className="py-20 md:py-32 bg-white relative overflow-hidden">
+        <div className="container-editorial max-w-3xl relative">
           <FadeIn>
             <SectionHeading
               eyebrow={t.approach.eyebrow}

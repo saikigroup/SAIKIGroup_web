@@ -30,9 +30,9 @@ export function JournalCard({
 }: JournalCardProps) {
   return (
     <motion.article
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -8 }}
       transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative border border-border-subtle bg-white hover:border-brand-teal transition-colors duration-300 ${
+      className={`group relative glass-strong rounded-2xl hover:shadow-xl hover:shadow-brand-teal/5 transition-all duration-300 ${
         featured ? 'md:col-span-2' : ''
       }`}
     >
@@ -60,13 +60,12 @@ export function JournalCard({
           {excerpt}
         </p>
 
-        <div className="flex items-center justify-between pt-4 border-t border-border-subtle">
+        <div className="flex items-center justify-between pt-4 border-t border-border-subtle/50">
           <time className="text-sm text-text-muted">{date}</time>
           <motion.span
-            className="inline-flex items-center gap-1 text-sm font-semibold text-brand-teal"
-            whileHover={{ x: 4 }}
+            className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-brand-teal/10 text-brand-teal group-hover:bg-brand-teal group-hover:text-white transition-all duration-300"
           >
-            <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            <ArrowUpRight className="w-4 h-4" />
           </motion.span>
         </div>
       </div>

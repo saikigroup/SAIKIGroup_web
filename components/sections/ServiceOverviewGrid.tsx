@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
-import { SectionHeading } from '@/components/shared';
+import { SectionHeading, IconConsultancy, IconImagery, IconTechnology } from '@/components/shared';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
 import { serviceAccentColors, type ServiceKey } from '@/lib/utils';
 
@@ -26,6 +26,20 @@ interface ServiceOverviewGridProps {
 
 const serviceKeys: ServiceKey[] = ['consultancy', 'imagery', 'technology'];
 
+const ServiceIcon = ({ serviceKey, className }: { serviceKey: ServiceKey; className?: string }) => {
+  switch (serviceKey) {
+    case 'consultancy': return <IconConsultancy className={className} />;
+    case 'imagery': return <IconImagery className={className} />;
+    case 'technology': return <IconTechnology className={className} />;
+  }
+};
+
+const gradientBg: Record<ServiceKey, string> = {
+  consultancy: 'from-rose-500/10 to-orange-500/10',
+  imagery: 'from-cyan-500/10 to-teal-500/10',
+  technology: 'from-violet-500/10 to-purple-500/10',
+};
+
 export function ServiceOverviewGrid({
   eyebrow,
   headline,
@@ -37,8 +51,11 @@ export function ServiceOverviewGrid({
   const services = [consultancy, imagery, technology];
 
   return (
-    <section className="py-20 md:py-32 bg-surface-cream">
-      <div className="container-editorial">
+    <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-violet/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-teal/5 rounded-full blur-3xl" />
+
+      <div className="container-editorial relative">
         <FadeIn>
           <SectionHeading eyebrow={eyebrow} headline={headline} size="xl" />
         </FadeIn>
@@ -51,42 +68,49 @@ export function ServiceOverviewGrid({
             return (
               <StaggerItem key={key}>
                 <motion.div
-                  whileHover={{ y: -8 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                   transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 >
                   <Link
                     href={getLocalizedPath(key, locale)}
-                    className="group block bg-white border border-border-subtle hover:border-brand-teal p-8 md:p-10 h-full transition-colors duration-300"
+                    className={`group block glass-strong rounded-2xl p-8 md:p-10 h-full hover:shadow-xl hover:shadow-brand-teal/5 transition-all duration-300 relative overflow-hidden`}
                   >
-                    {/* Accent bar */}
-                    <div
-                      className="w-10 h-1 mb-6 transition-all duration-300 group-hover:w-16"
-                      style={{ backgroundColor: colors.hex }}
-                    />
+                    {/* Gradient bg on hover */}
+                    <div className={`absolute inset-0 bg-gradient-to-br ${gradientBg[key]} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
 
-                    <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
-                      {service.title}
-                    </h3>
+                    <div className="relative">
+                      {/* Icon */}
+                      <div
+                        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
+                        style={{ backgroundColor: `${colors.hex}15` }}
+                      >
+                        <ServiceIcon serviceKey={key} className={`w-8 h-8`} />
+                      </div>
 
-                    <p className="text-text-secondary leading-relaxed mb-6">
-                      {service.description}
-                    </p>
+                      <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
+                        {service.title}
+                      </h3>
 
-                    <div className="flex flex-wrap gap-2 mb-8">
-                      {service.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs font-medium px-2.5 py-1 border"
-                          style={{ borderColor: colors.hex, color: colors.hex }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
+                      <p className="text-text-secondary leading-relaxed mb-6">
+                        {service.description}
+                      </p>
+
+                      <div className="flex flex-wrap gap-2 mb-8">
+                        {service.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs font-medium px-3 py-1.5 rounded-full border"
+                            style={{ borderColor: `${colors.hex}30`, color: colors.hex, backgroundColor: `${colors.hex}08` }}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-teal/10 text-brand-teal group-hover:bg-brand-teal group-hover:text-white transition-all duration-300">
+                        <ArrowRight className="w-4 h-4" />
+                      </span>
                     </div>
-
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-brand-teal group-hover:gap-3 transition-all duration-300">
-                      <ArrowRight className="w-4 h-4" />
-                    </span>
                   </Link>
                 </motion.div>
               </StaggerItem>
