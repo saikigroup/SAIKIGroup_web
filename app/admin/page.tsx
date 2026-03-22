@@ -44,6 +44,7 @@ export default function AdminPage() {
   const [search, setSearch] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+  const [emailTest, setEmailTest] = useState<{ loading: boolean; result: Record<string, unknown> | null }>({ loading: false, result: null });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -169,6 +170,27 @@ export default function AdminPage() {
             <span className="text-sm text-gray-500">
               {pagination.total} total inquiries
             </span>
+            <button
+              onClick={async () => {
+                const pw = sessionStorage.getItem('admin_pw');
+                if (!pw) return;
+                setEmailTest({ loading: true, result: null });
+                try {
+                  const res = await fetch('/api/admin/test-email', {
+                    method: 'POST',
+                    headers: { 'x-admin-password': pw },
+                  });
+                  const data = await res.json();
+                  setEmailTest({ loading: false, result: data });
+                } catch (err) {
+                  setEmailTest({ loading: false, result: { error: String(err) } });
+                }
+              }}
+              disabled={emailTest.loading}
+              className="px-3 py-1.5 text-sm bg-amber-100 text-amber-700 font-medium rounded-lg hover:bg-amber-200 transition disabled:opacity-50"
+            >
+              {emailTest.loading ? 'Testing...' : 'Test Email'}
+            </button>
             <button
               onClick={() => {
                 sessionStorage.removeItem('admin_pw');
@@ -410,6 +432,27 @@ export default function AdminPage() {
                   </a>
                 )}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Email Test Result Modal */}
+      {emailTest.result && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setEmailTest({ loading: false, result: null })} />
+          <div className="relative bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl">
+              <h2 className="text-lg font-bold text-gray-900">Email Test Result</h2>
+              <button onClick={() => setEmailTest({ loading: false, result: null })} className="text-gray-400 hover:text-gray-600">
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="p-6">
+              <pre className="bg-gray-50 rounded-xl p-4 text-sm text-gray-800 overflow-x-auto whitespace-pre-wrap">
+                {JSON.stringify(emailTest.result, null, 2)}
+              </pre>
             </div>
           </div>
         </div>
