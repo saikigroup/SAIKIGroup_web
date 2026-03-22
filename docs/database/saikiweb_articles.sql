@@ -1,5 +1,7 @@
 -- Supabase SQL: Create saikiweb_articles table
 -- Run this in Supabase SQL Editor
+-- Admin API uses service_role key which bypasses RLS entirely,
+-- so policies below are only for direct Supabase client access.
 
 CREATE TABLE IF NOT EXISTS saikiweb_articles (
   saikiweb_article_id BIGSERIAL PRIMARY KEY,
@@ -26,13 +28,27 @@ CREATE TABLE IF NOT EXISTS saikiweb_articles (
 -- Enable Row Level Security
 ALTER TABLE saikiweb_articles ENABLE ROW LEVEL SECURITY;
 
--- Policy: Allow public reads for published articles
-CREATE POLICY "Allow public reads for published articles" ON saikiweb_articles
+-- Drop existing policies if re-running this script
+DROP POLICY IF EXISTS "Allow public reads for published articles" ON saikiweb_articles;
+DROP POLICY IF EXISTS "Allow service role full access" ON saikiweb_articles;
+DROP POLICY IF EXISTS "Allow authenticated full access" ON saikiweb_articles;
+DROP POLICY IF EXISTS "Allow anon reads for published" ON saikiweb_articles;
+
+-- Policy: Allow anonymous reads for published articles (public website)
+CREATE POLICY "Allow anon reads for published" ON saikiweb_articles
   FOR SELECT
   TO anon
   USING (saikiweb_published = true);
 
--- Policy: Allow service role full access (admin via service key)
+-- Policy: Allow authenticated users full read access
+CREATE POLICY "Allow authenticated full access" ON saikiweb_articles
+  FOR ALL
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+
+-- Policy: Allow service role full access (admin API uses this)
+-- Note: service_role bypasses RLS by default, but adding for clarity
 CREATE POLICY "Allow service role full access" ON saikiweb_articles
   FOR ALL
   TO service_role
@@ -64,6 +80,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+DROP TRIGGER IF EXISTS trigger_saikiweb_articles_updated_at ON saikiweb_articles;
 CREATE TRIGGER trigger_saikiweb_articles_updated_at
   BEFORE UPDATE ON saikiweb_articles
   FOR EACH ROW

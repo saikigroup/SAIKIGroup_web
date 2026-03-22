@@ -22,6 +22,17 @@ interface Article {
   saikiweb_updated_at: string;
 }
 
+interface LocaleFields {
+  title: string;
+  excerpt: string;
+  body: string;
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string;
+  readTime: string;
+  category: string;
+}
+
 interface ArticleForm {
   slug: string;
   locale: string;
@@ -38,6 +49,17 @@ interface ArticleForm {
   metaDescription: string;
   keywords: string;
 }
+
+const emptyLocaleFields: LocaleFields = {
+  title: '',
+  excerpt: '',
+  body: '',
+  metaTitle: '',
+  metaDescription: '',
+  keywords: '',
+  readTime: '',
+  category: '',
+};
 
 const emptyForm: ArticleForm = {
   slug: '',
@@ -84,6 +106,12 @@ export default function AdminArticlesPage() {
 
   // Tab state for editor
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
+
+  // Dual locale mode
+  const [dualLocale, setDualLocale] = useState(false);
+  const [activeLocaleTab, setActiveLocaleTab] = useState<'id' | 'en'>('id');
+  const [enFields, setEnFields] = useState<LocaleFields>(emptyLocaleFields);
+  const [enSlug, setEnSlug] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,13 +181,62 @@ export default function AdminArticlesPage() {
       .trim();
   };
 
+  const formatReadTime = (raw: string, locale: string) => {
+    if (!raw) return '';
+    if (!raw.includes('|')) return raw; // already formatted
+    const [num, unit] = raw.split('|');
+    if (!num) return '';
+    const n = parseInt(num, 10);
+    if (locale === 'id') {
+      return `${n} ${unit}`;
+    }
+    const enUnits: Record<string, string> = { detik: 'sec read', menit: 'min read', jam: 'hour read' };
+    return `${n} ${enUnits[unit] || unit}`;
+  };
+
+  const formatDateForLocale = (dateStr: string, locale: string) => {
+    if (!dateStr) return '';
+    try {
+      const d = new Date(dateStr + 'T00:00:00');
+      if (isNaN(d.getTime())) return dateStr;
+      if (locale === 'id') {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+        return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+      }
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${months[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
+    } catch {
+      return dateStr;
+    }
+  };
+
+  const saveArticle = async (pw: string, payload: Record<string, unknown>, method: string) => {
+    const res = await fetch('/api/admin/articles', {
+      method,
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': pw },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  };
+
   const handleSave = async () => {
     const pw = sessionStorage.getItem('admin_pw');
     if (!pw) return;
 
     if (!form.slug || !form.title || !form.body || !form.excerpt) {
-      setSaveError('Slug, title, excerpt, and body are required');
+      setSaveError('Slug, title, excerpt, and body are required (ID)');
       return;
+    }
+
+    if (dualLocale && !editingId) {
+      if (!enFields.title || !enFields.body || !enFields.excerpt) {
+        setSaveError('Title, excerpt, and body are required for EN version too');
+        return;
+      }
+      if (!enSlug) {
+        setSaveError('EN slug is required');
+        return;
+      }
     }
 
     setSaving(true);
@@ -168,36 +245,93 @@ export default function AdminArticlesPage() {
 
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const payload = {
+      const catOpt = categoryOptions.find((c) => c.key === form.categoryKey);
+
+      // Save ID version
+      const saveLocale = editingId ? form.locale : 'id';
+      const idPayload = {
         ...form,
+        locale: saveLocale,
+        date: formatDateForLocale(form.date, saveLocale),
+        readTime: formatReadTime(form.readTime, saveLocale),
+        category: catOpt?.labelId || form.category,
         keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
         ...(editingId ? { id: editingId } : {}),
       };
 
-      const res = await fetch('/api/admin/articles', {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': pw,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
+      const idResult = await saveArticle(pw, idPayload, method);
 
-      if (data.success) {
-        setSaveSuccess(editingId ? 'Article updated!' : 'Article created!');
-        setEditing(false);
-        setEditingId(null);
-        setForm(emptyForm);
-        fetchArticles();
-        setTimeout(() => setSaveSuccess(''), 3000);
-      } else {
-        setSaveError(data.error || 'Failed to save');
+      if (!idResult.success) {
+        setSaveError(idResult.error || 'Failed to save ID version');
+        setSaving(false);
+        return;
       }
+
+      // Save EN version if dual locale
+      if (dualLocale && !editingId) {
+        const enPayload = {
+          slug: enSlug,
+          locale: 'en',
+          title: enFields.title,
+          excerpt: enFields.excerpt,
+          body: enFields.body,
+          category: catOpt?.labelEn || form.category,
+          categoryKey: form.categoryKey,
+          date: formatDateForLocale(form.date, 'en'),
+          readTime: formatReadTime(form.readTime, 'en'),
+          featured: form.featured,
+          published: form.published,
+          metaTitle: enFields.metaTitle || null,
+          metaDescription: enFields.metaDescription || null,
+          keywords: enFields.keywords ? enFields.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
+        };
+
+        const enResult = await saveArticle(pw, enPayload, 'POST');
+        if (!enResult.success) {
+          setSaveError(`ID saved, but EN failed: ${enResult.error}`);
+          setSaving(false);
+          fetchArticles();
+          return;
+        }
+      }
+
+      setSaveSuccess(dualLocale && !editingId ? 'Both ID & EN articles created!' : editingId ? 'Article updated!' : 'Article created!');
+      setEditing(false);
+      setEditingId(null);
+      setForm(emptyForm);
+      setEnFields(emptyLocaleFields);
+      setEnSlug('');
+      setDualLocale(false);
+      fetchArticles();
+      setTimeout(() => setSaveSuccess(''), 3000);
     } catch {
       setSaveError('Connection error');
     }
     setSaving(false);
+  };
+
+  const parseReadTimeToInput = (readTime: string) => {
+    if (!readTime) return '';
+    if (readTime.includes('|')) return readTime;
+    const num = readTime.replace(/\D/g, '');
+    if (!num) return readTime;
+    if (readTime.includes('jam') || readTime.includes('hour')) return `${num}|jam`;
+    if (readTime.includes('detik') || readTime.includes('sec')) return `${num}|detik`;
+    return `${num}|menit`;
+  };
+
+  const parseDateToInput = (dateStr: string) => {
+    if (!dateStr) return '';
+    // Already YYYY-MM-DD
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    // Try parsing display format
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        return d.toISOString().split('T')[0];
+      }
+    } catch { /* fall through */ }
+    return '';
   };
 
   const handleEdit = (article: Article) => {
@@ -209,8 +343,8 @@ export default function AdminArticlesPage() {
       body: article.saikiweb_body,
       category: article.saikiweb_category,
       categoryKey: article.saikiweb_category_key,
-      date: article.saikiweb_date,
-      readTime: article.saikiweb_read_time,
+      date: parseDateToInput(article.saikiweb_date),
+      readTime: parseReadTimeToInput(article.saikiweb_read_time),
       featured: article.saikiweb_featured,
       published: article.saikiweb_published,
       metaTitle: article.saikiweb_meta_title || '',
@@ -250,6 +384,10 @@ export default function AdminArticlesPage() {
     setEditorTab('write');
     setSaveError('');
     setSaveSuccess('');
+    setDualLocale(false);
+    setActiveLocaleTab('id');
+    setEnFields(emptyLocaleFields);
+    setEnSlug('');
   };
 
   if (!authenticated) {
@@ -327,40 +465,107 @@ export default function AdminArticlesPage() {
             <div className="mb-4 px-4 py-3 bg-green-50 text-green-700 text-sm rounded-xl border border-green-200">{saveSuccess}</div>
           )}
 
+          {/* Dual locale toggle for new articles */}
+          {!editingId && (
+            <div className="mb-4">
+              <label className="flex items-center gap-3 cursor-pointer bg-white rounded-xl px-4 py-3 border border-gray-200 w-fit">
+                <input
+                  type="checkbox"
+                  checked={dualLocale}
+                  onChange={(e) => {
+                    setDualLocale(e.target.checked);
+                    if (e.target.checked) setActiveLocaleTab('id');
+                  }}
+                  className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Create both ID & EN versions at once</span>
+              </label>
+            </div>
+          )}
+
+          {/* Locale tabs when dual mode */}
+          {dualLocale && !editingId && (
+            <div className="flex gap-1 mb-4 bg-gray-100 rounded-xl p-1 w-fit">
+              <button
+                onClick={() => setActiveLocaleTab('id')}
+                className={`px-5 py-2 text-sm font-medium rounded-lg transition ${activeLocaleTab === 'id' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                Indonesian (ID)
+              </button>
+              <button
+                onClick={() => setActiveLocaleTab('en')}
+                className={`px-5 py-2 text-sm font-medium rounded-lg transition ${activeLocaleTab === 'en' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                English (EN)
+              </button>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main editor */}
             <div className="lg:col-span-2 space-y-6">
               {/* Title */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Title</label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => {
-                    setForm({ ...form, title: e.target.value });
-                    if (!editingId && !form.slug) {
-                      setForm((f) => ({ ...f, title: e.target.value, slug: generateSlug(e.target.value) }));
-                    }
-                  }}
-                  placeholder="Article title..."
-                  className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
-                />
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Judul utama artikel yang tampil di halaman detail dan card. Buat menarik dan mengandung keyword utama. Contoh: '5 Kesalahan Fatal Saat Bikin Brand Identity'">
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Title {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </label>
+                {(!dualLocale || activeLocaleTab === 'id') ? (
+                  <input
+                    type="text"
+                    value={form.title}
+                    onChange={(e) => {
+                      setForm({ ...form, title: e.target.value });
+                      if (!editingId && !form.slug) {
+                        setForm((f) => ({ ...f, title: e.target.value, slug: generateSlug(e.target.value) }));
+                      }
+                    }}
+                    placeholder="Judul artikel..."
+                    title="Judul artikel dalam Bahasa Indonesia. Contoh: 'Mengapa Personal Branding Lebih Penting dari CV di 2025'"
+                    className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={enFields.title}
+                    onChange={(e) => {
+                      setEnFields({ ...enFields, title: e.target.value });
+                      if (!enSlug) setEnSlug(generateSlug(e.target.value));
+                    }}
+                    placeholder="Article title (English)..."
+                    title="Article title in English. Example: 'Why Personal Branding Matters More Than Your CV in 2025'"
+                    className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
+                  />
+                )}
               </div>
 
               {/* Excerpt */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Excerpt</label>
-                <textarea
-                  value={form.excerpt}
-                  onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                  placeholder="Brief summary shown on cards..."
-                  rows={2}
-                  className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
-                />
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6" title="Ringkasan singkat 1-2 kalimat yang muncul di card insight dan di bawah judul halaman artikel. Harus bikin orang penasaran untuk klik dan baca. Contoh: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal.'">
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Excerpt {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </label>
+                {(!dualLocale || activeLocaleTab === 'id') ? (
+                  <textarea
+                    value={form.excerpt}
+                    onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+                    placeholder="Ringkasan singkat untuk card..."
+                    title="Ringkasan artikel dalam Bahasa Indonesia. Tampil di card dan hero artikel."
+                    rows={2}
+                    className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
+                  />
+                ) : (
+                  <textarea
+                    value={enFields.excerpt}
+                    onChange={(e) => setEnFields({ ...enFields, excerpt: e.target.value })}
+                    placeholder="Brief summary for cards (English)..."
+                    title="Article excerpt in English. Shown on cards and article hero."
+                    rows={2}
+                    className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
+                  />
+                )}
               </div>
 
               {/* Body editor */}
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden" title="Isi lengkap artikel. Tulis langsung atau paste HTML dari editor lain. Tag yang didukung: <p> untuk paragraf, <h2> untuk heading section, <h3> untuk sub-heading, <blockquote> untuk kutipan yang di-highlight, <ul>/<ol> untuk list, <strong> untuk bold, <em> untuk italic, <a> untuk link, <hr> untuk garis pemisah.">
                 <div className="flex items-center gap-0 border-b border-gray-200">
                   <button
                     onClick={() => setEditorTab('write')}
@@ -382,19 +587,28 @@ export default function AdminArticlesPage() {
 
                 {editorTab === 'write' ? (
                   <textarea
-                    value={form.body}
-                    onChange={(e) => setForm({ ...form, body: e.target.value })}
-                    placeholder={`Write your article body here. You can paste HTML directly.\n\nExample:\n<p>Your opening paragraph here...</p>\n\n<h2>Section Heading</h2>\n<p>Section content...</p>\n\n<blockquote>A highlighted pull quote for emphasis.</blockquote>`}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, body: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, body: e.target.value });
+                      }
+                    }}
+                    placeholder={(!dualLocale || activeLocaleTab === 'id')
+                      ? `Tulis isi artikel di sini. Bisa paste HTML langsung.\n\nContoh:\n<p>Paragraf pembuka...</p>\n\n<h2>Heading Section</h2>\n<p>Isi section...</p>\n\n<blockquote>Quote yang di-highlight.</blockquote>`
+                      : `Write your article body here (English). Paste HTML directly.\n\nExample:\n<p>Opening paragraph...</p>\n\n<h2>Section Heading</h2>\n<p>Section content...</p>\n\n<blockquote>A highlighted quote.</blockquote>`
+                    }
                     rows={24}
                     className="w-full p-6 text-sm text-gray-800 font-mono border-none outline-none resize-y placeholder:text-gray-300 leading-relaxed"
                     spellCheck={false}
                   />
                 ) : (
                   <div className="p-6 min-h-[400px]">
-                    {form.body ? (
+                    {((!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body) ? (
                       <div
                         className="article-preview prose max-w-none"
-                        dangerouslySetInnerHTML={{ __html: form.body }}
+                        dangerouslySetInnerHTML={{ __html: (!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body }}
                       />
                     ) : (
                       <p className="text-gray-400 italic">Nothing to preview yet...</p>
@@ -410,30 +624,52 @@ export default function AdminArticlesPage() {
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
                 <h3 className="text-sm font-bold text-gray-900">Publish Settings</h3>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Slug</label>
+                <div title="Bagian URL artikel setelah /insights/. Otomatis dibuat dari judul. Gunakan huruf kecil, tanpa spasi (pakai strip). Contoh: 'kesalahan-fatal-brand-identity'">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Slug (ID)
+                  </label>
                   <input
                     type="text"
                     value={form.slug}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    placeholder="article-url-slug"
+                    placeholder="slug-artikel-indonesia"
+                    title="URL slug Bahasa Indonesia. Contoh: 'mengapa-personal-branding-penting'"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
-                  <select
-                    value={form.locale}
-                    onChange={(e) => setForm({ ...form, locale: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
-                  >
-                    <option value="id">Indonesian (ID)</option>
-                    <option value="en">English (EN)</option>
-                  </select>
-                </div>
+                {dualLocale && !editingId && (
+                  <div title="URL slug untuk versi Bahasa Inggris. Harus berbeda dari slug ID. Contoh: 'why-personal-branding-matters'">
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                      Slug (EN)
+                    </label>
+                    <input
+                      type="text"
+                      value={enSlug}
+                      onChange={(e) => setEnSlug(e.target.value)}
+                      placeholder="english-article-slug"
+                      title="English URL slug. Example: 'why-personal-branding-matters'"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
+                    />
+                  </div>
+                )}
 
-                <div>
+                {!dualLocale && (
+                  <div title="Bahasa artikel. ID = Bahasa Indonesia, EN = English. Artikel yang sama perlu dibuat terpisah untuk tiap bahasa, atau gunakan mode dual-locale.">
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
+                    <select
+                      value={form.locale}
+                      onChange={(e) => setForm({ ...form, locale: e.target.value })}
+                      title="Pilih bahasa artikel"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
+                    >
+                      <option value="id">Indonesian (ID)</option>
+                      <option value="en">English (EN)</option>
+                    </select>
+                  </div>
+                )}
+
+                <div title="Kategori layanan SAIKI yang relevan dengan artikel. Menentukan warna tag dan pengelompokan. Karier = SAIKI Consultancy, Branding = SAIKI Imagery, Teknologi = SAIKI Technology.">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
                   <select
                     value={form.categoryKey}
@@ -445,6 +681,7 @@ export default function AdminArticlesPage() {
                         category: form.locale === 'id' ? (opt?.labelId || '') : (opt?.labelEn || ''),
                       });
                     }}
+                    title="Pilih kategori yang paling relevan"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
                   >
                     {categoryOptions.map((c) => (
@@ -456,30 +693,54 @@ export default function AdminArticlesPage() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
-                  <div>
+                  <div title="Tanggal publikasi artikel. Otomatis diformat sesuai locale: ID = '15 Mar 2025', EN = 'Mar 15, 2025'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date</label>
                     <input
-                      type="text"
+                      type="date"
                       value={form.date}
                       onChange={(e) => setForm({ ...form, date: e.target.value })}
-                      placeholder="Mar 15, 2025"
+                      title="Pilih tanggal publikasi"
                       className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                     />
                   </div>
-                  <div>
+                  <div title="Estimasi waktu baca artikel. Pilih angka dan satuan. Otomatis diformat sesuai locale: ID = '5 menit', EN = '5 min read'.">
                     <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Read Time</label>
-                    <input
-                      type="text"
-                      value={form.readTime}
-                      onChange={(e) => setForm({ ...form, readTime: e.target.value })}
-                      placeholder="5 min read"
-                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
-                    />
+                    <div className="flex gap-2">
+                      <input
+                        type="number"
+                        min="1"
+                        max="120"
+                        value={form.readTime.replace(/\D/g, '') || ''}
+                        onChange={(e) => {
+                          const num = e.target.value;
+                          const unit = form.readTime.includes('jam') || form.readTime.includes('hour') ? 'jam'
+                            : form.readTime.includes('detik') || form.readTime.includes('sec') ? 'detik'
+                            : 'menit';
+                          setForm({ ...form, readTime: num ? `${num}|${unit}` : '' });
+                        }}
+                        placeholder="5"
+                        title="Angka waktu baca"
+                        className="w-16 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition text-center"
+                      />
+                      <select
+                        value={form.readTime.includes('|') ? form.readTime.split('|')[1] : 'menit'}
+                        onChange={(e) => {
+                          const num = form.readTime.replace(/\D/g, '') || form.readTime.split('|')[0] || '';
+                          setForm({ ...form, readTime: num ? `${num}|${e.target.value}` : '' });
+                        }}
+                        title="Satuan waktu"
+                        className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
+                      >
+                        <option value="detik">Detik</option>
+                        <option value="menit">Menit</option>
+                        <option value="jam">Jam</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-6 pt-2">
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel featured ditampilkan lebih besar (2 kolom) di halaman Insights. Gunakan untuk artikel unggulan yang mau ditonjolkan. Biasanya cukup 1-2 artikel yang di-featured.">
                     <input
                       type="checkbox"
                       checked={form.featured}
@@ -488,7 +749,7 @@ export default function AdminArticlesPage() {
                     />
                     <span className="text-sm text-gray-700">Featured</span>
                   </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
+                  <label className="flex items-center gap-2 cursor-pointer" title="Artikel yang di-publish akan tampil di website publik. Jika tidak dicentang, artikel tersimpan sebagai draft dan hanya bisa dilihat di admin.">
                     <input
                       type="checkbox"
                       checked={form.published}
@@ -502,46 +763,67 @@ export default function AdminArticlesPage() {
 
               {/* SEO */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-gray-900">SEO Settings</h3>
+                <h3 className="text-sm font-bold text-gray-900" title="Pengaturan SEO menentukan bagaimana artikel muncul di hasil pencarian Google. Isi semua field untuk hasil terbaik.">
+                  SEO Settings {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </h3>
 
-                <div>
+                <div title="Judul yang muncul di tab browser dan hasil pencarian Google. Idealnya 50-60 karakter. Harus mengandung keyword utama dan nama brand. Contoh: 'Personal Branding vs CV: Mana Lebih Penting di 2025? | SAIKI'">
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Title</label>
-                    <span className={`text-xs ${(form.metaTitle?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
-                      {form.metaTitle?.length || 0}/60
+                    <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
+                      {((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0}/60
                     </span>
                   </div>
                   <input
                     type="text"
-                    value={form.metaTitle}
-                    onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, metaTitle: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, metaTitle: e.target.value });
+                      }
+                    }}
                     placeholder="SEO optimized title | SAIKI"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                 </div>
 
-                <div>
+                <div title="Deskripsi yang muncul di bawah judul di hasil pencarian Google. Idealnya 150-160 karakter. Harus mengandung keyword dan call-to-action. Contoh: '70% recruiter cek media sosial sebelum wawancara. Pelajari 5 langkah membangun personal branding yang kuat.'">
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Description</label>
-                    <span className={`text-xs ${(form.metaDescription?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
-                      {form.metaDescription?.length || 0}/160
+                    <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
+                      {((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0}/160
                     </span>
                   </div>
                   <textarea
-                    value={form.metaDescription}
-                    onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
-                    placeholder="Compelling description with keywords for search results..."
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, metaDescription: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, metaDescription: e.target.value });
+                      }
+                    }}
+                    placeholder="Compelling description with keywords..."
+                    title="Deskripsi untuk hasil pencarian Google. Max 160 karakter."
                     rows={3}
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition resize-none"
                   />
                 </div>
 
-                <div>
+                <div title="Kata kunci yang relevan dengan artikel, dipisah koma. Membantu mesin pencari memahami topik artikel. Contoh: 'personal branding, tips karier, LinkedIn, SAIKI Consultancy'">
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Keywords</label>
                   <input
                     type="text"
-                    value={form.keywords}
-                    onChange={(e) => setForm({ ...form, keywords: e.target.value })}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.keywords : enFields.keywords}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, keywords: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, keywords: e.target.value });
+                      }
+                    }}
                     placeholder="keyword1, keyword2, keyword3"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
