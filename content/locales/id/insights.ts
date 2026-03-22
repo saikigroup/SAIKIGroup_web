@@ -1,18 +1,18 @@
 export const insights = {
   hero: {
     eyebrow: 'Insights',
-    headline: 'Tips & Cerita\nuntuk Anda.',
-    body: 'Kami berbagi pengalaman, pelajaran, dan perspektif dari lapangan. Supaya Anda bisa mengambil keputusan yang lebih baik untuk karier, brand, dan bisnis Anda.',
+    headline: 'Tips & Cerita\nuntuk kamu.',
+    body: 'Kami berbagi pengalaman, pelajaran, dan perspektif dari lapangan. Supaya kamubisa mengambil keputusan yang lebih baik untuk karier, brand, dan bisnis kamu.',
   },
   articles: [
     {
       slug: 'mengapa-personal-branding-penting',
       layout: 'editorial' as const,
       title: 'Mengapa Personal Branding Lebih Penting dari CV di 2025',
-      excerpt: 'Recruiter sudah Google nama Anda sebelum baca CV. Kabar baiknya: Anda bisa kontrol apa yang mereka temukan. Begini caranya.',
+      excerpt: 'Recruiter sudah Google nama kamusebelum baca CV. Kabar baiknya: kamubisa kontrol apa yang mereka temukan. Begini caranya.',
       seo: {
         metaTitle: 'Personal Branding vs CV: Mana Lebih Penting di 2025? | SAIKI',
-        metaDescription: '70% recruiter cek media sosial sebelum wawancara. Pelajari 5 langkah membangun personal branding yang kuat untuk karier Anda. Panduan lengkap dari SAIKI Consultancy.',
+        metaDescription: '70% recruiter cek media sosial sebelum wawancara. Pelajari 5 langkah membangun personal branding yang kuat untuk karier kamu. Panduan lengkap dari SAIKI Consultancy.',
         keywords: ['personal branding', 'tips karier 2025', 'cara membangun personal brand', 'personal branding Indonesia', 'konsultansi karier', 'LinkedIn personal branding', 'SAIKI Consultancy'],
       },
       category: 'Karier',
@@ -23,15 +23,15 @@ export const insights = {
       body: [
         {
           type: 'paragraph' as const,
-          content: 'Bayangkan ini: Anda baru saja mengirim lamaran kerja yang sempurna. CV rapi, portofolio lengkap, surat lamaran ditulis dengan hati. Tiga puluh menit kemudian, seorang HR manager membuka browser dan mengetik nama Anda di Google. Yang muncul pertama kali bukan CV Anda. Bukan portofolio Anda. Tapi sebuah akun media sosial yang sudah lama tidak diperbarui, sebuah komentar di forum dari tahun 2019, dan halaman profil LinkedIn yang fotonya masih dari zaman kuliah.',
+          content: 'Bayangkan ini: kamubaru saja mengirim lamaran kerja yang sempurna. CV rapi, portofolio lengkap, surat lamaran ditulis dengan hati. Tiga puluh menit kemudian, seorang HR manager membuka browser dan mengetik nama kamudi Google. Yang muncul pertama kali bukan CV kamu. Bukan portofolio kamu. Tapi sebuah akun media sosial yang sudah lama tidak diperbarui, sebuah komentar di forum dari tahun 2019, dan halaman profil LinkedIn yang fotonya masih dari zaman kuliah.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Itulah kenyataan rekrutmen di tahun 2025. Sebuah survei dari CareerBuilder menunjukkan bahwa 70% perusahaan melakukan pengecekan media sosial kandidat sebelum menjadwalkan wawancara. Bukan setelah. Sebelum. Artinya, kesan pertama Anda terbentuk jauh sebelum Anda duduk di depan pewawancara.',
+          content: 'Itulah kenyataan rekrutmen di tahun 2025. Sebuah survei dari CareerBuilder menunjukkan bahwa 70% perusahaan melakukan pengecekan media sosial kandidat sebelum menjadwalkan wawancara. Bukan setelah. Sebelum. Artinya, kesan pertama kamuterbentuk jauh sebelum kamududuk di depan pewawancara.',
         },
         {
           type: 'pullquote' as const,
-          content: 'Kesan pertama Anda terbentuk jauh sebelum Anda duduk di depan pewawancara.',
+          content: 'Kesan pertama kamuterbentuk jauh sebelum kamududuk di depan pewawancara.',
         },
         {
           type: 'heading' as const,
@@ -39,7 +39,7 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'CV adalah dokumen satu arah. Anda menulis, mereka membaca. Tidak ada ruang untuk menunjukkan bagaimana Anda berpikir, bagaimana Anda berkomunikasi, atau apa yang benar-benar Anda pedulikan. Semuanya terkompresi ke dalam daftar pengalaman dan keterampilan yang formatnya mirip satu sama lain.',
+          content: 'CV adalah dokumen satu arah. kamumenulis, mereka membaca. Tidak ada ruang untuk menunjukkan bagaimana kamuberpikir, bagaimana kamuberkomunikasi, atau apa yang benar-benar kamupedulikan. Semuanya terkompresi ke dalam daftar pengalaman dan keterampilan yang formatnya mirip satu sama lain.',
         },
         {
           type: 'paragraph' as const,
@@ -51,11 +51,11 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Kita sering berpikir bahwa recruiter hanya melihat pengalaman kerja dan pendidikan. Kenyataannya jauh lebih kompleks. Mereka mencari konsistensi. Apakah cerita yang Anda sampaikan di CV sejalan dengan apa yang mereka temukan secara online? Mereka mencari bukti. Jika Anda klaim sebagai "ahli digital marketing", apakah ada jejak digital yang membuktikannya?',
+          content: 'Kita sering berpikir bahwa recruiter hanya melihat pengalaman kerja dan pendidikan. Kenyataannya jauh lebih kompleks. Mereka mencari konsistensi. Apakah cerita yang kamusampaikan di CV sejalan dengan apa yang mereka temukan secara online? Mereka mencari bukti. Jika kamuklaim sebagai "ahli digital marketing", apakah ada jejak digital yang membuktikannya?',
         },
         {
           type: 'paragraph' as const,
-          content: 'Yang paling penting, mereka mencari sinyal kepribadian. Bagaimana Anda berinteraksi dengan orang lain secara online? Topik apa yang Anda bagikan? Bagaimana cara Anda menyampaikan pendapat? Semua ini membentuk profil yang jauh lebih kaya dibandingkan CV terbaik sekalipun.',
+          content: 'Yang paling penting, mereka mencari sinyal kepribadian. Bagaimana kamuberinteraksi dengan orang lain secara online? Topik apa yang kamubagikan? Bagaimana cara kamumenyampaikan pendapat? Semua ini membentuk profil yang jauh lebih kaya dibandingkan CV terbaik sekalipun.',
         },
         {
           type: 'heading' as const,
@@ -63,23 +63,23 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Pertama, lakukan audit digital. Google nama Anda sendiri. Lihat hasilnya dari sudut pandang orang asing. Apa kesan yang terbentuk? Jika jawabannya "tidak ada" atau "membingungkan", itu sudah jadi sinyal bahwa Anda perlu bertindak.',
+          content: 'Pertama, lakukan audit digital. Google nama kamusendiri. Lihat hasilnya dari sudut pandang orang asing. Apa kesan yang terbentuk? Jika jawabannya "tidak ada" atau "membingungkan", itu sudah jadi sinyal bahwa kamuperlu bertindak.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Kedua, tentukan narasi Anda. Personal branding bukan tentang berpura-pura jadi orang lain. Ini tentang memilih aspek mana dari diri Anda yang ingin Anda tampilkan secara konsisten. Anda seorang data analyst yang juga suka menulis? Itu narasi yang menarik. Anda seorang developer yang peduli dengan aksesibilitas? Itu diferensiasi yang kuat.',
+          content: 'Kedua, tentukan narasi kamu. Personal branding bukan tentang berpura-pura jadi orang lain. Ini tentang memilih aspek mana dari diri kamuyang ingin kamutampilkan secara konsisten. kamuseorang data analyst yang juga suka menulis? Itu narasi yang menarik. kamuseorang developer yang peduli dengan aksesibilitas? Itu diferensiasi yang kuat.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Ketiga, pilih satu atau dua platform utama dan kelola dengan serius. LinkedIn hampir wajib untuk profesional. Sisanya tergantung bidang Anda. Desainer mungkin butuh Behance atau Dribbble. Developer butuh GitHub. Penulis butuh blog atau Medium. Jangan coba kuasai semua platform sekaligus karena Anda akan kewalahan dan hasilnya setengah-setengah.',
+          content: 'Ketiga, pilih satu atau dua platform utama dan kelola dengan serius. LinkedIn hampir wajib untuk profesional. Sisanya tergantung bidang kamu. Desainer mungkin butuh Behance atau Dribbble. Developer butuh GitHub. Penulis butuh blog atau Medium. Jangan coba kuasai semua platform sekaligus karena kamuakan kewalahan dan hasilnya setengah-setengah.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Keempat, mulai berbagi sesuatu yang bernilai. Tidak perlu menulis esai panjang setiap hari. Cukup bagikan insight dari pekerjaan Anda, komentar tentang tren industri, atau pelajaran dari kesalahan yang pernah Anda buat. Konsistensi jauh lebih penting daripada kuantitas.',
+          content: 'Keempat, mulai berbagi sesuatu yang bernilai. Tidak perlu menulis esai panjang setiap hari. Cukup bagikan insight dari pekerjaan kamu, komentar tentang tren industri, atau pelajaran dari kesalahan yang pernah kamubuat. Konsistensi jauh lebih penting daripada kuantitas.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Kelima, bangun koneksi yang bermakna. Follow orang-orang di bidang Anda. Komentari posting mereka dengan pemikiran yang substantif, bukan sekadar "Setuju!" atau emoji. Jadilah bagian dari percakapan profesional di industri Anda.',
+          content: 'Kelima, bangun koneksi yang bermakna. Follow orang-orang di bidang kamu. Komentari posting mereka dengan pemikiran yang substantif, bukan sekadar "Setuju!" atau emoji. Jadilah bagian dari percakapan profesional di industri kamu.',
         },
         {
           type: 'pullquote' as const,
@@ -91,18 +91,18 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Personal branding bukan sesuatu yang Anda selesaikan dalam satu akhir pekan. Ini proses berkelanjutan yang berkembang seiring karier Anda. Kabar baiknya, Anda tidak perlu menunggu sampai semuanya sempurna untuk memulai. Profil LinkedIn yang diperbarui hari ini sudah lebih baik daripada yang belum disentuh selama dua tahun. Satu artikel yang Anda tulis minggu ini sudah lebih berdampak daripada rencana konten yang tidak pernah dieksekusi.',
+          content: 'Personal branding bukan sesuatu yang kamuselesaikan dalam satu akhir pekan. Ini proses berkelanjutan yang berkembang seiring karier kamu. Kabar baiknya, kamutidak perlu menunggu sampai semuanya sempurna untuk memulai. Profil LinkedIn yang diperbarui hari ini sudah lebih baik daripada yang belum disentuh selama dua tahun. Satu artikel yang kamutulis minggu ini sudah lebih berdampak daripada rencana konten yang tidak pernah dieksekusi.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Di dunia di mana hampir semua informasi bisa diakses dalam hitungan detik, personal brand Anda berjalan lebih dulu dari CV Anda. Pertanyaannya bukan apakah Anda butuh personal brand. Pertanyaannya adalah: apakah Anda mau membiarkan orang lain mendefinisikan brand Anda, atau Anda yang akan mengambil kendali?',
+          content: 'Di dunia di mana hampir semua informasi bisa diakses dalam hitungan detik, personal brand kamuberjalan lebih dulu dari CV kamu. Pertanyaannya bukan apakah kamubutuh personal brand. Pertanyaannya adalah: apakah kamumau membiarkan orang lain mendefinisikan brand kamu, atau kamuyang akan mengambil kendali?',
         },
       ],
     },
     {
       slug: 'brand-identity-bukan-logo',
       layout: 'magazine' as const,
-      title: 'Brand Anda Lebih dari Sekadar Logo: Yang Sebenarnya Anda Butuhkan',
+      title: 'Brand Kamu Lebih dari Sekadar Logo: Yang Sebenarnya Kamu Butuhkan',
       excerpt: 'Banyak bisnis habis jutaan untuk logo cantik tapi tetap nggak dikenal. Masalahnya bukan di logo, tapi di sistem brand yang belum lengkap.',
       seo: {
         metaTitle: 'Brand Identity Bukan Cuma Logo: Panduan Brand System | SAIKI',
@@ -137,11 +137,11 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Brand system adalah keseluruhan elemen visual, verbal, dan emosional yang membentuk persepsi orang terhadap bisnis Anda. Logo termasuk di dalamnya, tapi juga ada palet warna, tipografi, gaya fotografi, tone of voice, dan yang paling penting: positioning. Tanpa sistem ini, logo Anda seperti nama yang dituliskan di atas bangunan kosong. Ada identitas, tapi tidak ada substansi di baliknya.',
+          content: 'Brand system adalah keseluruhan elemen visual, verbal, dan emosional yang membentuk persepsi orang terhadap bisnis kamu. Logo termasuk di dalamnya, tapi juga ada palet warna, tipografi, gaya fotografi, tone of voice, dan yang paling penting: positioning. Tanpa sistem ini, logo kamuseperti nama yang dituliskan di atas bangunan kosong. Ada identitas, tapi tidak ada substansi di baliknya.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Pikirkan brand yang Anda kenal dengan baik. Apple, misalnya. Tanpa melihat logo apel itu, Anda tetap bisa mengenali produk Apple dari packaging-nya, dari gaya copywriting-nya, dari pilihan warna yang minimalis, dari pengalaman membuka kotaknya. Semua itu bukan kebetulan. Itu adalah brand system yang bekerja.',
+          content: 'Pikirkan brand yang kamukenal dengan baik. Apple, misalnya. Tanpa melihat logo apel itu, kamutetap bisa mengenali produk Apple dari packaging-nya, dari gaya copywriting-nya, dari pilihan warna yang minimalis, dari pengalaman membuka kotaknya. Semua itu bukan kebetulan. Itu adalah brand system yang bekerja.',
         },
         {
           type: 'heading' as const,
@@ -149,35 +149,35 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Pilar pertama adalah positioning. Ini menjawab pertanyaan: di mana posisi bisnis Anda di benak pelanggan? Bukan di mana Anda ingin berada, tapi di mana Anda benar-benar berdiri saat ini. Banyak bisnis melompat ke desain visual tanpa menjawab pertanyaan fundamental ini dulu. Akibatnya, brand mereka terlihat bagus tapi terasa kosong.',
+          content: 'Pilar pertama adalah positioning. Ini menjawab pertanyaan: di mana posisi bisnis kamudi benak pelanggan? Bukan di mana kamuingin berada, tapi di mana kamubenar-benar berdiri saat ini. Banyak bisnis melompat ke desain visual tanpa menjawab pertanyaan fundamental ini dulu. Akibatnya, brand mereka terlihat bagus tapi terasa kosong.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Pilar kedua adalah voice dan messaging. Bagaimana brand Anda berbicara? Apakah formal atau santai? Apakah menggunakan humor atau serius? Konsistensi dalam cara berkomunikasi membangun kepercayaan yang tidak bisa dicapai oleh logo semahal apapun. Sebuah bisnis yang berbicara dengan cara yang sama di website, Instagram, email, dan customer service akan terasa lebih bisa dipercaya dibandingkan yang tone-nya berubah-ubah.',
+          content: 'Pilar kedua adalah voice dan messaging. Bagaimana brand kamuberbicara? Apakah formal atau santai? Apakah menggunakan humor atau serius? Konsistensi dalam cara berkomunikasi membangun kepercayaan yang tidak bisa dicapai oleh logo semahal apapun. Sebuah bisnis yang berbicara dengan cara yang sama di website, Instagram, email, dan customer service akan terasa lebih bisa dipercaya dibandingkan yang tone-nya berubah-ubah.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Pilar ketiga adalah pengalaman. Setiap interaksi pelanggan dengan bisnis Anda adalah bagian dari brand. Cara Anda membalas DM di Instagram. Kecepatan loading website Anda. Kemasan produk yang mereka terima. Invoice yang Anda kirim. Semua touchpoint ini membentuk cerita yang lebih kuat dari tagline manapun.',
+          content: 'Pilar ketiga adalah pengalaman. Setiap interaksi pelanggan dengan bisnis kamuadalah bagian dari brand. Cara kamumembalas DM di Instagram. Kecepatan loading website kamu. Kemasan produk yang mereka terima. Invoice yang kamukirim. Semua touchpoint ini membentuk cerita yang lebih kuat dari tagline manapun.',
         },
         {
           type: 'heading' as const,
-          content: 'Jadi, Kapan Anda Butuh Rebranding?',
+          content: 'Jadi, Kapan Kamu Butuh Rebranding?',
         },
         {
           type: 'paragraph' as const,
-          content: 'Jawabannya: mungkin tidak sesering yang Anda pikirkan. Rebranding yang sesungguhnya bukan mengganti logo. Itu adalah proses menata ulang seluruh cara bisnis Anda berkomunikasi dan berinteraksi dengan dunia. Proses ini memakan waktu, tenaga, dan sumber daya yang signifikan.',
+          content: 'Jawabannya: mungkin tidak sesering yang kamupikirkan. Rebranding yang sesungguhnya bukan mengganti logo. Itu adalah proses menata ulang seluruh cara bisnis kamuberkomunikasi dan berinteraksi dengan dunia. Proses ini memakan waktu, tenaga, dan sumber daya yang signifikan.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Yang lebih sering dibutuhkan adalah brand audit. Coba lihat semua materi komunikasi bisnis Anda dalam satu tempat: website, media sosial, email, proposal, kemasan. Apakah semuanya terasa seperti berasal dari satu entitas yang sama? Apakah ada inkonsistensi yang mengganggu? Apakah pesan yang Anda sampaikan sudah sesuai dengan realitas bisnis Anda saat ini?',
+          content: 'Yang lebih sering dibutuhkan adalah brand audit. Coba lihat semua materi komunikasi bisnis kamudalam satu tempat: website, media sosial, email, proposal, kemasan. Apakah semuanya terasa seperti berasal dari satu entitas yang sama? Apakah ada inkonsistensi yang mengganggu? Apakah pesan yang kamusampaikan sudah sesuai dengan realitas bisnis kamusaat ini?',
         },
         {
           type: 'paragraph' as const,
-          content: 'Dari audit ini, Anda mungkin menemukan bahwa yang Anda butuhkan bukan logo baru, melainkan panduan brand yang jelas. Sebuah dokumen yang menjelaskan bagaimana brand Anda seharusnya terlihat, terdengar, dan terasa di setiap situasi. Dengan panduan ini, siapapun yang membuat konten untuk bisnis Anda akan menghasilkan output yang konsisten.',
+          content: 'Dari audit ini, kamumungkin menemukan bahwa yang kamubutuhkan bukan logo baru, melainkan panduan brand yang jelas. Sebuah dokumen yang menjelaskan bagaimana brand kamuseharusnya terlihat, terdengar, dan terasa di setiap situasi. Dengan panduan ini, siapapun yang membuat konten untuk bisnis kamuakan menghasilkan output yang konsisten.',
         },
         {
           type: 'pullquote' as const,
-          content: 'Setiap interaksi pelanggan dengan bisnis Anda adalah bagian dari brand.',
+          content: 'Setiap interaksi pelanggan dengan bisnis kamuadalah bagian dari brand.',
         },
         {
           type: 'heading' as const,
@@ -189,14 +189,14 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Jika Anda hanya punya waktu dan budget untuk satu hal, jangan mulai dari logo. Mulai dari positioning. Ketika Anda tahu persis di mana posisi Anda, semuanya yang lain akan lebih mudah dibangun. Logo, warna, tipografi, semuanya menjadi perpanjangan dari sebuah fondasi yang kuat, bukan hiasan di atas fondasi yang rapuh.',
+          content: 'Jika kamuhanya punya waktu dan budget untuk satu hal, jangan mulai dari logo. Mulai dari positioning. Ketika kamutahu persis di mana posisi kamu, semuanya yang lain akan lebih mudah dibangun. Logo, warna, tipografi, semuanya menjadi perpanjangan dari sebuah fondasi yang kuat, bukan hiasan di atas fondasi yang rapuh.',
         },
       ],
     },
     {
       slug: 'custom-vs-off-the-shelf',
       layout: 'bold' as const,
-      title: 'Custom Software vs Off-the-Shelf: Mana yang Tepat untuk Bisnis Anda?',
+      title: 'Custom Software vs Off-the-Shelf: Mana yang Tepat untuk Bisnis kamu?',
       excerpt: 'Sebelum pilih teknologi, jawab dulu: apa masalah yang mau diselesaikan? Panduan praktis untuk keputusan yang sering bikin bingung.',
       seo: {
         metaTitle: 'Custom Software vs SaaS: Panduan Memilih untuk Bisnis | SAIKI',
@@ -215,7 +215,7 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Ini bukan pertanyaan yang bisa dijawab dengan mudah, karena jawabannya sangat tergantung pada konteks bisnis Anda. Tapi ada kerangka berpikir yang bisa membantu Anda membuat keputusan ini dengan lebih percaya diri.',
+          content: 'Ini bukan pertanyaan yang bisa dijawab dengan mudah, karena jawabannya sangat tergantung pada konteks bisnis kamu. Tapi ada kerangka berpikir yang bisa membantu kamumembuat keputusan ini dengan lebih percaya diri.',
         },
         {
           type: 'heading' as const,
@@ -223,11 +223,11 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Software yang sudah jadi punya keunggulan yang sangat nyata: kecepatan implementasi. Anda bisa mulai pakai hari ini. Tidak perlu menunggu berbulan-bulan untuk proses development. Tools seperti Trello, Notion, atau Shopify sudah dipakai jutaan pengguna, artinya mereka sudah diuji, diperbaiki, dan dioptimalkan bertahun-tahun.',
+          content: 'Software yang sudah jadi punya keunggulan yang sangat nyata: kecepatan implementasi. kamubisa mulai pakai hari ini. Tidak perlu menunggu berbulan-bulan untuk proses development. Tools seperti Trello, Notion, atau Shopify sudah dipakai jutaan pengguna, artinya mereka sudah diuji, diperbaiki, dan dioptimalkan bertahun-tahun.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Dari sisi biaya, software berlangganan juga terasa lebih ringan di awal. Membayar Rp500.000 per bulan terasa jauh lebih mudah dicerna daripada mengeluarkan puluhan juta untuk membangun sistem dari nol. Dan Anda mendapat bonus: update berkala, dukungan teknis, dan komunitas pengguna yang bisa jadi sumber belajar.',
+          content: 'Dari sisi biaya, software berlangganan juga terasa lebih ringan di awal. Membayar Rp500.000 per bulan terasa jauh lebih mudah dicerna daripada mengeluarkan puluhan juta untuk membangun sistem dari nol. Dan kamumendapat bonus: update berkala, dukungan teknis, dan komunitas pengguna yang bisa jadi sumber belajar.',
         },
         {
           type: 'heading' as const,
@@ -235,15 +235,15 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Masalah muncul ketika bisnis Anda punya proses yang unik. Mungkin alur kerja Anda tidak mengikuti pola standar. Mungkin Anda butuh integrasi antar sistem yang tidak didukung oleh platform manapun. Atau mungkin Anda menemukan diri Anda membayar lima tools berbeda yang masing-masing hanya Anda pakai 20% fiturnya.',
+          content: 'Masalah muncul ketika bisnis kamupunya proses yang unik. Mungkin alur kerja kamutidak mengikuti pola standar. Mungkin kamubutuh integrasi antar sistem yang tidak didukung oleh platform manapun. Atau mungkin kamumenemukan diri kamumembayar lima tools berbeda yang masing-masing hanya kamupakai 20% fiturnya.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Ada juga masalah kontrol data. Dengan SaaS, data Anda ada di server orang lain. Untuk beberapa industri, ini bisa jadi masalah regulasi. Untuk bisnis lain, ini soal kenyamanan: bagaimana jika layanan tersebut menaikkan harga secara signifikan? Bagaimana jika mereka tutup? Bagaimana jika fitur yang Anda andalkan tiba-tiba dihapus?',
+          content: 'Ada juga masalah kontrol data. Dengan SaaS, data kamuada di server orang lain. Untuk beberapa industri, ini bisa jadi masalah regulasi. Untuk bisnis lain, ini soal kenyamanan: bagaimana jika layanan tersebut menaikkan harga secara signifikan? Bagaimana jika mereka tutup? Bagaimana jika fitur yang kamuandalkan tiba-tiba dihapus?',
         },
         {
           type: 'pullquote' as const,
-          content: 'Masalah muncul ketika bisnis Anda punya proses yang unik.',
+          content: 'Masalah muncul ketika bisnis kamupunya proses yang unik.',
         },
         {
           type: 'heading' as const,
@@ -251,15 +251,15 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Software custom dibangun spesifik untuk masalah Anda. Tidak ada fitur yang tidak Anda butuhkan. Tidak ada workaround yang harus Anda lakukan karena sistemnya tidak mendukung proses Anda. Setiap tombol, setiap alur, setiap laporan dirancang sesuai cara kerja tim Anda.',
+          content: 'Software custom dibangun spesifik untuk masalah kamu. Tidak ada fitur yang tidak kamubutuhkan. Tidak ada workaround yang harus kamulakukan karena sistemnya tidak mendukung proses kamu. Setiap tombol, setiap alur, setiap laporan dirancang sesuai cara kerja tim kamu.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Dalam jangka panjang, ini bisa menjadi keunggulan kompetitif yang nyata. Bisnis Anda beroperasi lebih efisien karena sistemnya memang dirancang untuk efisiensi spesifik Anda. Kompetitor yang menggunakan tools generik tidak bisa mereplikasi keunggulan ini.',
+          content: 'Dalam jangka panjang, ini bisa menjadi keunggulan kompetitif yang nyata. Bisnis kamuberoperasi lebih efisien karena sistemnya memang dirancang untuk efisiensi spesifik kamu. Kompetitor yang menggunakan tools generik tidak bisa mereplikasi keunggulan ini.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Kepemilikan juga menjadi faktor penting. Software custom adalah aset bisnis. Anda punya kontrol penuh atas data, fitur, dan pengembangan ke depan. Tidak ada vendor yang bisa mengubah harga atau menghapus fitur tanpa persetujuan Anda.',
+          content: 'Kepemilikan juga menjadi faktor penting. Software custom adalah aset bisnis. kamupunya kontrol penuh atas data, fitur, dan pengembangan ke depan. Tidak ada vendor yang bisa mengubah harga atau menghapus fitur tanpa persetujuan kamu.',
         },
         {
           type: 'heading' as const,
@@ -279,7 +279,7 @@ export const insights = {
         },
         {
           type: 'pullquote' as const,
-          content: 'Software custom adalah aset bisnis. Anda punya kontrol penuh atas data, fitur, dan pengembangan ke depan.',
+          content: 'Software custom adalah aset bisnis. kamupunya kontrol penuh atas data, fitur, dan pengembangan ke depan.',
         },
         {
           type: 'heading' as const,
@@ -291,11 +291,11 @@ export const insights = {
         },
         {
           type: 'paragraph' as const,
-          content: 'Pendekatan ini memberikan keseimbangan antara kecepatan dan kustomisasi. Anda tidak perlu membangun semuanya dari nol, tapi juga tidak dipaksa menyesuaikan proses unik Anda ke dalam kotak yang tidak pas. Investasi difokuskan pada area yang memberikan dampak terbesar untuk bisnis Anda.',
+          content: 'Pendekatan ini memberikan keseimbangan antara kecepatan dan kustomisasi. kamutidak perlu membangun semuanya dari nol, tapi juga tidak dipaksa menyesuaikan proses unik kamuke dalam kotak yang tidak pas. Investasi difokuskan pada area yang memberikan dampak terbesar untuk bisnis kamu.',
         },
         {
           type: 'paragraph' as const,
-          content: 'Apapun yang Anda pilih, mulailah dari masalah, bukan dari teknologi. Teknologi adalah alat. Yang menentukan keberhasilannya adalah seberapa jelas Anda memahami apa yang ingin Anda selesaikan.',
+          content: 'Apapun yang kamupilih, mulailah dari masalah, bukan dari teknologi. Teknologi adalah alat. Yang menentukan keberhasilannya adalah seberapa jelas kamumemahami apa yang ingin kamuselesaikan.',
         },
       ],
     },

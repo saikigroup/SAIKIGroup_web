@@ -4,7 +4,7 @@ import { generatePageMetadata } from '@/lib/metadata';
 import { FadeIn } from '@/components/motion';
 import { Eyebrow } from '@/components/shared';
 import { ContactForm } from '@/components/forms/ContactForm';
-import { Mail, Phone, MessageCircle, MapPin, Clock } from 'lucide-react';
+import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
@@ -82,24 +82,12 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                       </a>
 
                       <a
-                        href={`tel:+62${t.info.phone.slice(1)}`}
-                        className="flex items-center gap-3 text-sm text-text-secondary hover:text-brand-teal transition-colors group"
-                      >
-                        <div className="w-9 h-9 rounded-xl bg-brand-teal/10 flex items-center justify-center shrink-0 group-hover:bg-brand-teal/20 transition-colors">
-                          <Phone className="w-4 h-4 text-brand-teal" />
-                        </div>
-                        {t.info.phone}
-                      </a>
-
-                      <a
                         href={`https://wa.me/62${t.info.phone.slice(1)}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-3 text-sm font-semibold text-brand-teal hover:text-brand-black transition-colors group"
+                        className="flex items-center gap-3 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-xl px-4 py-3 transition-colors group"
                       >
-                        <div className="w-9 h-9 rounded-xl bg-brand-teal/10 flex items-center justify-center shrink-0 group-hover:bg-brand-teal/20 transition-colors">
-                          <MessageCircle className="w-4 h-4 text-brand-teal" />
-                        </div>
+                        <MessageCircle className="w-4 h-4" />
                         {t.info.whatsapp}
                       </a>
                     </div>

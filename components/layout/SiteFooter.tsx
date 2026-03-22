@@ -118,7 +118,9 @@ export function SiteFooter({ locale }: SiteFooterProps) {
               </li>
               <li>
                 <a
-                  href="tel:+6287788980088"
+                  href="https://wa.me/6287788980088"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-sm text-white/60 hover:text-brand-teal-light transition-colors"
                 >
                   087788980088

@@ -2,7 +2,7 @@ export const common = {
   brand: {
     name: 'SAIKI',
     tagline: 'Beyond Your Needs',
-    description: 'SAIKI Group - Karier, Branding, dan Teknologi untuk Anda.',
+    description: 'SAIKI Group - Karier, Branding, dan Teknologi untuk kamu.',
   },
   nav: {
     home: 'Beranda',
@@ -25,7 +25,7 @@ export const common = {
     discoverMore: 'Temukan Lebih',
   },
   footer: {
-    tagline: 'Bergerak sekarang. Membangun yang relevan untuk Anda.',
+    tagline: 'Bergerak sekarang. Membangun yang relevan untuk kamu.',
     rights: 'Hak cipta dilindungi.',
     privacy: 'Kebijakan Privasi',
     terms: 'Syarat & Ketentuan',

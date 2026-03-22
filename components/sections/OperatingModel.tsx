@@ -27,8 +27,8 @@ export function OperatingModel({ eyebrow, headline, body, stats }: OperatingMode
       <div className="absolute top-0 right-0 w-96 h-96 bg-brand-violet/5 rounded-full blur-3xl" />
 
       <div className="container-editorial relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-          <div className="lg:col-span-7">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
+          <div className="lg:col-span-6">
             <FadeIn>
               <SectionHeading
                 eyebrow={eyebrow}
@@ -39,21 +39,21 @@ export function OperatingModel({ eyebrow, headline, body, stats }: OperatingMode
             </FadeIn>
           </div>
 
-          <div className="lg:col-span-4 lg:col-start-9">
-            <StaggerGroup className="space-y-6">
+          <div className="lg:col-span-5 lg:col-start-8">
+            <StaggerGroup className="grid grid-cols-3 gap-4">
               {stats.map((stat, i) => (
                 <StaggerItem key={i}>
                   <TiltCard tiltAmount={12} glare>
                     <motion.div
                       whileHover={{ scale: 1.05 }}
-                      className="glass-strong rounded-2xl p-6 hover:shadow-lg transition-all duration-300"
+                      className="glass-strong rounded-2xl p-5 md:p-6 hover:shadow-lg transition-all duration-300 text-center"
                     >
                       <AnimatedCounter
                         value={stat.value}
-                        className="heading-display text-5xl md:text-6xl"
+                        className="heading-display text-4xl md:text-5xl"
                         duration={1.5}
                       />
-                      <p className="text-sm font-medium text-text-secondary mt-1 uppercase tracking-wide">
+                      <p className="text-xs font-medium text-text-secondary mt-2 uppercase tracking-wide">
                         {stat.label}
                       </p>
                     </motion.div>
