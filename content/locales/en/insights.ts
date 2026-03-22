@@ -9,6 +9,11 @@ export const insights = {
       slug: 'why-personal-branding-matters',
       title: 'Why Personal Branding Matters More Than Your CV in 2025',
       excerpt: 'Recruiters Google your name before reading your CV. The good news: you can control what they find. Here\'s how.',
+      seo: {
+        metaTitle: 'Personal Branding vs CV in 2025: What Recruiters Check First | SAIKI',
+        metaDescription: '70% of recruiters check your social media before interviews. Learn 5 actionable steps to build a personal brand that lands you the job. Career insights from SAIKI Consultancy.',
+        keywords: ['personal branding', 'career tips 2025', 'how to build personal brand', 'LinkedIn personal branding', 'recruiter tips', 'career consultancy', 'SAIKI Consultancy'],
+      },
       category: 'Career',
       categoryKey: 'consultancy',
       date: 'Mar 15, 2025',
@@ -22,6 +27,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'That is the reality of recruitment in 2025. A CareerBuilder survey found that 70% of companies check candidates\' social media before scheduling an interview. Not after. Before. Your first impression is formed long before you sit down in front of an interviewer.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Your first impression is formed long before you sit down in front of an interviewer.',
         },
         {
           type: 'heading' as const,
@@ -72,6 +81,10 @@ export const insights = {
           content: 'Fifth, build meaningful connections. Follow people in your field. Comment on their posts with substantive thoughts, not just "Agree!" or emojis. Become part of the professional conversation in your industry.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Consistency matters far more than quantity.',
+        },
+        {
           type: 'heading' as const,
           content: 'This Is an Investment, Not a One-Time Project',
         },
@@ -89,6 +102,11 @@ export const insights = {
       slug: 'brand-identity-is-not-a-logo',
       title: 'Your Brand Is More Than a Logo: What You Actually Need',
       excerpt: 'Many businesses spend millions on a beautiful logo but still go unnoticed. The problem isn\'t the logo, it\'s the incomplete brand system.',
+      seo: {
+        metaTitle: 'Brand Identity Is Not a Logo: Build a Complete Brand System | SAIKI',
+        metaDescription: 'New logo but still invisible? The problem is not the logo. Discover the 3 brand pillars every business needs for real recognition. Branding guide from SAIKI Imagery.',
+        keywords: ['brand identity', 'brand system', 'business branding', 'logo design', 'brand positioning', 'brand strategy', 'SAIKI Imagery'],
+      },
       category: 'Branding',
       categoryKey: 'imagery',
       date: 'Mar 8, 2025',
@@ -106,6 +124,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'The problem is not the logo. The problem is treating the logo as if it were the only brand element. In reality, a logo is just one small part of a much larger system.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'A logo is just one small part of a much larger system.',
         },
         {
           type: 'heading' as const,
@@ -152,6 +174,10 @@ export const insights = {
           content: 'From this audit, you might discover that what you need is not a new logo, but clear brand guidelines. A document that explains how your brand should look, sound, and feel in every situation. With these guidelines, anyone creating content for your business will produce consistent output.',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Every customer interaction with your business is part of your brand.',
+        },
+        {
           type: 'heading' as const,
           content: 'Start Small, But Start Right',
         },
@@ -169,6 +195,11 @@ export const insights = {
       slug: 'custom-vs-off-the-shelf',
       title: 'Custom Software vs Off-the-Shelf: Which Is Right for Your Business?',
       excerpt: 'Before choosing technology, answer this first: what problem are you solving? A practical guide for the decision that often causes confusion.',
+      seo: {
+        metaTitle: 'Custom Software vs Off-the-Shelf: How to Choose in 2025 | SAIKI',
+        metaDescription: 'Custom build or SaaS? Compare costs, flexibility, and long-term value. Includes the hybrid approach most businesses overlook. Technology guide from SAIKI Technology.',
+        keywords: ['custom software', 'SaaS vs custom', 'software development', 'business software', 'off-the-shelf software', 'software comparison', 'SAIKI Technology'],
+      },
       category: 'Technology',
       categoryKey: 'technology',
       date: 'Mar 1, 2025',
@@ -208,6 +239,10 @@ export const insights = {
           content: 'There is also the question of data control. With SaaS, your data lives on someone else\'s server. For some industries, this can be a regulatory issue. For others, it is about comfort: what if the service raises its prices significantly? What if they shut down? What if a feature you depend on suddenly gets removed?',
         },
         {
+          type: 'pullquote' as const,
+          content: 'Problems arise when your business has unique processes.',
+        },
+        {
           type: 'heading' as const,
           content: 'The Advantages of Custom Software',
         },
@@ -238,6 +273,10 @@ export const insights = {
         {
           type: 'paragraph' as const,
           content: 'Do I have the budget and patience for a development process that takes months? Custom software is not a project that finishes in a week. There are discovery, design, development, testing, and iteration phases that need to happen.',
+        },
+        {
+          type: 'pullquote' as const,
+          content: 'Custom software is a business asset. You have full control over data, features, and future development.',
         },
         {
           type: 'heading' as const,
