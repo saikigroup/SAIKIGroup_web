@@ -39,6 +39,14 @@ export function getLocalizedPath(routeKey: string, locale: Locale): string {
   return `/${locale}${path ? `/${path}` : ''}`;
 }
 
+// Article slug mappings between locales (ID slug <-> EN slug)
+// Each pair maps slugs that represent the same article in different languages
+export const articleSlugMap: Array<{ id: string; en: string }> = [
+  { id: 'mengapa-personal-branding-penting', en: 'why-personal-branding-matters' },
+  { id: 'brand-identity-bukan-logo', en: 'brand-identity-is-not-a-logo' },
+  { id: 'custom-vs-off-the-shelf', en: 'custom-vs-off-the-shelf' },
+];
+
 export function switchLocale(currentPath: string, targetLocale: Locale): string {
   const segments = currentPath.split('/').filter(Boolean);
   const currentLocale = segments[0];
@@ -54,6 +62,17 @@ export function switchLocale(currentPath: string, targetLocale: Locale): string 
     if (paths[currentLocale as Locale] === currentSubPath) {
       return getLocalizedPath(key, targetLocale);
     }
+  }
+
+  // Handle article slug switching: /locale/insights/slug
+  if (currentSubPath.startsWith('insights/')) {
+    const currentSlug = currentSubPath.replace('insights/', '');
+    const fromLocale = currentLocale as Locale;
+    const mapping = articleSlugMap.find((m) => m[fromLocale] === currentSlug);
+    if (mapping) {
+      return `/${targetLocale}/insights/${mapping[targetLocale]}`;
+    }
+    // For Supabase articles with same slug in both locales, just swap locale
   }
 
   // Fallback: just swap locale prefix

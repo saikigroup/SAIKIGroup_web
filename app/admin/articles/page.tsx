@@ -22,6 +22,17 @@ interface Article {
   saikiweb_updated_at: string;
 }
 
+interface LocaleFields {
+  title: string;
+  excerpt: string;
+  body: string;
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string;
+  readTime: string;
+  category: string;
+}
+
 interface ArticleForm {
   slug: string;
   locale: string;
@@ -38,6 +49,17 @@ interface ArticleForm {
   metaDescription: string;
   keywords: string;
 }
+
+const emptyLocaleFields: LocaleFields = {
+  title: '',
+  excerpt: '',
+  body: '',
+  metaTitle: '',
+  metaDescription: '',
+  keywords: '',
+  readTime: '',
+  category: '',
+};
 
 const emptyForm: ArticleForm = {
   slug: '',
@@ -84,6 +106,12 @@ export default function AdminArticlesPage() {
 
   // Tab state for editor
   const [editorTab, setEditorTab] = useState<'write' | 'preview'>('write');
+
+  // Dual locale mode
+  const [dualLocale, setDualLocale] = useState(false);
+  const [activeLocaleTab, setActiveLocaleTab] = useState<'id' | 'en'>('id');
+  const [enFields, setEnFields] = useState<LocaleFields>(emptyLocaleFields);
+  const [enSlug, setEnSlug] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -153,13 +181,33 @@ export default function AdminArticlesPage() {
       .trim();
   };
 
+  const saveArticle = async (pw: string, payload: Record<string, unknown>, method: string) => {
+    const res = await fetch('/api/admin/articles', {
+      method,
+      headers: { 'Content-Type': 'application/json', 'x-admin-password': pw },
+      body: JSON.stringify(payload),
+    });
+    return res.json();
+  };
+
   const handleSave = async () => {
     const pw = sessionStorage.getItem('admin_pw');
     if (!pw) return;
 
     if (!form.slug || !form.title || !form.body || !form.excerpt) {
-      setSaveError('Slug, title, excerpt, and body are required');
+      setSaveError('Slug, title, excerpt, and body are required (ID)');
       return;
+    }
+
+    if (dualLocale && !editingId) {
+      if (!enFields.title || !enFields.body || !enFields.excerpt) {
+        setSaveError('Title, excerpt, and body are required for EN version too');
+        return;
+      }
+      if (!enSlug) {
+        setSaveError('EN slug is required');
+        return;
+      }
     }
 
     setSaving(true);
@@ -168,32 +216,62 @@ export default function AdminArticlesPage() {
 
     try {
       const method = editingId ? 'PUT' : 'POST';
-      const payload = {
+      const catOpt = categoryOptions.find((c) => c.key === form.categoryKey);
+
+      // Save ID version
+      const idPayload = {
         ...form,
+        locale: 'id',
+        category: catOpt?.labelId || form.category,
         keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
         ...(editingId ? { id: editingId } : {}),
       };
 
-      const res = await fetch('/api/admin/articles', {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-          'x-admin-password': pw,
-        },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
+      const idResult = await saveArticle(pw, idPayload, method);
 
-      if (data.success) {
-        setSaveSuccess(editingId ? 'Article updated!' : 'Article created!');
-        setEditing(false);
-        setEditingId(null);
-        setForm(emptyForm);
-        fetchArticles();
-        setTimeout(() => setSaveSuccess(''), 3000);
-      } else {
-        setSaveError(data.error || 'Failed to save');
+      if (!idResult.success) {
+        setSaveError(idResult.error || 'Failed to save ID version');
+        setSaving(false);
+        return;
       }
+
+      // Save EN version if dual locale
+      if (dualLocale && !editingId) {
+        const enPayload = {
+          slug: enSlug,
+          locale: 'en',
+          title: enFields.title,
+          excerpt: enFields.excerpt,
+          body: enFields.body,
+          category: catOpt?.labelEn || form.category,
+          categoryKey: form.categoryKey,
+          date: form.date,
+          readTime: enFields.readTime || form.readTime,
+          featured: form.featured,
+          published: form.published,
+          metaTitle: enFields.metaTitle || null,
+          metaDescription: enFields.metaDescription || null,
+          keywords: enFields.keywords ? enFields.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
+        };
+
+        const enResult = await saveArticle(pw, enPayload, 'POST');
+        if (!enResult.success) {
+          setSaveError(`ID saved, but EN failed: ${enResult.error}`);
+          setSaving(false);
+          fetchArticles();
+          return;
+        }
+      }
+
+      setSaveSuccess(dualLocale && !editingId ? 'Both ID & EN articles created!' : editingId ? 'Article updated!' : 'Article created!');
+      setEditing(false);
+      setEditingId(null);
+      setForm(emptyForm);
+      setEnFields(emptyLocaleFields);
+      setEnSlug('');
+      setDualLocale(false);
+      fetchArticles();
+      setTimeout(() => setSaveSuccess(''), 3000);
     } catch {
       setSaveError('Connection error');
     }
@@ -250,6 +328,10 @@ export default function AdminArticlesPage() {
     setEditorTab('write');
     setSaveError('');
     setSaveSuccess('');
+    setDualLocale(false);
+    setActiveLocaleTab('id');
+    setEnFields(emptyLocaleFields);
+    setEnSlug('');
   };
 
   if (!authenticated) {
@@ -327,36 +409,99 @@ export default function AdminArticlesPage() {
             <div className="mb-4 px-4 py-3 bg-green-50 text-green-700 text-sm rounded-xl border border-green-200">{saveSuccess}</div>
           )}
 
+          {/* Dual locale toggle for new articles */}
+          {!editingId && (
+            <div className="mb-4">
+              <label className="flex items-center gap-3 cursor-pointer bg-white rounded-xl px-4 py-3 border border-gray-200 w-fit">
+                <input
+                  type="checkbox"
+                  checked={dualLocale}
+                  onChange={(e) => {
+                    setDualLocale(e.target.checked);
+                    if (e.target.checked) setActiveLocaleTab('id');
+                  }}
+                  className="w-4 h-4 text-teal-600 border-gray-300 rounded focus:ring-teal-500"
+                />
+                <span className="text-sm font-medium text-gray-700">Create both ID & EN versions at once</span>
+              </label>
+            </div>
+          )}
+
+          {/* Locale tabs when dual mode */}
+          {dualLocale && !editingId && (
+            <div className="flex gap-1 mb-4 bg-gray-100 rounded-xl p-1 w-fit">
+              <button
+                onClick={() => setActiveLocaleTab('id')}
+                className={`px-5 py-2 text-sm font-medium rounded-lg transition ${activeLocaleTab === 'id' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                Indonesian (ID)
+              </button>
+              <button
+                onClick={() => setActiveLocaleTab('en')}
+                className={`px-5 py-2 text-sm font-medium rounded-lg transition ${activeLocaleTab === 'en' ? 'bg-white text-teal-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+              >
+                English (EN)
+              </button>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Main editor */}
             <div className="lg:col-span-2 space-y-6">
               {/* Title */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Title</label>
-                <input
-                  type="text"
-                  value={form.title}
-                  onChange={(e) => {
-                    setForm({ ...form, title: e.target.value });
-                    if (!editingId && !form.slug) {
-                      setForm((f) => ({ ...f, title: e.target.value, slug: generateSlug(e.target.value) }));
-                    }
-                  }}
-                  placeholder="Article title..."
-                  className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
-                />
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Title {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </label>
+                {(!dualLocale || activeLocaleTab === 'id') ? (
+                  <input
+                    type="text"
+                    value={form.title}
+                    onChange={(e) => {
+                      setForm({ ...form, title: e.target.value });
+                      if (!editingId && !form.slug) {
+                        setForm((f) => ({ ...f, title: e.target.value, slug: generateSlug(e.target.value) }));
+                      }
+                    }}
+                    placeholder="Judul artikel..."
+                    className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={enFields.title}
+                    onChange={(e) => {
+                      setEnFields({ ...enFields, title: e.target.value });
+                      if (!enSlug) setEnSlug(generateSlug(e.target.value));
+                    }}
+                    placeholder="Article title (English)..."
+                    className="w-full text-2xl font-bold text-gray-900 border-none outline-none placeholder:text-gray-300"
+                  />
+                )}
               </div>
 
               {/* Excerpt */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Excerpt</label>
-                <textarea
-                  value={form.excerpt}
-                  onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
-                  placeholder="Brief summary shown on cards..."
-                  rows={2}
-                  className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
-                />
+                <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  Excerpt {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </label>
+                {(!dualLocale || activeLocaleTab === 'id') ? (
+                  <textarea
+                    value={form.excerpt}
+                    onChange={(e) => setForm({ ...form, excerpt: e.target.value })}
+                    placeholder="Ringkasan singkat untuk card..."
+                    rows={2}
+                    className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
+                  />
+                ) : (
+                  <textarea
+                    value={enFields.excerpt}
+                    onChange={(e) => setEnFields({ ...enFields, excerpt: e.target.value })}
+                    placeholder="Brief summary for cards (English)..."
+                    rows={2}
+                    className="w-full text-sm text-gray-700 border-none outline-none resize-none placeholder:text-gray-300 leading-relaxed"
+                  />
+                )}
               </div>
 
               {/* Body editor */}
@@ -382,19 +527,28 @@ export default function AdminArticlesPage() {
 
                 {editorTab === 'write' ? (
                   <textarea
-                    value={form.body}
-                    onChange={(e) => setForm({ ...form, body: e.target.value })}
-                    placeholder={`Write your article body here. You can paste HTML directly.\n\nExample:\n<p>Your opening paragraph here...</p>\n\n<h2>Section Heading</h2>\n<p>Section content...</p>\n\n<blockquote>A highlighted pull quote for emphasis.</blockquote>`}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, body: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, body: e.target.value });
+                      }
+                    }}
+                    placeholder={(!dualLocale || activeLocaleTab === 'id')
+                      ? `Tulis isi artikel di sini. Bisa paste HTML langsung.\n\nContoh:\n<p>Paragraf pembuka...</p>\n\n<h2>Heading Section</h2>\n<p>Isi section...</p>\n\n<blockquote>Quote yang di-highlight.</blockquote>`
+                      : `Write your article body here (English). Paste HTML directly.\n\nExample:\n<p>Opening paragraph...</p>\n\n<h2>Section Heading</h2>\n<p>Section content...</p>\n\n<blockquote>A highlighted quote.</blockquote>`
+                    }
                     rows={24}
                     className="w-full p-6 text-sm text-gray-800 font-mono border-none outline-none resize-y placeholder:text-gray-300 leading-relaxed"
                     spellCheck={false}
                   />
                 ) : (
                   <div className="p-6 min-h-[400px]">
-                    {form.body ? (
+                    {((!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body) ? (
                       <div
                         className="article-preview prose max-w-none"
-                        dangerouslySetInnerHTML={{ __html: form.body }}
+                        dangerouslySetInnerHTML={{ __html: (!dualLocale || activeLocaleTab === 'id') ? form.body : enFields.body }}
                       />
                     ) : (
                       <p className="text-gray-400 italic">Nothing to preview yet...</p>
@@ -411,27 +565,46 @@ export default function AdminArticlesPage() {
                 <h3 className="text-sm font-bold text-gray-900">Publish Settings</h3>
 
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Slug</label>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Slug (ID)
+                  </label>
                   <input
                     type="text"
                     value={form.slug}
                     onChange={(e) => setForm({ ...form, slug: e.target.value })}
-                    placeholder="article-url-slug"
+                    placeholder="slug-artikel-indonesia"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
-                  <select
-                    value={form.locale}
-                    onChange={(e) => setForm({ ...form, locale: e.target.value })}
-                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
-                  >
-                    <option value="id">Indonesian (ID)</option>
-                    <option value="en">English (EN)</option>
-                  </select>
-                </div>
+                {dualLocale && !editingId && (
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                      Slug (EN)
+                    </label>
+                    <input
+                      type="text"
+                      value={enSlug}
+                      onChange={(e) => setEnSlug(e.target.value)}
+                      placeholder="english-article-slug"
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
+                    />
+                  </div>
+                )}
+
+                {!dualLocale && (
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Locale</label>
+                    <select
+                      value={form.locale}
+                      onChange={(e) => setForm({ ...form, locale: e.target.value })}
+                      className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none"
+                    >
+                      <option value="id">Indonesian (ID)</option>
+                      <option value="en">English (EN)</option>
+                    </select>
+                  </div>
+                )}
 
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Category</label>
@@ -502,19 +675,27 @@ export default function AdminArticlesPage() {
 
               {/* SEO */}
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-                <h3 className="text-sm font-bold text-gray-900">SEO Settings</h3>
+                <h3 className="text-sm font-bold text-gray-900">
+                  SEO Settings {dualLocale && `(${activeLocaleTab.toUpperCase()})`}
+                </h3>
 
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Title</label>
-                    <span className={`text-xs ${(form.metaTitle?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
-                      {form.metaTitle?.length || 0}/60
+                    <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0) > 60 ? 'text-red-500' : 'text-gray-400'}`}>
+                      {((!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle)?.length || 0}/60
                     </span>
                   </div>
                   <input
                     type="text"
-                    value={form.metaTitle}
-                    onChange={(e) => setForm({ ...form, metaTitle: e.target.value })}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.metaTitle : enFields.metaTitle}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, metaTitle: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, metaTitle: e.target.value });
+                      }
+                    }}
                     placeholder="SEO optimized title | SAIKI"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
@@ -523,14 +704,20 @@ export default function AdminArticlesPage() {
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">Meta Description</label>
-                    <span className={`text-xs ${(form.metaDescription?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
-                      {form.metaDescription?.length || 0}/160
+                    <span className={`text-xs ${(((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0) > 160 ? 'text-red-500' : 'text-gray-400'}`}>
+                      {((!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription)?.length || 0}/160
                     </span>
                   </div>
                   <textarea
-                    value={form.metaDescription}
-                    onChange={(e) => setForm({ ...form, metaDescription: e.target.value })}
-                    placeholder="Compelling description with keywords for search results..."
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.metaDescription : enFields.metaDescription}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, metaDescription: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, metaDescription: e.target.value });
+                      }
+                    }}
+                    placeholder="Compelling description with keywords..."
                     rows={3}
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition resize-none"
                   />
@@ -540,8 +727,14 @@ export default function AdminArticlesPage() {
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Keywords</label>
                   <input
                     type="text"
-                    value={form.keywords}
-                    onChange={(e) => setForm({ ...form, keywords: e.target.value })}
+                    value={(!dualLocale || activeLocaleTab === 'id') ? form.keywords : enFields.keywords}
+                    onChange={(e) => {
+                      if (!dualLocale || activeLocaleTab === 'id') {
+                        setForm({ ...form, keywords: e.target.value });
+                      } else {
+                        setEnFields({ ...enFields, keywords: e.target.value });
+                      }
+                    }}
                     placeholder="keyword1, keyword2, keyword3"
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
