@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase, TABLES, type SaikiwebInquiry } from '@/lib/supabase';
+import { sendVisitorConfirmation, sendAdminNotification } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -45,6 +46,30 @@ export async function POST(request: NextRequest) {
         { status: 500 }
       );
     }
+
+    // Send email notifications (non-blocking — don't fail the API response)
+    const emailData = {
+      name: body.name,
+      email: body.email,
+      phone: body.phone || null,
+      company: body.company || null,
+      category: body.category,
+      message: body.message,
+      budget: body.budget || null,
+      locale: body.locale || 'id',
+    };
+
+    Promise.allSettled([
+      sendVisitorConfirmation(emailData),
+      sendAdminNotification(emailData),
+    ]).then((results) => {
+      results.forEach((result, i) => {
+        if (result.status === 'rejected') {
+          const label = i === 0 ? 'visitor confirmation' : 'admin notification';
+          console.error(`Failed to send ${label} email:`, result.reason);
+        }
+      });
+    });
 
     return NextResponse.json({ success: true, data });
   } catch (err) {
