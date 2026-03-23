@@ -62,7 +62,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
               {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="heading-display text-3xl md:text-4xl text-brand-teal">
-                    <AnimatedCounter target={stat.value} />+
+                    <AnimatedCounter value={String(stat.value)} />+
                   </div>
                   <p className="text-sm text-text-muted mt-1 font-medium">{stat.label}</p>
                 </div>
