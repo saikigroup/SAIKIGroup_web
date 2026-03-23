@@ -199,8 +199,6 @@ export function ServicePageTemplate({
         className="py-20 md:py-32 text-white relative overflow-hidden"
       >
         <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.hex}, ${colors.hexSecondary})` }} />
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-
         <div className="container-editorial text-center max-w-3xl mx-auto relative">
           <FadeIn>
             <h2 className="heading-display text-4xl md:text-5xl text-white">
