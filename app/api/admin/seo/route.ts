@@ -32,11 +32,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ success: true, data: defaultSeoConfig });
     }
 
-    // Merge with defaults
+    // Merge with defaults – filter empty verification so env-var defaults are preserved
     const dbConfig = data.config || {};
+    const dbVerification = dbConfig.verification ?? {};
+    const filteredVerification = Object.fromEntries(
+      Object.entries(dbVerification).filter(([, v]: [string, unknown]) => v !== '' && v != null)
+    );
     const merged = {
       global: { ...defaultSeoConfig.global, ...dbConfig.global },
-      verification: { ...defaultSeoConfig.verification, ...dbConfig.verification },
+      verification: { ...defaultSeoConfig.verification, ...filteredVerification },
       organization: { ...defaultSeoConfig.organization, ...dbConfig.organization },
       pages: { ...defaultSeoConfig.pages, ...dbConfig.pages },
       robots: { ...defaultSeoConfig.robots, ...dbConfig.robots },
