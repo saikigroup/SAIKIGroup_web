@@ -18,16 +18,19 @@ export const home = {
     consultancy: {
       title: 'SAIKI Consultancy',
       description: 'Bingung mau ke mana setelah ini? Kami bantu kamu menemukan arah karier yang tepat, mempersiapkan diri, dan tampil percaya diri di depan peluang yang menunggu.',
+      hoverDescription: 'Dari analisis potensi sampai persiapan interview, kami dampingi setiap langkah perjalanan karier kamu.',
       tags: ['Arah Karier', 'Personal Branding', 'Persiapan Interview'],
     },
     imagery: {
       title: 'SAIKI Imagery',
       description: 'Bisnis kamu bagus, tapi orang belum tahu? Kami bantu membangun identitas brand yang kuat dan strategi pemasaran yang benar-benar menyentuh audiens kamu.',
+      hoverDescription: 'Logo, konten, kampanye, semuanya kami rancang supaya brand kamu dikenal dan diingat.',
       tags: ['Brand Identity', 'Content Strategy', 'Digital Marketing'],
     },
     technology: {
       title: 'SAIKI Technology',
       description: 'Proses manual yang memakan waktu? Kami bangun sistem dan platform digital yang menyederhanakan operasi kamu, sehingga kamu bisa fokus pada hal yang penting.',
+      hoverDescription: 'Aplikasi custom, automasi, dan digitalisasi proses. Kami bangun dari nol atau kustomisasi sistem yang sudah ada.',
       tags: ['Custom Software', 'Automation', 'Platform Digital'],
     },
   },

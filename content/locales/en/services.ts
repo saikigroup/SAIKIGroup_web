@@ -1,4 +1,5 @@
 export const services = {
+  otherServices: 'Other Services',
   overview: {
     eyebrow: 'Our Services',
     headline: 'We Help You\nin These Three Areas.',

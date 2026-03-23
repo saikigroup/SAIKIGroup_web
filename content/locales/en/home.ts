@@ -18,16 +18,19 @@ export const home = {
     consultancy: {
       title: 'SAIKI Consultancy',
       description: 'Not sure where to go next? We help you find the right career direction, prepare yourself, and show up with confidence when opportunity knocks.',
+      hoverDescription: 'From potential analysis to interview prep, we guide every step of your career journey.',
       tags: ['Career Direction', 'Personal Branding', 'Interview Prep'],
     },
     imagery: {
       title: 'SAIKI Imagery',
       description: 'Your business is great, but people don\'t know yet? We help build a strong brand identity and marketing strategy that truly resonates with your audience.',
+      hoverDescription: 'Logo, content, campaigns. We design everything so your brand gets noticed and remembered.',
       tags: ['Brand Identity', 'Content Strategy', 'Digital Marketing'],
     },
     technology: {
       title: 'SAIKI Technology',
       description: 'Manual processes eating your time? We build systems and digital platforms that simplify your operations, so you can focus on what matters.',
+      hoverDescription: 'Custom apps, automation, and process digitization. We build from scratch or customize what you already have.',
       tags: ['Custom Software', 'Automation', 'Digital Platform'],
     },
   },

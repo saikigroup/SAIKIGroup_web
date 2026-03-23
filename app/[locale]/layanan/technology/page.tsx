@@ -11,7 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 export default async function TechnologyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale: l } = await params;
   const locale = l as Locale;
-  const t = getServices(locale).technology;
+  const s = getServices(locale);
+  const t = s.technology;
 
   return (
     <ServicePageTemplate
@@ -21,6 +22,11 @@ export default async function TechnologyPage({ params }: { params: Promise<{ loc
       approach={t.approach}
       useCases={t.useCases}
       cta={t.cta}
+      otherServicesLabel={s.otherServices}
+      otherServices={[
+        { key: 'consultancy', title: s.consultancy.hero.eyebrow, description: s.consultancy.hero.body },
+        { key: 'imagery', title: s.imagery.hero.eyebrow, description: s.imagery.hero.body },
+      ]}
       locale={locale}
     />
   );

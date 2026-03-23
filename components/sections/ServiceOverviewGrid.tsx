@@ -11,6 +11,7 @@ import { serviceAccentColors, type ServiceKey } from '@/lib/utils';
 interface ServiceData {
   title: string;
   description: string;
+  hoverDescription?: string;
   tags: string[];
 }
 
@@ -130,7 +131,7 @@ export function ServiceOverviewGrid({
                       </div>
 
                       <p className="text-white/80 text-sm leading-relaxed mb-8 max-w-xs">
-                        {service.description}
+                        {service.hoverDescription || service.description}
                       </p>
 
                       <span className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 group-hover:bg-white/30">
