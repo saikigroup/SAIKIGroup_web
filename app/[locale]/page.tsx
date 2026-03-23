@@ -11,6 +11,7 @@ import {
   JournalPreview,
   ContactCTA,
   MarqueeBanner,
+  ProductShowcase,
 } from '@/components/sections';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -81,6 +82,13 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         headline={t.operating.headline}
         body={t.operating.body}
         stats={t.operating.stats}
+      />
+
+      <ProductShowcase
+        eyebrow={t.products.eyebrow}
+        headline={t.products.headline}
+        body={t.products.body}
+        products={t.products.items}
       />
 
       <JournalPreview

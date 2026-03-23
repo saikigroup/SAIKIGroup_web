@@ -81,6 +81,27 @@ export const home = {
       { value: '∞', label: 'Possibilities' },
     ],
   },
+  products: {
+    eyebrow: 'Our Products',
+    headline: 'Solutions You Can\nUse Right Now.',
+    body: 'We don\'t just talk about solutions — we build them. These are live digital products ready to help you today.',
+    items: [
+      {
+        name: 'BlastMail',
+        description: 'A simple yet powerful email blast platform. Send emails to thousands of contacts easily, without confusing setup.',
+        url: 'https://blastmail.saiki.id',
+        logo: '/images/products/blastmail-logo.svg',
+        accent: '#0d9488',
+      },
+      {
+        name: 'aPick',
+        description: 'A digital solution to simplify picking processes and warehouse management. Efficient, accurate, and real-time.',
+        url: 'https://apick.id',
+        logo: '/images/products/apick-logo.svg',
+        accent: '#8b5cf6',
+      },
+    ],
+  },
   journal: {
     eyebrow: 'Insights',
     headline: 'Tips & Stories\nfor You.',
