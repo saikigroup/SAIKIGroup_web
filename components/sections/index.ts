@@ -7,3 +7,4 @@ export { OperatingModel } from './OperatingModel';
 export { JournalPreview } from './JournalPreview';
 export { ContactCTA } from './ContactCTA';
 export { MarqueeBanner } from './MarqueeBanner';
+export { ProductShowcase } from './ProductShowcase';

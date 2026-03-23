@@ -81,6 +81,27 @@ export const home = {
       { value: '∞', label: 'Kemungkinan' },
     ],
   },
+  products: {
+    eyebrow: 'Produk Kami',
+    headline: 'Solusi yang Sudah\nBisa Kamu Gunakan.',
+    body: 'Kami tidak hanya bicara soal solusi — kami membangunnya. Ini adalah produk digital yang sudah live dan siap membantu kamu hari ini.',
+    items: [
+      {
+        name: 'BlastMail',
+        description: 'Platform email blast yang simpel dan powerful. Kirim email ke ribuan kontak dengan mudah, tanpa ribet setup yang membingungkan.',
+        url: 'https://blastmail.saiki.id',
+        logo: '/images/products/blastmail-logo.svg',
+        accent: '#0d9488',
+      },
+      {
+        name: 'aPick',
+        description: 'Solusi digital untuk memudahkan proses picking dan manajemen gudang. Efisien, akurat, dan real-time.',
+        url: 'https://apick.id',
+        logo: '/images/products/apick-logo.svg',
+        accent: '#8b5cf6',
+      },
+    ],
+  },
   journal: {
     eyebrow: 'Insights',
     headline: 'Tips & Cerita\nuntuk kamu.',
