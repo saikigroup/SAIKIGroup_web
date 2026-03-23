@@ -30,6 +30,7 @@ export const TABLES = {
   ARTICLES: 'saikiweb_articles',
   SEO_CONFIG: 'saikiweb_seo_config',
   SUBSCRIBERS: 'saikiweb_subscribers',
+  SOCIAL_POSTS: 'saikiweb_social_posts',
 } as const;
 
 // Type for the saikiweb_articles table
@@ -77,6 +78,26 @@ export interface SaikiwebInquiry {
   saikiweb_current_page?: string;
   saikiweb_visitor_id?: string;
   saikiweb_created_at?: string;
+}
+
+// Type for the saikiweb_social_posts table
+export interface SaikiwebSocialPost {
+  saikiweb_post_id?: number;
+  saikiweb_platform: 'instagram' | 'linkedin' | 'tiktok' | 'twitter' | 'facebook';
+  saikiweb_post_type: 'single' | 'carousel' | 'reel' | 'story' | 'text';
+  saikiweb_caption: string;
+  saikiweb_hashtags: string[];
+  saikiweb_media_urls: string[];
+  saikiweb_locale: string;
+  saikiweb_status: 'draft' | 'scheduled' | 'published' | 'archived';
+  saikiweb_scheduled_at?: string;
+  saikiweb_published_at?: string;
+  saikiweb_post_url?: string;
+  saikiweb_article_slug?: string;
+  saikiweb_category_key?: 'consultancy' | 'imagery' | 'technology' | 'general';
+  saikiweb_notes?: string;
+  saikiweb_created_at?: string;
+  saikiweb_updated_at?: string;
 }
 
 // Type for the saikiweb_subscribers table
