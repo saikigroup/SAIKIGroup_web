@@ -114,6 +114,219 @@ const categoryOptions = [
   { value: 'technology', label: 'Technology' },
 ];
 
+// AI model prompt wrappers
+const aiModels = [
+  { value: 'chatgpt', label: 'ChatGPT' },
+  { value: 'gemini', label: 'Gemini' },
+  { value: 'claude', label: 'Claude' },
+];
+
+// Prompt types for social post generation
+type PromptType = 'caption' | 'visual' | 'infographic';
+
+const promptTypes: { value: PromptType; label: string; desc: string }[] = [
+  { value: 'caption', label: 'Caption / Copy', desc: 'Copywriting untuk postingan' },
+  { value: 'visual', label: 'Image / Visual Brief', desc: 'Brief untuk desainer atau AI image generator' },
+  { value: 'infographic', label: 'Infographic Outline', desc: 'Struktur konten untuk carousel/infografis' },
+];
+
+function generateSocialPrompt(
+  type: PromptType,
+  platform: string,
+  postType: string,
+  article: { title: string; excerpt: string; slug: string; locale: string },
+  ai: string,
+  siteUrl: string
+): string {
+  const utmUrl = buildUtmUrl(siteUrl, article.locale, article.slug, platform, postType);
+  const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
+  const platLabel = platforms.find(p => p.value === platform)?.label || platform;
+
+  const articleBlock = `ARTIKEL YANG AKAN DIBAGIKAN:
+- Judul: "${article.title}"
+- Ringkasan: "${article.excerpt}"
+- URL (dengan UTM tracking): ${utmUrl}`;
+
+  if (type === 'caption') {
+    const captionRules: Record<string, string> = {
+      instagram: `- Buka dengan hook yang bikin stop scrolling (1 kalimat pendek, bold)
+- Gunakan line breaks untuk readability
+- Pakai emoji secukupnya untuk visual cue, JANGAN berlebihan
+- ${postType === 'carousel' ? 'Buat outline 7-10 slide: Slide 1 = cover hook, Slide 2-8 = insight, Slide terakhir = CTA + link' : 'Tulis caption 150-300 kata'}
+- Akhiri dengan CTA: ajak comment, save, atau share
+- Sertakan link artikel di akhir caption
+- Tambahkan 15-20 hashtag (campuran populer + niche)
+- Tone: conversational, relatable`,
+      linkedin: `- Buka dengan hook 1-2 baris (personal story atau data mengejutkan)
+- Format pendek per paragraf (1-2 kalimat, banyak white space)
+- Sertakan personal insight atau pengalaman nyata
+- ${postType === 'carousel' ? 'Buat outline 8-12 slide PDF: judul + poin utama per slide' : 'Tulis post 200-400 kata'}
+- Akhiri dengan pertanyaan terbuka untuk diskusi
+- Sertakan link artikel
+- Tambahkan 3-5 hashtag profesional
+- Tone: professional tapi approachable, thought leadership`,
+      tiktok: `- Hook 3 detik pertama: "Kamu pasti belum tahu ini..." / "Stop!"
+- ${postType === 'reel' ? 'Tulis script video 30-60 detik: hook > masalah > insight > solusi > CTA' : 'Caption pendek 50-100 kata'}
+- Bahasa super casual, kayak ngomong ke teman
+- Angle: myth-busting, "things nobody tells you", listicle
+- CTA: "Follow untuk tips lainnya" / "Link di bio"
+- Tambahkan 5-8 hashtag trending + niche
+- Tone: energetic, fun, to the point`,
+      twitter: `- Tweet utama: max 280 karakter, hook yang bikin penasaran
+- Buat thread 5-8 tweet: Tweet 1 = hook, Tweet 2-6 = insight, Tweet terakhir = CTA + link
+- Setiap tweet harus bisa berdiri sendiri
+- Gunakan angka: "5 alasan...", "3 kesalahan..."
+- Sertakan link artikel di tweet terakhir
+- Tambahkan 2-3 hashtag
+- Tone: sharp, witty, concise`,
+      facebook: `- Buka dengan storytelling singkat atau pertanyaan relatable
+- ${postType === 'reel' ? 'Script video 30-60 detik' : 'Post 150-300 kata'}
+- Bahasa warm dan conversational
+- Sertakan link artikel
+- Pertanyaan di akhir untuk engagement
+- CTA: ajak share ke teman
+- Tambahkan 3-5 hashtag
+- Tone: friendly, community-oriented`,
+    };
+
+    return `Kamu adalah social media copywriter untuk SAIKI Group, ekosistem terintegrasi untuk konsultansi karier, branding & marketing, dan teknologi.
+
+TUGAS: Buat caption/copy untuk ${platLabel} ${postType}.
+
+${articleBlock}
+
+PLATFORM: ${platLabel} ${postType}
+BAHASA: ${lang}
+
+STYLE RULES:
+${captionRules[platform] || captionRules.instagram}
+
+ATURAN:
+- JANGAN copy-paste isi artikel. Buat orang PENASARAN untuk klik dan baca
+- JANGAN gunakan emdash (--)
+- Output HANYA caption yang siap dipakai, tanpa penjelasan
+- Sertakan hashtag terpisah di bawah caption`;
+  }
+
+  if (type === 'visual') {
+    const visualRules: Record<string, string> = {
+      instagram: postType === 'carousel'
+        ? `Buat brief untuk carousel 7-10 slide:
+- Slide 1: Cover dengan headline yang eye-catching
+- Slide 2-8: Masing-masing 1 poin utama dengan visual pendukung
+- Slide terakhir: CTA + branding SAIKI Group
+- Style: modern, clean, warna brand SAIKI (teal #0d9488, violet #8b5cf6)
+- Aspect ratio: 1:1 (1080x1080px)`
+        : postType === 'reel'
+        ? `Buat brief untuk thumbnail reel:
+- Thumbnail yang bikin stop scrolling
+- Text overlay: headline pendek 3-5 kata
+- Style: bold, high contrast
+- Aspect ratio: 9:16 (1080x1920px)`
+        : `Buat brief untuk single image post:
+- Visual yang menarik perhatian di feed
+- Text overlay opsional: headline pendek
+- Style: editorial, premium feel
+- Aspect ratio: 1:1 (1080x1080px) atau 4:5 (1080x1350px)`,
+      linkedin: `Buat brief untuk image LinkedIn:
+- Professional, thought-provoking visual
+- ${postType === 'carousel' ? 'Document PDF 8-12 halaman: clean, data-driven, typography-focused' : 'Single image yang stop scrolling'}
+- Minimal text overlay, fokus pada insight utama
+- Style: corporate tapi modern
+- Aspect ratio: ${postType === 'carousel' ? '4:5 (PDF slides)' : '1.91:1 (1200x627px)'}`,
+      tiktok: `Buat brief untuk visual TikTok:
+- Bold, eye-catching, Gen-Z aesthetic
+- High contrast dengan text besar
+- Aspect ratio: 9:16 (1080x1920px)
+- ${postType === 'reel' ? 'Storyboard untuk video: 3-5 scene utama' : 'Cover/thumbnail yang mencolok'}`,
+      twitter: `Buat brief untuk image X/Twitter:
+- Clean, informative, shareable
+- Bisa infographic mini atau quote card
+- Aspect ratio: 16:9 (1200x675px)
+- Fokus pada 1 insight utama`,
+      facebook: `Buat brief untuk visual Facebook:
+- Warm, inviting, community-feel
+- ${postType === 'reel' ? 'Storyboard video 30-60 detik' : 'Single image atau mini collage'}
+- Aspect ratio: ${postType === 'reel' ? '9:16' : '1:1 atau 1.91:1'}`,
+    };
+
+    return `Kamu adalah art director dan visual designer untuk SAIKI Group.
+
+TUGAS: Buat visual/image brief untuk posting di ${platLabel}.
+
+${articleBlock}
+
+BRIEF REQUIREMENTS:
+${visualRules[platform] || visualRules.instagram}
+
+BRAND GUIDELINE SAIKI:
+- Primary: Teal (#0d9488), Violet (#8b5cf6)
+- Neutral: Brand Black (#1a1a2e), White
+- Font: Sans-serif modern (clean, professional)
+- Style: Editorial premium, clean whitespace, subtle gradients
+
+BAHASA: ${lang}
+
+OUTPUT:
+1. Konsep visual (1-2 kalimat)
+2. Layout description (posisi elemen, hierarchy)
+3. Color palette untuk post ini
+4. Text overlay (jika ada)
+5. ${postType === 'carousel' ? 'Konten per slide (judul + visual description)' : 'Mood/reference keywords untuk AI image generator'}
+${ai === 'chatgpt' ? '\n6. DALL-E prompt siap pakai untuk generate image' : ai === 'gemini' ? '\n6. Imagen prompt siap pakai' : '\n6. Deskripsi visual detail untuk designer'}`;
+  }
+
+  // infographic
+  const infographicRules: Record<string, string> = {
+    instagram: `Format: Instagram Carousel ${postType === 'carousel' ? '7-10 slide' : '5-7 slide'}
+- Slide 1: Judul hook yang bikin swipe
+- Slide 2-N: Masing-masing 1 poin dengan ikon/ilustrasi
+- Slide terakhir: Summary + CTA
+- Setiap slide: max 30 kata, font besar readable di mobile`,
+    linkedin: `Format: LinkedIn Document/PDF 8-12 halaman
+- Halaman 1: Cover dengan judul + subtitle
+- Halaman 2-N: Data points, frameworks, atau step-by-step
+- Halaman terakhir: Key takeaways + CTA
+- Style: data-driven, banyak whitespace, clean charts`,
+    tiktok: `Format: TikTok Carousel atau Video Script
+- Slide/Scene 1: Hook visual
+- ${postType === 'carousel' ? 'Slide 2-7: Quick tips dengan visual bold' : 'Scene 2-5: Poin utama dengan transisi snappy'}
+- Final: CTA follow + save
+- Style: Gen-Z, bold typography, high energy`,
+    twitter: `Format: Twitter Thread Visual Companion
+- 1 infographic image yang merangkum semua poin
+- Atau series 3-4 mini cards untuk thread
+- Focus: data, stats, key insights
+- Clean, minimal, high information density`,
+    facebook: `Format: Facebook Shareable Infographic
+- Single long infographic atau carousel
+- Storytelling flow: problem > insight > solution
+- Easy to share, relatable
+- Include branding subtle di footer`,
+  };
+
+  return `Kamu adalah content strategist dan infographic designer untuk SAIKI Group.
+
+TUGAS: Buat outline infographic/konten visual untuk ${platLabel}.
+
+${articleBlock}
+
+${infographicRules[platform] || infographicRules.instagram}
+
+BAHASA: ${lang}
+
+OUTPUT YANG DIBUTUHKAN:
+1. Judul/headline infographic
+2. Struktur konten per slide/section:
+   - Judul section
+   - Poin utama (max 2 kalimat)
+   - Saran visual/ikon
+   - Data/statistik jika relevan
+3. Color scheme (berdasarkan brand SAIKI: teal, violet)
+4. CTA di penutup
+5. Hashtag recommendations (${platform === 'linkedin' ? '3-5' : platform === 'twitter' ? '2-3' : '10-15'})`;
+}
+
 // UTM URL builder for tracking article shares per platform
 function buildUtmUrl(siteUrl: string, locale: string, slug: string, platform: string, postType: string): string {
   const base = `${siteUrl}/${locale}/insights/${slug}`;
@@ -126,83 +339,6 @@ function buildUtmUrl(siteUrl: string, locale: string, slug: string, platform: st
   return `${base}?${params.toString()}`;
 }
 
-// Platform-specific copywriting prompt generator
-function generateCaptionPrompt(platform: string, postType: string, article: { title: string; excerpt: string; slug: string; locale: string }, siteUrl: string): string {
-  const articleUrl = buildUtmUrl(siteUrl, article.locale, article.slug, platform, postType);
-  const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
-
-  const platformRules: Record<string, string> = {
-    instagram: `PLATFORM: Instagram ${postType === 'carousel' ? 'Carousel' : postType === 'reel' ? 'Reel' : 'Feed Post'}
-STYLE RULES:
-- Buka dengan hook yang bikin stop scrolling (1 kalimat pendek, bold, provokatif)
-- Gunakan line breaks untuk readability (jangan paragraf panjang)
-- Pakai emoji secukupnya untuk visual cue, JANGAN berlebihan
-- Akhiri dengan CTA yang engaging: ajak comment, save, atau share
-- ${postType === 'carousel' ? 'Buat outline 7-10 slide: Slide 1 = cover hook, Slide 2-8 = poin utama (1 insight per slide), Slide terakhir = CTA + link' : 'Tulis caption 150-300 kata'}
-- Tambahkan 15-20 hashtag yang relevan (campuran populer + niche)
-- Tone: conversational, relatable, kayak teman yang expert`,
-
-    linkedin: `PLATFORM: LinkedIn ${postType === 'text' ? 'Text Post' : postType === 'carousel' ? 'Document Post' : 'Post'}
-STYLE RULES:
-- Buka dengan hook 1-2 baris yang memancing rasa ingin tahu (personal story atau data mengejutkan)
-- Gunakan format pendek per paragraf (1-2 kalimat per paragraf, banyak white space)
-- Sertakan personal insight atau pengalaman nyata
-- Gunakan angka dan data jika ada
-- ${postType === 'carousel' ? 'Buat outline 8-12 slide dokumen PDF: judul tiap slide + poin utama' : 'Tulis post 200-400 kata'}
-- Akhiri dengan pertanyaan terbuka untuk memancing diskusi
-- Tambahkan 3-5 hashtag profesional saja
-- Tone: professional tapi approachable, thought leadership`,
-
-    tiktok: `PLATFORM: TikTok ${postType === 'reel' ? 'Video' : 'Post'}
-STYLE RULES:
-- Buka dengan hook 3 detik pertama: "Kamu pasti belum tahu ini..." / "Stop! Jangan [X] sebelum baca ini"
-- ${postType === 'reel' ? 'Tulis script video 30-60 detik: hook > masalah > insight > solusi > CTA. Format: [SCENE 1] narasi...' : 'Tulis caption pendek 50-100 kata'}
-- Bahasa super casual, kayak ngomong ke teman
-- Pakai trending angle: myth-busting, "things nobody tells you", listicle
-- CTA: "Follow untuk tips lainnya" / "Save biar nggak lupa"
-- Tambahkan 5-8 hashtag (campuran trending + niche)
-- Tone: energetic, fun, to the point`,
-
-    twitter: `PLATFORM: X (Twitter) Thread/Tweet
-STYLE RULES:
-- Tweet utama: max 280 karakter, hook yang bikin penasaran
-- Buat thread 5-8 tweet: Tweet 1 = hook, Tweet 2-6 = insight per poin, Tweet terakhir = ringkasan + CTA
-- Setiap tweet harus bisa berdiri sendiri tapi connect ke keseluruhan
-- Gunakan angka di awal: "5 alasan...", "3 kesalahan..."
-- Tambahkan 2-3 hashtag saja
-- Tone: sharp, witty, concise`,
-
-    facebook: `PLATFORM: Facebook ${postType === 'reel' ? 'Reel' : 'Post'}
-STYLE RULES:
-- Buka dengan storytelling singkat atau pertanyaan relatable
-- ${postType === 'reel' ? 'Tulis script video 30-60 detik dengan narasi' : 'Tulis post 150-300 kata'}
-- Bahasa warm dan conversational
-- Sertakan pertanyaan di akhir untuk engagement
-- CTA: ajak share ke teman yang butuh info ini
-- Tambahkan 3-5 hashtag
-- Tone: friendly, community-oriented, shareable`,
-  };
-
-  return `Kamu adalah social media copywriter untuk SAIKI Group, ekosistem terintegrasi untuk konsultansi karier, branding & marketing, dan teknologi.
-
-TUGAS: Buat caption/copy untuk membagikan artikel berikut ke ${platforms.find(p => p.value === platform)?.label || platform}:
-
-ARTIKEL:
-- Judul: "${article.title}"
-- Ringkasan: "${article.excerpt}"
-- URL: ${articleUrl}
-
-${platformRules[platform] || platformRules.instagram}
-
-BAHASA: ${lang}
-
-ATURAN UMUM:
-- JANGAN copy-paste isi artikel. Buat caption yang bikin orang PENASARAN untuk klik dan baca
-- Sertakan link artikel di akhir caption
-- JANGAN gunakan emdash (--)
-- Output HANYA caption/copy yang siap dipakai (tanpa penjelasan tambahan)
-- Pastikan sesuai character limit platform`;
-}
 
 
 export default function AdminSocialPostsPage() {
@@ -236,8 +372,10 @@ function SocialPostsContent() {
   const [saveSuccess, setSaveSuccess] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
-  const [captionPrompt, setCaptionPrompt] = useState('');
+  const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [promptCopied, setPromptCopied] = useState(false);
+  const [selectedPromptType, setSelectedPromptType] = useState<PromptType>('caption');
+  const [selectedAi, setSelectedAi] = useState('chatgpt');
 
   // Auth
   const handleLogin = async (e: React.FormEvent) => {
@@ -582,42 +720,78 @@ function SocialPostsContent() {
                 />
               </div>
 
-              {/* Caption Generator */}
+              {/* Prompt Library */}
               {form.articleSlug && (() => {
                 const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
                 if (!linked) return null;
                 return (
                   <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl border border-teal-200 p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <div>
-                        <h2 className="text-sm font-semibold text-teal-900">Caption Generator</h2>
-                        <p className="text-xs text-teal-600 mt-0.5">Generate AI prompt sesuai gaya {platforms.find(p => p.value === form.platform)?.label}</p>
-                      </div>
-                      <button
-                        onClick={() => {
-                          const prompt = generateCaptionPrompt(
-                            form.platform,
-                            form.postType,
-                            { title: linked.saikiweb_title, excerpt: linked.saikiweb_excerpt, slug: linked.saikiweb_slug, locale: linked.saikiweb_locale },
-                            'https://saiki.id'
-                          );
-                          setCaptionPrompt(prompt);
-                          setPromptCopied(false);
-                        }}
-                        className="px-4 py-2 bg-teal-600 text-white text-xs font-semibold rounded-lg hover:bg-teal-700 transition"
-                      >
-                        Generate Prompt
-                      </button>
+                    <h2 className="text-sm font-semibold text-teal-900 mb-1">Prompt Library</h2>
+                    <p className="text-xs text-teal-600 mb-4">Generate AI prompt untuk {platforms.find(p => p.value === form.platform)?.label} content</p>
+
+                    {/* AI Model selector */}
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs text-teal-700 font-medium">AI:</span>
+                      {aiModels.map((m) => (
+                        <button
+                          key={m.value}
+                          onClick={() => setSelectedAi(m.value)}
+                          className={`px-2.5 py-1 text-xs font-medium rounded-md transition ${
+                            selectedAi === m.value ? 'bg-teal-600 text-white' : 'bg-white text-teal-700 border border-teal-200 hover:bg-teal-50'
+                          }`}
+                        >
+                          {m.label}
+                        </button>
+                      ))}
                     </div>
-                    {captionPrompt && (
-                      <div className="mt-3">
-                        <div className="bg-white rounded-xl p-4 max-h-48 overflow-y-auto">
-                          <pre className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed font-sans">{captionPrompt}</pre>
+
+                    {/* Prompt type tabs */}
+                    <div className="flex gap-1 mb-4">
+                      {promptTypes.map((pt) => (
+                        <button
+                          key={pt.value}
+                          onClick={() => { setSelectedPromptType(pt.value); setGeneratedPrompt(''); setPromptCopied(false); }}
+                          className={`flex-1 px-3 py-2 text-xs font-medium rounded-lg transition ${
+                            selectedPromptType === pt.value
+                              ? 'bg-teal-600 text-white'
+                              : 'bg-white text-teal-700 border border-teal-200 hover:bg-teal-50'
+                          }`}
+                        >
+                          <span className="block">{pt.label}</span>
+                          <span className={`block text-[10px] mt-0.5 ${selectedPromptType === pt.value ? 'text-teal-100' : 'text-teal-400'}`}>{pt.desc}</span>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Generate button */}
+                    <button
+                      onClick={() => {
+                        const prompt = generateSocialPrompt(
+                          selectedPromptType,
+                          form.platform,
+                          form.postType,
+                          { title: linked.saikiweb_title, excerpt: linked.saikiweb_excerpt, slug: linked.saikiweb_slug, locale: linked.saikiweb_locale },
+                          selectedAi,
+                          'https://saiki.id'
+                        );
+                        setGeneratedPrompt(prompt);
+                        setPromptCopied(false);
+                      }}
+                      className="w-full py-2.5 bg-teal-600 text-white text-xs font-semibold rounded-lg hover:bg-teal-700 transition"
+                    >
+                      Generate {promptTypes.find(pt => pt.value === selectedPromptType)?.label} Prompt
+                    </button>
+
+                    {/* Generated output */}
+                    {generatedPrompt && (
+                      <div className="mt-4">
+                        <div className="bg-white rounded-xl p-4 max-h-56 overflow-y-auto">
+                          <pre className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed font-sans">{generatedPrompt}</pre>
                         </div>
                         <div className="flex items-center gap-2 mt-3">
                           <button
                             onClick={async () => {
-                              await navigator.clipboard.writeText(captionPrompt);
+                              await navigator.clipboard.writeText(generatedPrompt);
                               setPromptCopied(true);
                               setTimeout(() => setPromptCopied(false), 2000);
                             }}
@@ -627,7 +801,9 @@ function SocialPostsContent() {
                           >
                             {promptCopied ? 'Copied!' : 'Copy Prompt'}
                           </button>
-                          <span className="text-xs text-teal-500">Paste ke ChatGPT / Claude / Gemini, lalu paste hasilnya di Caption</span>
+                          <span className="text-xs text-teal-500">
+                            Paste ke {aiModels.find(m => m.value === selectedAi)?.label}, lalu paste hasilnya
+                          </span>
                         </div>
                       </div>
                     )}
