@@ -88,7 +88,7 @@ export function ServiceOverviewGrid({
 
                     <div className="relative">
                       {/* Service sub-logo */}
-                      <div className="mb-6 flex items-center gap-4">
+                      <div className="mb-6">
                         <div
                           className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 backdrop-blur-sm"
                           style={{ backgroundColor: `${colors.hex}10` }}
@@ -97,9 +97,7 @@ export function ServiceOverviewGrid({
                           <img
                             src={colors.logo}
                             alt={service.title}
-                            width={40}
-                            height={50}
-                            className="object-contain"
+                            className="h-10 w-auto object-contain"
                           />
                         </div>
                       </div>

@@ -46,23 +46,20 @@ export function ServicePageTemplate({
               {/* Service Logo */}
               <div className="flex items-center gap-5 mb-8">
                 <div
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                  className="w-16 h-20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
                   style={{ backgroundColor: `${colors.hex}10` }}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={colors.logo}
                     alt={hero.eyebrow}
-                    width={50}
-                    height={62}
-                    className="object-contain"
+                    className="h-14 w-auto object-contain"
                   />
                 </div>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={colors.logoFull}
                   alt={hero.eyebrow}
-                  height={32}
                   className="h-8 w-auto object-contain"
                 />
               </div>

@@ -60,25 +60,20 @@ export function ProductShowcase({ eyebrow, headline, body, products }: ProductSh
 
                 <div className="relative">
                   {/* Logo */}
-                  <div className="mb-6 flex items-center gap-4">
+                  <div className="mb-6">
                     <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden shrink-0"
-                      style={{ backgroundColor: `${product.accent}12` }}
+                      className="inline-flex items-center justify-center rounded-xl px-4 py-3 mb-3"
+                      style={{ backgroundColor: `${product.accent}08` }}
                     >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.logo}
                         alt={product.name}
-                        width={40}
-                        height={40}
-                        className="object-contain"
+                        className="h-8 w-auto object-contain"
                       />
                     </div>
                     <div>
-                      <h3 className="heading-sans text-xl text-brand-black transition-colors" style={{ color: undefined }}>
-                        {product.name}
-                      </h3>
-                      <span className="text-[11px] font-semibold uppercase tracking-widest" style={{ color: product.accent }}>
+                      <span className="text-[11px] font-semibold uppercase tracking-widest block" style={{ color: product.accent }}>
                         Live Product
                       </span>
                     </div>
