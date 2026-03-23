@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Membangun Identitas Visual untuk Startup Fintech',
   subtitle: 'Ketika kepercayaan dan inovasi harus berjalan beriringan dalam satu identitas brand.',
   industry: 'Financial Technology',
-  year: '2024',
+  year: '2025',
   duration: '3 bulan',
   overview: 'Sebuah startup fintech yang sedang dalam fase growth menghadapi tantangan klasik: produk mereka sudah kuat secara teknologi, tapi identitas visual mereka belum bisa menyampaikan level kepercayaan yang dibutuhkan oleh target pasar mereka. Di industri keuangan, persepsi visual bukan sekadar estetika. Ini soal kredibilitas. Kami diminta untuk membangun sistem identitas brand dari nol yang bisa menjembatani dua narasi sekaligus: inovasi teknologi dan keandalan finansial.',
   sections: [
@@ -78,8 +78,8 @@ const id: ProjectDetail = {
       type: 'metrics',
       heading: 'Dampak yang Terukur',
       items: [
-        { value: '3x', label: 'Peningkatan brand recall dalam survei post-launch' },
-        { value: '47%', label: 'Peningkatan conversion rate landing page' },
+        { value: '2.6x', label: 'Peningkatan brand recall dalam survei post-launch' },
+        { value: '34%', label: 'Peningkatan conversion rate landing page' },
         { value: '100%', label: 'Konsistensi visual di semua touchpoint' },
         { value: '1', label: 'Brand book lengkap sebagai panduan tim' },
       ],
@@ -103,7 +103,7 @@ const en: ProjectDetail = {
   title: 'Building a Visual Identity for a Fintech Startup',
   subtitle: 'When trust and innovation must coexist in a single brand identity.',
   industry: 'Financial Technology',
-  year: '2024',
+  year: '2025',
   duration: '3 months',
   overview: 'A growth-stage fintech startup faced a classic challenge: their product was technically strong, but their visual identity could not convey the level of trust their target market demands. In the financial industry, visual perception is not just about aesthetics. It is about credibility. We were tasked with building a brand identity system from scratch that could bridge two narratives at once: technological innovation and financial reliability.',
   sections: [
@@ -175,8 +175,8 @@ const en: ProjectDetail = {
       type: 'metrics',
       heading: 'Measurable Impact',
       items: [
-        { value: '3x', label: 'Increase in brand recall from post-launch survey' },
-        { value: '47%', label: 'Landing page conversion rate improvement' },
+        { value: '2.6x', label: 'Increase in brand recall from post-launch survey' },
+        { value: '34%', label: 'Landing page conversion rate improvement' },
         { value: '100%', label: 'Visual consistency across all touchpoints' },
         { value: '1', label: 'Complete brand book as team guide' },
       ],

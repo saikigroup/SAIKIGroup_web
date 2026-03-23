@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Kampanye Visual untuk Jaringan F&B Nasional',
   subtitle: 'Konsistensi brand di 50+ kota tanpa kehilangan nuansa lokal.',
   industry: 'Food & Beverage',
-  year: '2024',
+  year: '2025',
   duration: '4 bulan',
   overview: 'Jaringan restoran dengan lebih dari 50 cabang di seluruh Indonesia menghadapi dilema yang sering dialami bisnis F&B yang berkembang pesat: bagaimana menjaga konsistensi brand di semua kota sambil tetap terasa relevan dan dekat dengan komunitas lokal. Kampanye visual mereka sebelumnya terasa generik, atau sebaliknya, terlalu lokal hingga tidak terasa seperti satu brand. Kami diminta untuk menciptakan framework kampanye visual yang bisa diadaptasi tanpa kehilangan identitas.',
   sections: [
@@ -59,7 +59,7 @@ const id: ProjectDetail = {
       items: [
         { value: '50+', label: 'Cabang mengadopsi sistem baru' },
         { value: '62%', label: 'Pengurangan waktu produksi materi' },
-        { value: '3.2x', label: 'Peningkatan engagement sosial media regional' },
+        { value: '2.4x', label: 'Peningkatan engagement sosial media regional' },
         { value: '89%', label: 'Brand consistency score (dari 41%)' },
       ],
     },
@@ -77,7 +77,7 @@ const en: ProjectDetail = {
   title: 'Visual Campaign for a National F&B Chain',
   subtitle: 'Brand consistency across 50+ cities without losing local nuance.',
   industry: 'Food & Beverage',
-  year: '2024',
+  year: '2025',
   duration: '4 months',
   overview: 'A restaurant chain with more than 50 locations across Indonesia faced a dilemma common to fast-growing F&B businesses: how to maintain brand consistency across all cities while still feeling relevant and close to local communities. Their previous visual campaigns felt either generic, or conversely, too localized to feel like one brand. We were asked to create a visual campaign framework that could adapt without losing its identity.',
   sections: [
@@ -130,7 +130,7 @@ const en: ProjectDetail = {
       items: [
         { value: '50+', label: 'Branches adopted the new system' },
         { value: '62%', label: 'Reduction in material production time' },
-        { value: '3.2x', label: 'Increase in regional social media engagement' },
+        { value: '2.4x', label: 'Increase in regional social media engagement' },
         { value: '89%', label: 'Brand consistency score (up from 41%)' },
       ],
     },

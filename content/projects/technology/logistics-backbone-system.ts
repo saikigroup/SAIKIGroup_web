@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Logistics Operation Backbone System',
   subtitle: 'Dari spreadsheet ke sistem terintegrasi untuk ribuan pengiriman harian.',
   industry: 'Logistics & Ekspedisi',
-  year: '2024',
+  year: '2025',
   duration: '6 bulan',
   overview: 'Perusahaan ekspedisi ini memproses ribuan pengiriman setiap hari di puluhan rute berbeda. Seluruh operasional mereka berjalan di atas spreadsheet yang saling terhubung secara manual: order masuk dicatat di satu file, tracking status di file lain, invoice di file terpisah, dan rekonsiliasi dilakukan manual setiap minggu. Ketika volume pengiriman meningkat 3x lipat dalam setahun terakhir, sistem spreadsheet ini mulai runtuh. Data hilang, pengiriman tertukar, dan tim operasional menghabiskan lebih banyak waktu untuk administrasi daripada mengelola pengiriman.',
   sections: [
@@ -116,7 +116,7 @@ const en: ProjectDetail = {
   title: 'Logistics Operation Backbone System',
   subtitle: 'From spreadsheets to an integrated system for thousands of daily deliveries.',
   industry: 'Logistics & Shipping',
-  year: '2024',
+  year: '2025',
   duration: '6 months',
   overview: 'This shipping company processed thousands of deliveries daily across dozens of different routes. Their entire operation ran on manually interconnected spreadsheets: incoming orders recorded in one file, tracking status in another, invoices in a separate file, and reconciliation done manually every week. When delivery volume tripled in the past year, this spreadsheet system started collapsing. Data went missing, shipments got mixed up, and the operations team spent more time on administration than managing deliveries.',
   sections: [

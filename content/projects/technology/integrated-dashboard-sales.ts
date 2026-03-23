@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Integrated Dashboard & Sales Management',
   subtitle: 'Satu dashboard terpadu untuk proses penjualan, order, dan pelaporan.',
   industry: 'Multi-Industri Lokal',
-  year: '2024',
+  year: '2025',
   duration: '4 bulan',
   overview: 'Beberapa perusahaan skala lokal yang kami tangani memiliki masalah yang hampir identik: tim sales bekerja dengan tools yang terpisah-pisah. WhatsApp untuk komunikasi klien, spreadsheet untuk tracking pipeline, email untuk internal approval, dan aplikasi berbeda lagi untuk membuat quotation. Informasi terfragmentasi, follow-up terlewat, dan manajemen tidak punya gambaran akurat soal pipeline dan performa tim. Kami membangun satu platform terpadu yang menyatukan seluruh siklus penjualan dalam satu tempat.',
   sections: [
@@ -64,7 +64,7 @@ const id: ProjectDetail = {
         { value: '40%', label: 'Peningkatan conversion rate' },
         { value: '60%', label: 'Pengurangan waktu pembuatan quotation' },
         { value: '0', label: 'Lead yang terlewat follow-up' },
-        { value: '95%', label: 'Tingkat adopsi oleh tim sales' },
+        { value: '91%', label: 'Tingkat adopsi oleh tim sales' },
       ],
     },
     {
@@ -86,7 +86,7 @@ const en: ProjectDetail = {
   title: 'Integrated Dashboard & Sales Management',
   subtitle: 'One unified dashboard for sales processes, orders, and reporting.',
   industry: 'Multi-Industry Local',
-  year: '2024',
+  year: '2025',
   duration: '4 months',
   overview: 'Several local-scale companies we served had nearly identical problems: their sales teams worked with fragmented tools. WhatsApp for client communication, spreadsheets for pipeline tracking, email for internal approvals, and yet another app for creating quotations. Information was fragmented, follow-ups were missed, and management had no accurate picture of their pipeline or team performance. We built a unified platform that brings the entire sales cycle into one place.',
   sections: [
@@ -144,7 +144,7 @@ const en: ProjectDetail = {
         { value: '40%', label: 'Increase in conversion rate' },
         { value: '60%', label: 'Reduction in quotation creation time' },
         { value: '0', label: 'Leads missed for follow-up' },
-        { value: '95%', label: 'Adoption rate by sales teams' },
+        { value: '91%', label: 'Adoption rate by sales teams' },
       ],
     },
     {

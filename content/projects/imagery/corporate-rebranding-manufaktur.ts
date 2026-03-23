@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Rebranding Korporat Perusahaan Manufaktur',
   subtitle: 'Modernisasi visual tanpa kehilangan 20 tahun warisan brand.',
   industry: 'Manufacturing',
-  year: '2023',
+  year: '2024',
   duration: '5 bulan',
   overview: 'Perusahaan manufaktur yang sudah beroperasi selama dua dekade ini dikenal solid di industrinya. Tapi visual mereka menceritakan kisah yang berbeda: logo yang terlihat usang, materi korporat yang tidak kohesif, dan kehadiran digital yang minim. Di tengah persaingan yang semakin ketat dan kebutuhan untuk menarik talenta muda serta mitra bisnis baru, mereka memutuskan bahwa sudah saatnya untuk berbenah, tanpa meninggalkan warisan yang sudah dibangun.',
   sections: [
@@ -125,7 +125,7 @@ const en: ProjectDetail = {
   title: 'Corporate Rebranding for a Manufacturing Company',
   subtitle: 'Visual modernization without losing 20 years of brand heritage.',
   industry: 'Manufacturing',
-  year: '2023',
+  year: '2024',
   duration: '5 months',
   overview: 'This manufacturing company had been operating for two decades and was well-known in its industry. But their visuals told a different story: an outdated logo, incoherent corporate materials, and minimal digital presence. Amid intensifying competition and the need to attract young talent and new business partners, they decided it was time for a refresh, without leaving behind the legacy they had built.',
   sections: [
