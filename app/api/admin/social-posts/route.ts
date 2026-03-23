@@ -51,6 +51,10 @@ export async function GET(request: NextRequest) {
   const { data, error } = await query;
 
   if (error) {
+    // Table may not exist yet — return empty array gracefully
+    if (error.message.includes('schema cache') || error.code === '42P01') {
+      return NextResponse.json({ success: true, data: [] });
+    }
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 
