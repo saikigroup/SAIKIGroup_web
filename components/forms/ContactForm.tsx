@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, type FormEvent } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Check, AlertCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Check, AlertCircle, Mail, Sparkles } from 'lucide-react';
 import { getContact } from '@/lib/content';
 import { type Locale } from '@/lib/i18n';
 import { getAttributionForForm } from '@/lib/attribution';
@@ -18,6 +18,8 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
   const [formState, setFormState] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [formStarted, setFormStarted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showNewsletter, setShowNewsletter] = useState(false);
+  const [newsletterState, setNewsletterState] = useState<'idle' | 'subscribing' | 'done'>('idle');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -84,48 +86,139 @@ export function ContactForm({ locale, preselectedCategory }: ContactFormProps) {
 
       analytics.formSubmit('contact', formData.category);
       setFormState('success');
+      // Show newsletter dialog after a brief delay
+      setTimeout(() => setShowNewsletter(true), 1500);
     } catch {
       setFormState('error');
       analytics.formSubmit('contact', formData.category);
       setFormState('success');
+      setTimeout(() => setShowNewsletter(true), 1500);
     }
+  };
+
+  const handleSubscribe = async () => {
+    setNewsletterState('subscribing');
+    try {
+      await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: formData.email,
+          name: formData.name,
+          locale,
+        }),
+      });
+    } catch {
+      // Non-blocking - don't fail the UX
+    }
+    setNewsletterState('done');
+    setTimeout(() => setShowNewsletter(false), 2000);
   };
 
   if (formState === 'success') {
     return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-center py-16"
-      >
-        <div className="w-16 h-16 bg-gradient-teal rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-teal/30">
-          <Check className="w-8 h-8 text-white" />
-        </div>
-        <h3 className="heading-sans text-2xl text-brand-black mb-3">
-          {t.success.headline}
-        </h3>
-        <p className="text-text-secondary max-w-md mx-auto mb-8">
-          {t.success.body}
-        </p>
-        <button
-          onClick={() => {
-            setFormState('idle');
-            setFormData({
-              name: '',
-              email: '',
-              phone: '',
-              company: '',
-              category: '',
-              message: '',
-              budget: '',
-              consent: false,
-            });
-          }}
-          className="text-brand-teal font-semibold hover:underline"
+      <div className="relative">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center py-16"
         >
-          {t.success.another}
-        </button>
-      </motion.div>
+          <div className="w-16 h-16 bg-gradient-teal rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg shadow-brand-teal/30">
+            <Check className="w-8 h-8 text-white" />
+          </div>
+          <h3 className="heading-sans text-2xl text-brand-black mb-3">
+            {t.success.headline}
+          </h3>
+          <p className="text-text-secondary max-w-md mx-auto mb-8">
+            {t.success.body}
+          </p>
+          <button
+            onClick={() => {
+              setFormState('idle');
+              setShowNewsletter(false);
+              setNewsletterState('idle');
+              setFormData({
+                name: '',
+                email: '',
+                phone: '',
+                company: '',
+                category: '',
+                message: '',
+                budget: '',
+                consent: false,
+              });
+            }}
+            className="text-brand-teal font-semibold hover:underline"
+          >
+            {t.success.another}
+          </button>
+        </motion.div>
+
+        {/* Newsletter opt-in dialog */}
+        <AnimatePresence>
+          {showNewsletter && newsletterState !== 'done' && (
+            <motion.div
+              initial={{ opacity: 0, y: 30, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="absolute inset-0 flex items-center justify-center z-10"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl shadow-brand-black/10 border border-border-subtle/50 p-8 max-w-md w-full mx-4">
+                <div className="w-12 h-12 bg-gradient-to-br from-brand-teal/10 to-teal-100 rounded-xl flex items-center justify-center mx-auto mb-5">
+                  <Sparkles className="w-6 h-6 text-brand-teal" />
+                </div>
+                <h4 className="heading-sans text-xl text-brand-black text-center mb-2">
+                  {t.newsletter.headline}
+                </h4>
+                <p className="text-text-secondary text-sm text-center leading-relaxed mb-6">
+                  {t.newsletter.body}
+                </p>
+                <div className="flex flex-col gap-3">
+                  <motion.button
+                    onClick={handleSubscribe}
+                    disabled={newsletterState === 'subscribing'}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-gradient-to-r from-brand-teal to-teal-500 text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-brand-teal/25 transition-all disabled:opacity-60"
+                  >
+                    {newsletterState === 'subscribing' ? (
+                      <span className="inline-block w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <Mail className="w-4 h-4" />
+                        {t.newsletter.accept}
+                      </>
+                    )}
+                  </motion.button>
+                  <button
+                    onClick={() => setShowNewsletter(false)}
+                    className="text-sm text-text-muted hover:text-text-secondary transition-colors py-2"
+                  >
+                    {t.newsletter.decline}
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {showNewsletter && newsletterState === 'done' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center z-10"
+            >
+              <div className="bg-white rounded-2xl shadow-2xl shadow-brand-black/10 border border-border-subtle/50 p-8 max-w-md w-full mx-4 text-center">
+                <div className="w-12 h-12 bg-gradient-teal rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <Check className="w-6 h-6 text-white" />
+                </div>
+                <p className="text-brand-black font-semibold">{t.newsletter.thanks}</p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     );
   }
 

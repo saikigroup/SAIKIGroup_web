@@ -29,6 +29,7 @@ export const TABLES = {
   INQUIRIES: 'saikiweb_inquiries',
   ARTICLES: 'saikiweb_articles',
   SEO_CONFIG: 'saikiweb_seo_config',
+  SUBSCRIBERS: 'saikiweb_subscribers',
 } as const;
 
 // Type for the saikiweb_articles table
@@ -76,4 +77,17 @@ export interface SaikiwebInquiry {
   saikiweb_current_page?: string;
   saikiweb_visitor_id?: string;
   saikiweb_created_at?: string;
+}
+
+// Type for the saikiweb_subscribers table
+export interface SaikiwebSubscriber {
+  saikiweb_subscriber_id?: number;
+  saikiweb_email: string;
+  saikiweb_name?: string;
+  saikiweb_locale: string;
+  saikiweb_status: 'active' | 'unsubscribed';
+  saikiweb_unsubscribe_token: string;
+  saikiweb_source?: string;
+  saikiweb_subscribed_at?: string;
+  saikiweb_unsubscribed_at?: string;
 }

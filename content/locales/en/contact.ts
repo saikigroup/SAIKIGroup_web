@@ -63,6 +63,13 @@ export const contact = {
     body: 'Thank you for trusting SAIKI. Our team will read your story and get back to you within 1-2 business days. If urgent, chat us on WhatsApp.',
     another: 'Tell Us Something Else',
   },
+  newsletter: {
+    headline: 'One More Thing!',
+    body: 'Want industry insights, tips, and the latest tricks delivered straight to your inbox? We send new articles as they are published, no spam.',
+    accept: 'Yes, Sign Me Up!',
+    decline: 'No, Thanks',
+    thanks: 'Thanks for subscribing!',
+  },
   validation: {
     required: 'Required',
     invalidEmail: 'Invalid email format',

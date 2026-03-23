@@ -63,6 +63,13 @@ export const contact = {
     body: 'Terima kasih sudah percaya ke SAIKI. Tim kami akan baca cerita kamu dan menghubungi dalam 1-2 hari kerja. Kalau urgent, langsung chat kami di WhatsApp ya.',
     another: 'Ceritakan Hal Lain',
   },
+  newsletter: {
+    headline: 'Satu Hal Lagi!',
+    body: 'Mau dapat insight industri, tips, dan trik terbaru langsung ke inbox kamu? Kami kirim artikel baru setiap kali terbit, tanpa spam.',
+    accept: 'Ya, Saya Mau!',
+    decline: 'Tidak, Terima Kasih',
+    thanks: 'Terima kasih sudah berlangganan!',
+  },
   validation: {
     required: 'Wajib diisi',
     invalidEmail: 'Format email tidak valid',
