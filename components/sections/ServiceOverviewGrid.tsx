@@ -27,18 +27,12 @@ interface ServiceOverviewGridProps {
 
 const serviceKeys: ServiceKey[] = ['consultancy', 'imagery', 'technology'];
 
-const ServiceIcon = ({ serviceKey, className }: { serviceKey: ServiceKey; className?: string }) => {
+const ServiceIcon = ({ serviceKey, size = 32 }: { serviceKey: ServiceKey; size?: number }) => {
   switch (serviceKey) {
-    case 'consultancy': return <IconConsultancy className={className} />;
-    case 'imagery': return <IconImagery className={className} />;
-    case 'technology': return <IconTechnology className={className} />;
+    case 'consultancy': return <IconConsultancy size={size} />;
+    case 'imagery': return <IconImagery size={size} />;
+    case 'technology': return <IconTechnology size={size} />;
   }
-};
-
-const gradientBg: Record<ServiceKey, string> = {
-  consultancy: 'from-rose-500/10 to-orange-500/10',
-  imagery: 'from-cyan-500/10 to-teal-500/10',
-  technology: 'from-violet-500/10 to-purple-500/10',
 };
 
 export function ServiceOverviewGrid({
@@ -71,18 +65,43 @@ export function ServiceOverviewGrid({
                 <TiltCard tiltAmount={8} className="h-full">
                   <Link
                     href={getLocalizedPath(key, locale)}
-                    className={`group block glass-strong rounded-2xl p-8 md:p-10 h-full hover:shadow-xl hover:shadow-brand-teal/5 transition-all duration-300 relative overflow-hidden`}
+                    className="group block glass-strong rounded-2xl p-8 md:p-10 h-full transition-all duration-300 relative overflow-hidden hover:shadow-xl"
+                    style={{
+                      // @ts-expect-error CSS custom properties
+                      '--service-color': colors.hex,
+                      '--service-color-light': `${colors.hex}08`,
+                      '--service-color-hover': `${colors.hex}12`,
+                    }}
                   >
-                    {/* Gradient bg on hover */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${gradientBg[key]} opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl`} />
+                    {/* Gradient bg on hover - uses logo color */}
+                    <div
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
+                      style={{
+                        background: `linear-gradient(135deg, ${colors.hex}08 0%, ${colors.hex}15 100%)`,
+                      }}
+                    />
+
+                    {/* Watermark icon - large background */}
+                    <div className="absolute -right-6 -bottom-6 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500 pointer-events-none">
+                      <ServiceIcon serviceKey={key} size={180} />
+                    </div>
 
                     <div className="relative">
-                      {/* Icon */}
-                      <div
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 transition-transform duration-300 group-hover:scale-110"
-                        style={{ backgroundColor: `${colors.hex}15` }}
-                      >
-                        <ServiceIcon serviceKey={key} className={`w-8 h-8`} />
+                      {/* Service sub-logo */}
+                      <div className="mb-6 flex items-center gap-4">
+                        <div
+                          className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 backdrop-blur-sm"
+                          style={{ backgroundColor: `${colors.hex}10` }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={colors.logo}
+                            alt={service.title}
+                            width={40}
+                            height={50}
+                            className="object-contain"
+                          />
+                        </div>
                       </div>
 
                       <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
@@ -97,16 +116,37 @@ export function ServiceOverviewGrid({
                         {service.tags.map((tag) => (
                           <span
                             key={tag}
-                            className="text-xs font-medium px-3 py-1.5 rounded-full border"
-                            style={{ borderColor: `${colors.hex}30`, color: colors.hex, backgroundColor: `${colors.hex}08` }}
+                            className="text-xs font-medium px-3 py-1.5 rounded-full border backdrop-blur-sm"
+                            style={{
+                              borderColor: `${colors.hex}30`,
+                              color: colors.hex,
+                              backgroundColor: `${colors.hex}08`,
+                            }}
                           >
                             {tag}
                           </span>
                         ))}
                       </div>
 
-                      <span className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-brand-teal/10 text-brand-teal group-hover:bg-brand-teal group-hover:text-white transition-all duration-300">
-                        <ArrowRight className="w-4 h-4" />
+                      <span
+                        className="inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300"
+                        style={{
+                          backgroundColor: `${colors.hex}10`,
+                          color: colors.hex,
+                        }}
+                      >
+                        <motion.span
+                          className="inline-flex items-center justify-center w-10 h-10 rounded-full group-hover:text-white transition-all duration-300"
+                          style={{
+                            // On hover, fill with service color
+                          }}
+                        >
+                          <span
+                            className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            style={{ backgroundColor: colors.hex }}
+                          />
+                          <ArrowRight className="w-4 h-4 relative z-10" />
+                        </motion.span>
                       </span>
                     </div>
                   </Link>

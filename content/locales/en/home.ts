@@ -88,17 +88,19 @@ export const home = {
     items: [
       {
         name: 'BlastMail',
-        description: 'A simple yet powerful email blast platform. Send emails to thousands of contacts easily, without confusing setup.',
+        description: 'AI-powered email marketing platform that lets you send emails to thousands of contacts in minutes. Complete with drag & drop template builder and real-time analytics.',
         url: 'https://blastmail.saiki.id',
         logo: '/images/products/blastmail-logo.svg',
         accent: '#0d9488',
+        linkText: 'Visit BlastMail',
       },
       {
-        name: 'aPick',
-        description: 'A digital solution to simplify picking processes and warehouse management. Efficient, accurate, and real-time.',
+        name: 'apick',
+        description: 'Business management app for small businesses — from sales tracking, rental management, community fees, to event planning. As simple as using WhatsApp.',
         url: 'https://apick.id',
         logo: '/images/products/apick-logo.svg',
-        accent: '#8b5cf6',
+        accent: '#2e7795',
+        linkText: 'Visit apick',
       },
     ],
   },

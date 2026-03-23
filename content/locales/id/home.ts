@@ -88,17 +88,19 @@ export const home = {
     items: [
       {
         name: 'BlastMail',
-        description: 'Platform email blast yang simpel dan powerful. Kirim email ke ribuan kontak dengan mudah, tanpa ribet setup yang membingungkan.',
+        description: 'Platform email marketing dengan AI yang membantu kamu kirim email ke ribuan kontak dalam hitungan menit. Lengkap dengan drag & drop template builder dan analitik real-time.',
         url: 'https://blastmail.saiki.id',
         logo: '/images/products/blastmail-logo.svg',
         accent: '#0d9488',
+        linkText: 'Kunjungi BlastMail',
       },
       {
-        name: 'aPick',
-        description: 'Solusi digital untuk memudahkan proses picking dan manajemen gudang. Efisien, akurat, dan real-time.',
+        name: 'apick',
+        description: 'Aplikasi manajemen usaha untuk UMKM — dari catat penjualan, kelola sewa properti, iuran warga, hingga atur acara. Sesimpel pakai WhatsApp.',
         url: 'https://apick.id',
         logo: '/images/products/apick-logo.svg',
-        accent: '#8b5cf6',
+        accent: '#2e7795',
+        linkText: 'Kunjungi apick',
       },
     ],
   },

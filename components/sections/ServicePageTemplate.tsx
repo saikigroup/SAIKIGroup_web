@@ -2,7 +2,7 @@
 
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
-import { Eyebrow, CTAButton, IconConsultancy, IconImagery, IconTechnology, IconCheck } from '@/components/shared';
+import { Eyebrow, CTAButton, IconCheck } from '@/components/shared';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
 import type { ServiceKey } from '@/lib/utils';
 import { serviceAccentColors } from '@/lib/utils';
@@ -22,14 +22,6 @@ interface ServicePageTemplateProps {
   locale: Locale;
 }
 
-const ServiceIcon = ({ serviceKey, className }: { serviceKey: ServiceKey; className?: string }) => {
-  switch (serviceKey) {
-    case 'consultancy': return <IconConsultancy className={className} size={36} />;
-    case 'imagery': return <IconImagery className={className} size={36} />;
-    case 'technology': return <IconTechnology className={className} size={36} />;
-  }
-};
-
 export function ServicePageTemplate({
   serviceKey,
   hero,
@@ -46,18 +38,35 @@ export function ServicePageTemplate({
       {/* Hero */}
       <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
         <div className="absolute top-20 -left-32 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: `${colors.hex}15` }} />
-        <div className="absolute bottom-10 right-0 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 right-0 w-80 h-80 rounded-full blur-3xl" style={{ backgroundColor: `${colors.hex}08` }} />
 
         <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
-              <div
-                className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6"
-                style={{ backgroundColor: `${colors.hex}15` }}
-              >
-                <ServiceIcon serviceKey={serviceKey} />
+              {/* Service Logo */}
+              <div className="flex items-center gap-5 mb-8">
+                <div
+                  className="w-20 h-20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                  style={{ backgroundColor: `${colors.hex}10` }}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={colors.logo}
+                    alt={hero.eyebrow}
+                    width={50}
+                    height={62}
+                    className="object-contain"
+                  />
+                </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={colors.logoFull}
+                  alt={hero.eyebrow}
+                  height={32}
+                  className="h-8 w-auto object-contain"
+                />
               </div>
-              <Eyebrow color={`text-[${colors.hex}]`}>{hero.eyebrow}</Eyebrow>
+              <Eyebrow style={{ color: colors.hex }}>{hero.eyebrow}</Eyebrow>
               <h1 className="heading-display text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4 whitespace-pre-line">
                 {hero.headline}
               </h1>
@@ -69,7 +78,11 @@ export function ServicePageTemplate({
                 {hero.body}
               </p>
               <div className="mt-10">
-                <CTAButton href={getLocalizedPath('contact', locale)}>
+                <CTAButton
+                  href={getLocalizedPath('contact', locale)}
+                  className="transition-all duration-300"
+                  style={{ backgroundColor: colors.hex, borderColor: colors.hex }}
+                >
                   {cta.button}
                 </CTAButton>
               </div>
@@ -82,7 +95,7 @@ export function ServicePageTemplate({
       <section className="py-20 md:py-32 bg-white relative overflow-hidden">
         <div className="container-editorial">
           <FadeIn>
-            <Eyebrow>{scope.eyebrow}</Eyebrow>
+            <Eyebrow style={{ color: colors.hex }}>{scope.eyebrow}</Eyebrow>
             <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4">
               {scope.headline}
             </h2>
@@ -91,7 +104,13 @@ export function ServicePageTemplate({
           <StaggerGroup className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-14">
             {scope.items.map((item, i) => (
               <StaggerItem key={i}>
-                <div className="glass-strong rounded-2xl p-6 md:p-8 hover:shadow-lg transition-all duration-300 h-full">
+                <div
+                  className="glass-strong rounded-2xl p-6 md:p-8 hover:shadow-lg transition-all duration-300 h-full"
+                  style={{
+                    // @ts-expect-error CSS custom property
+                    '--tw-shadow-color': `${colors.hex}10`,
+                  }}
+                >
                   <div className="flex items-center gap-3 mb-3">
                     <span
                       className="w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold text-white"
@@ -114,12 +133,15 @@ export function ServicePageTemplate({
       </section>
 
       {/* Approach */}
-      <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
+      <section
+        className="py-20 md:py-32 relative overflow-hidden"
+        style={{ backgroundColor: `${colors.hex}06` }}
+      >
         <div className="container-editorial">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
             <div className="lg:col-span-5">
               <FadeIn>
-                <Eyebrow>{approach.eyebrow}</Eyebrow>
+                <Eyebrow style={{ color: colors.hex }}>{approach.eyebrow}</Eyebrow>
                 <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4">
                   {approach.headline}
                 </h2>
@@ -144,7 +166,7 @@ export function ServicePageTemplate({
       <section className="py-20 md:py-32 bg-white">
         <div className="container-editorial">
           <FadeIn>
-            <Eyebrow>{useCases.eyebrow}</Eyebrow>
+            <Eyebrow style={{ color: colors.hex }}>{useCases.eyebrow}</Eyebrow>
             <h2 className="heading-display text-4xl md:text-5xl text-brand-black mt-4 mb-12">
               {useCases.headline}
             </h2>
@@ -167,7 +189,7 @@ export function ServicePageTemplate({
       <section
         className="py-20 md:py-32 text-white relative overflow-hidden"
       >
-        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.hex}, ${colors.hex}cc)` }} />
+        <div className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${colors.hex}, ${colors.hexSecondary})` }} />
         <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
 
         <div className="container-editorial text-center max-w-3xl mx-auto relative">
