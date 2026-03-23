@@ -109,9 +109,9 @@ const id: ProjectDetail = {
       heading: 'Akumulasi Dampak',
       items: [
         { value: '30+', label: 'Profesional yang sudah kami dampingi' },
-        { value: '85%', label: 'Mencapai target karier dalam 6 bulan' },
+        { value: '80%', label: 'Mencapai target karier dalam 12 bulan' },
         { value: '100%', label: 'Merasa lebih jelas tentang arah karier' },
-        { value: '4.9', label: 'Rating kepuasan rata-rata (dari 5)' },
+        { value: '4.7', label: 'Rating kepuasan rata-rata (dari 5)' },
       ],
     },
     {
@@ -236,9 +236,9 @@ const en: ProjectDetail = {
       heading: 'Cumulative Impact',
       items: [
         { value: '30+', label: 'Professionals we have guided' },
-        { value: '85%', label: 'Achieved career goals within 6 months' },
+        { value: '80%', label: 'Achieved career goals within 12 months' },
         { value: '100%', label: 'Felt clearer about career direction' },
-        { value: '4.9', label: 'Average satisfaction rating (out of 5)' },
+        { value: '4.7', label: 'Average satisfaction rating (out of 5)' },
       ],
     },
     {

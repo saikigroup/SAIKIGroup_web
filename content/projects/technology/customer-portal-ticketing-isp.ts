@@ -109,7 +109,7 @@ const id: ProjectDetail = {
     heading: 'Dari Reaktif ke Proaktif',
     body: 'Transformasi paling signifikan bukan di angka-angkanya, tapi di perubahan mindset. ISP ini bergeser dari operasi yang reaktif (menunggu komplain) ke proaktif (mendeteksi dan menangani masalah sebelum pelanggan melaporkan). Dengan data dari ticketing system, mereka bisa mengidentifikasi pola masalah di area tertentu dan melakukan tindakan preventif. Pelanggan yang dulunya vokal di media sosial sekarang menjadi pemberi testimoni positif karena merasa didengar dan dilayani dengan transparan. Churn rate turun signifikan di kuartal pertama setelah launch.',
   },
-  nextProject: { slug: 'data-analytics-platform-agritech', title: 'Data Analytics Platform untuk Agritech' },
+  nextProject: { slug: 'data-analytics-platform-agritech', title: 'Data Analytics Platform untuk Cold Storage Operations' },
 };
 
 const en: ProjectDetail = {
@@ -221,7 +221,7 @@ const en: ProjectDetail = {
     heading: 'From Reactive to Proactive',
     body: 'The most significant transformation was not in the numbers, but in the mindset shift. This ISP moved from reactive operations (waiting for complaints) to proactive (detecting and addressing issues before customers report them). With data from the ticketing system, they can identify problem patterns in specific areas and take preventive action. Customers who were previously vocal on social media are now providing positive testimonials because they feel heard and served transparently. Churn rate dropped significantly in the first quarter after launch.',
   },
-  nextProject: { slug: 'data-analytics-platform-agritech', title: 'Data Analytics Platform for Agritech' },
+  nextProject: { slug: 'data-analytics-platform-agritech', title: 'Data Analytics Platform for Cold Storage Operations' },
 };
 
 registerProject('customer-portal-ticketing-isp', { id: () => id, en: () => en });

@@ -59,7 +59,7 @@ const id: ProjectDetail = {
       items: [
         { value: '50+', label: 'Cabang mengadopsi sistem baru' },
         { value: '62%', label: 'Pengurangan waktu produksi materi' },
-        { value: '3.2x', label: 'Peningkatan engagement sosial media regional' },
+        { value: '2.4x', label: 'Peningkatan engagement sosial media regional' },
         { value: '89%', label: 'Brand consistency score (dari 41%)' },
       ],
     },
@@ -130,7 +130,7 @@ const en: ProjectDetail = {
       items: [
         { value: '50+', label: 'Branches adopted the new system' },
         { value: '62%', label: 'Reduction in material production time' },
-        { value: '3.2x', label: 'Increase in regional social media engagement' },
+        { value: '2.4x', label: 'Increase in regional social media engagement' },
         { value: '89%', label: 'Brand consistency score (up from 41%)' },
       ],
     },

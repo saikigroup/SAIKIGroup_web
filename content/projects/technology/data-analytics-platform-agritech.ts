@@ -134,7 +134,7 @@ const id: ProjectDetail = {
     heading: 'Dari Data ke Ketenangan Pikiran',
     body: 'Platform ini sekarang aktif di seluruh jaringan gudang. Tapi pencapaian terbesar bukan di metrik teknis. Pencapaian terbesar adalah ketika warehouse manager yang dulunya harus bolak-balik cek suhu manual setiap jam sekarang bisa tenang karena tahu sistem akan memberi tahu jika ada yang tidak beres. Tim operasional yang dulunya kebal terhadap alert sekarang merespons setiap notifikasi karena mereka tahu setiap alert yang muncul memang perlu ditindaklanjuti. Spoilage turun, compliance tercatat otomatis, dan biaya energi lebih efisien karena sistem bisa mendeteksi inefisiensi pendinginan yang tidak terlihat oleh mata manusia.',
   },
-  nextProject: { slug: 'business-process-optimization', title: 'Business Process Optimization Lintas Industri' },
+  nextProject: { slug: 'business-process-optimization', title: 'Puluhan Profesional, Satu Pendekatan Personal' },
 };
 
 const en: ProjectDetail = {
@@ -271,7 +271,7 @@ const en: ProjectDetail = {
     heading: 'From Data to Peace of Mind',
     body: 'This platform is now active across the entire warehouse network. But the greatest achievement is not in technical metrics. The greatest achievement is when warehouse managers who used to manually check temperatures every hour can now rest easy knowing the system will notify them if something is wrong. Operations teams that were once immune to alerts now respond to every notification because they know each alert that appears truly needs action. Spoilage is down, compliance is automatically recorded, and energy costs are more efficient because the system can detect cooling inefficiencies invisible to the human eye.',
   },
-  nextProject: { slug: 'business-process-optimization', title: 'Business Process Optimization Lintas Industri' },
+  nextProject: { slug: 'business-process-optimization', title: 'Dozens of Professionals, One Personal Approach' },
 };
 
 registerProject('data-analytics-platform-agritech', { id: () => id, en: () => en });

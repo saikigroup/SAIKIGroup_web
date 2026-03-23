@@ -64,7 +64,7 @@ const id: ProjectDetail = {
         { value: '40%', label: 'Peningkatan conversion rate' },
         { value: '60%', label: 'Pengurangan waktu pembuatan quotation' },
         { value: '0', label: 'Lead yang terlewat follow-up' },
-        { value: '95%', label: 'Tingkat adopsi oleh tim sales' },
+        { value: '91%', label: 'Tingkat adopsi oleh tim sales' },
       ],
     },
     {
@@ -144,7 +144,7 @@ const en: ProjectDetail = {
         { value: '40%', label: 'Increase in conversion rate' },
         { value: '60%', label: 'Reduction in quotation creation time' },
         { value: '0', label: 'Leads missed for follow-up' },
-        { value: '95%', label: 'Adoption rate by sales teams' },
+        { value: '91%', label: 'Adoption rate by sales teams' },
       ],
     },
     {

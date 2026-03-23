@@ -92,7 +92,7 @@ const id: ProjectDetail = {
       heading: 'Hasil Setelah Full Rollout',
       items: [
         { value: '35%', label: 'Pengurangan stok mati (dead stock)' },
-        { value: '99.8%', label: 'Akurasi inventory (dari 92%)' },
+        { value: '98.5%', label: 'Akurasi inventory (dari 92%)' },
         { value: '50%', label: 'Pengurangan biaya maintenance IT' },
         { value: '2x', label: 'Kecepatan order processing' },
       ],
@@ -207,7 +207,7 @@ const en: ProjectDetail = {
       heading: 'Results After Full Rollout',
       items: [
         { value: '35%', label: 'Reduction in dead stock' },
-        { value: '99.8%', label: 'Inventory accuracy (from 92%)' },
+        { value: '98.5%', label: 'Inventory accuracy (from 92%)' },
         { value: '50%', label: 'Reduction in IT maintenance costs' },
         { value: '2x', label: 'Order processing speed' },
       ],

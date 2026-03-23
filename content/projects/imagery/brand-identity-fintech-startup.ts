@@ -78,8 +78,8 @@ const id: ProjectDetail = {
       type: 'metrics',
       heading: 'Dampak yang Terukur',
       items: [
-        { value: '3x', label: 'Peningkatan brand recall dalam survei post-launch' },
-        { value: '47%', label: 'Peningkatan conversion rate landing page' },
+        { value: '2.6x', label: 'Peningkatan brand recall dalam survei post-launch' },
+        { value: '34%', label: 'Peningkatan conversion rate landing page' },
         { value: '100%', label: 'Konsistensi visual di semua touchpoint' },
         { value: '1', label: 'Brand book lengkap sebagai panduan tim' },
       ],
@@ -175,8 +175,8 @@ const en: ProjectDetail = {
       type: 'metrics',
       heading: 'Measurable Impact',
       items: [
-        { value: '3x', label: 'Increase in brand recall from post-launch survey' },
-        { value: '47%', label: 'Landing page conversion rate improvement' },
+        { value: '2.6x', label: 'Increase in brand recall from post-launch survey' },
+        { value: '34%', label: 'Landing page conversion rate improvement' },
         { value: '100%', label: 'Visual consistency across all touchpoints' },
         { value: '1', label: 'Complete brand book as team guide' },
       ],
