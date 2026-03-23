@@ -11,6 +11,7 @@ interface CTAButtonProps {
   size?: 'sm' | 'md' | 'lg';
   icon?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   onClick?: () => void;
 }
 
@@ -36,6 +37,7 @@ export function CTAButton({
   size = 'md',
   icon = true,
   className = '',
+  style,
   onClick,
 }: CTAButtonProps) {
   return (
@@ -52,6 +54,7 @@ export function CTAButton({
           border rounded-xl transition-all duration-300
           ${variants[variant]} ${sizes[size]} ${className}
         `}
+        style={style}
       >
         {children}
         {icon && (

@@ -1,7 +1,6 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { SectionHeading } from '@/components/shared';
@@ -13,6 +12,7 @@ interface Product {
   url: string;
   logo: string;
   accent: string;
+  linkText: string;
 }
 
 interface ProductShowcaseProps {
@@ -54,30 +54,26 @@ export function ProductShowcase({ eyebrow, headline, body, products }: ProductSh
                 <div
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                   style={{
-                    background: `radial-gradient(circle at 50% 100%, ${product.accent}15 0%, transparent 70%)`,
+                    background: `radial-gradient(circle at 50% 100%, ${product.accent}20 0%, transparent 70%)`,
                   }}
                 />
 
                 <div className="relative">
                   {/* Logo */}
-                  <div className="mb-6 flex items-center gap-4">
+                  <div className="mb-6">
                     <div
-                      className="w-14 h-14 rounded-xl flex items-center justify-center overflow-hidden"
-                      style={{ backgroundColor: `${product.accent}12` }}
+                      className="inline-flex items-center justify-center rounded-xl px-4 py-3 mb-3"
+                      style={{ backgroundColor: `${product.accent}08` }}
                     >
-                      <Image
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
                         src={product.logo}
                         alt={product.name}
-                        width={36}
-                        height={36}
-                        className="object-contain"
+                        className="h-8 w-auto object-contain"
                       />
                     </div>
                     <div>
-                      <h3 className="heading-sans text-xl text-brand-black group-hover:text-brand-teal transition-colors">
-                        {product.name}
-                      </h3>
-                      <span className="text-xs font-medium uppercase tracking-wider text-text-tertiary">
+                      <span className="text-[11px] font-semibold uppercase tracking-widest block" style={{ color: product.accent }}>
                         Live Product
                       </span>
                     </div>
@@ -89,8 +85,14 @@ export function ProductShowcase({ eyebrow, headline, body, products }: ProductSh
                   </p>
 
                   {/* Link */}
-                  <div className="flex items-center gap-2 text-sm font-medium" style={{ color: product.accent }}>
-                    <span className="group-hover:underline">Kunjungi</span>
+                  <div
+                    className="inline-flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-300 group-hover:shadow-md"
+                    style={{
+                      color: product.accent,
+                      backgroundColor: `${product.accent}10`,
+                    }}
+                  >
+                    <span>{product.linkText}</span>
                     <ArrowUpRight
                       size={16}
                       className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
