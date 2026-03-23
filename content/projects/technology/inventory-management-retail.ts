@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Inventory Management System untuk Retail Chain',
   subtitle: 'Visibilitas stok real-time dan otomasi restock di puluhan toko.',
   industry: 'Retail',
-  year: '2024',
+  year: '2025',
   duration: '4 bulan',
   overview: 'Jaringan retail dengan puluhan toko yang tersebar di beberapa kota menghadapi masalah klasik: toko yang satu kehabisan stok sementara toko lain menumpuk barang yang sama. Proses restock masih manual, bergantung pada intuisi store manager yang menelepon ke gudang pusat. Tidak ada data yang bisa diandalkan untuk menentukan kapan dan berapa banyak barang harus dikirim ke masing-masing toko. Kami membangun sistem inventory management yang memberikan visibilitas real-time dan otomasi restock berbasis data.',
   sections: [
@@ -118,7 +118,7 @@ const en: ProjectDetail = {
   title: 'Inventory Management System for Retail Chain',
   subtitle: 'Real-time stock visibility and automated restocking across dozens of stores.',
   industry: 'Retail',
-  year: '2024',
+  year: '2025',
   duration: '4 months',
   overview: 'A retail chain with dozens of stores spread across several cities faced a classic problem: one store runs out of stock while another hoards the same items. Restocking was still manual, relying on store managers calling the central warehouse based on intuition. There was no reliable data to determine when and how much stock to send to each store. We built an inventory management system that provides real-time visibility and data-driven restocking automation.',
   sections: [

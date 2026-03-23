@@ -29,7 +29,7 @@ export const projects = {
       title: 'Membangun Identitas Visual untuk Startup Fintech',
       excerpt: 'Sebuah startup fintech butuh identitas brand yang bisa menyampaikan kepercayaan dan inovasi sekaligus. Kami merancang sistem visual yang menjembatani keduanya.',
       industry: 'Financial Technology',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'visual-campaign-fnb-chain',
@@ -38,7 +38,7 @@ export const projects = {
       title: 'Kampanye Visual untuk Jaringan F&B Nasional',
       excerpt: 'Jaringan restoran dengan 50+ cabang membutuhkan kampanye visual yang konsisten namun tetap terasa lokal di setiap kota.',
       industry: 'Food & Beverage',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'corporate-rebranding-manufaktur',
@@ -47,7 +47,7 @@ export const projects = {
       title: 'Rebranding Korporat Perusahaan Manufaktur',
       excerpt: 'Perusahaan manufaktur berusia 20 tahun ingin tampil lebih modern tanpa kehilangan warisan dan kredibilitas yang sudah dibangun.',
       industry: 'Manufacturing',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'digital-content-system-ecommerce',
@@ -56,7 +56,7 @@ export const projects = {
       title: 'Sistem Konten Digital untuk E-Commerce Fashion',
       excerpt: 'Platform e-commerce fashion membutuhkan sistem produksi konten yang scalable untuk ratusan produk baru setiap bulan.',
       industry: 'E-Commerce & Fashion',
-      year: '2024',
+      year: '2025',
     },
     // TECHNOLOGY (7 projects)
     {
@@ -66,7 +66,7 @@ export const projects = {
       title: 'Logistics Operation Backbone System',
       excerpt: 'Perusahaan ekspedisi mengandalkan spreadsheet untuk mengatur ribuan pengiriman harian. Kami membangun sistem backbone yang mengubah operasional mereka.',
       industry: 'Logistics & Ekspedisi',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'integrated-dashboard-sales',
@@ -75,7 +75,7 @@ export const projects = {
       title: 'Integrated Dashboard & Sales Management',
       excerpt: 'Beberapa perusahaan skala lokal membutuhkan satu dashboard terpadu yang menghubungkan proses penjualan, order management, dan pelaporan.',
       industry: 'Multi-Industri Lokal',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'custom-erp-distributor-fmcg',
@@ -84,7 +84,7 @@ export const projects = {
       title: 'Custom ERP untuk Distributor FMCG',
       excerpt: 'Distributor FMCG besar kesulitan mengelola inventory multi-gudang dan rantai distribusi yang kompleks dengan sistem legacy mereka.',
       industry: 'FMCG & Distribusi',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'inventory-management-retail',
@@ -93,7 +93,7 @@ export const projects = {
       title: 'Inventory Management System untuk Retail Chain',
       excerpt: 'Jaringan retail dengan puluhan toko memerlukan visibilitas stok real-time dan otomasi restock yang akurat.',
       industry: 'Retail',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'hr-payroll-automation',
@@ -102,7 +102,7 @@ export const projects = {
       title: 'HR & Payroll Automation Platform',
       excerpt: 'Perusahaan jasa profesional dengan ratusan karyawan kontrak membutuhkan sistem HR dan payroll yang bisa menangani kompleksitas skema kompensasi mereka.',
       industry: 'Professional Services',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'customer-portal-ticketing-isp',
@@ -111,7 +111,7 @@ export const projects = {
       title: 'Customer Portal & Ticketing System',
       excerpt: 'ISP regional menghadapi lonjakan komplain pelanggan tanpa sistem yang terstruktur. Kami membangun portal pelanggan dan ticketing system yang mengubah cara mereka melayani.',
       industry: 'Telekomunikasi & ISP',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'data-analytics-platform-agritech',
@@ -120,17 +120,17 @@ export const projects = {
       title: 'Data Analytics Platform untuk Cold Storage Operations',
       excerpt: 'Operator cold storage membutuhkan platform analitik yang bisa mengolah data dari ratusan sensor IoT menjadi alert dan insight yang actionable untuk tim operasional gudang.',
       industry: 'Warehouse & Cold Storage',
-      year: '2024',
+      year: '2025',
     },
     // CONSULTANCY (1 cumulative project)
     {
       slug: 'business-process-optimization',
       category: 'consultancy',
       categoryLabel: 'Consultancy',
-      title: 'Business Process Optimization Lintas Industri',
-      excerpt: 'Rangkuman pendekatan konsultatif SAIKI dalam membantu berbagai perusahaan mengoptimalkan proses bisnis mereka, dari assessment hingga implementasi.',
-      industry: 'Multi-Industri',
-      year: '2023-2024',
+      title: 'Puluhan Profesional, Satu Pendekatan Personal',
+      excerpt: 'Kompilasi cerita dari berbagai profesional yang sudah kami dampingi: dari yang bingung arah karier, ingin pindah industri, hingga yang ingin naik level. Setiap orang unik, tapi pola tantangannya sering serupa.',
+      industry: 'Career & Professional Development',
+      year: '2024-2025',
     },
   ],
 };

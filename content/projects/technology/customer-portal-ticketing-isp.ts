@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Customer Portal & Ticketing System',
   subtitle: 'Mengubah cara ISP regional melayani pelanggan mereka.',
   industry: 'Telekomunikasi & ISP',
-  year: '2024',
+  year: '2025',
   duration: '4 bulan',
   overview: 'ISP regional dengan ribuan pelanggan di beberapa kabupaten mengalami lonjakan komplain yang tidak bisa mereka tangani secara efektif. Pelanggan menelepon berulang kali tanpa kejelasan status penanganan. Teknisi di lapangan tidak tahu prioritas mana yang harus dikerjakan duluan. Tim customer service kewalahan menjawab pertanyaan yang sama berulang-ulang: "Kapan internet saya diperbaiki?" Kami membangun customer portal dan ticketing system yang memberikan transparansi kepada pelanggan dan struktur kepada tim internal.',
   sections: [
@@ -118,7 +118,7 @@ const en: ProjectDetail = {
   title: 'Customer Portal & Ticketing System',
   subtitle: 'Changing how a regional ISP serves their customers.',
   industry: 'Telecommunications & ISP',
-  year: '2024',
+  year: '2025',
   duration: '4 months',
   overview: 'A regional ISP with thousands of subscribers across several districts experienced a surge in complaints they could not handle effectively. Customers called repeatedly without clarity on resolution status. Field technicians did not know which priorities to address first. The customer service team was overwhelmed answering the same questions over and over: "When will my internet be fixed?" We built a customer portal and ticketing system that brings transparency to customers and structure to the internal team.',
   sections: [

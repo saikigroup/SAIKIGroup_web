@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Membangun Identitas Visual untuk Startup Fintech',
   subtitle: 'Ketika kepercayaan dan inovasi harus berjalan beriringan dalam satu identitas brand.',
   industry: 'Financial Technology',
-  year: '2024',
+  year: '2025',
   duration: '3 bulan',
   overview: 'Sebuah startup fintech yang sedang dalam fase growth menghadapi tantangan klasik: produk mereka sudah kuat secara teknologi, tapi identitas visual mereka belum bisa menyampaikan level kepercayaan yang dibutuhkan oleh target pasar mereka. Di industri keuangan, persepsi visual bukan sekadar estetika. Ini soal kredibilitas. Kami diminta untuk membangun sistem identitas brand dari nol yang bisa menjembatani dua narasi sekaligus: inovasi teknologi dan keandalan finansial.',
   sections: [
@@ -103,7 +103,7 @@ const en: ProjectDetail = {
   title: 'Building a Visual Identity for a Fintech Startup',
   subtitle: 'When trust and innovation must coexist in a single brand identity.',
   industry: 'Financial Technology',
-  year: '2024',
+  year: '2025',
   duration: '3 months',
   overview: 'A growth-stage fintech startup faced a classic challenge: their product was technically strong, but their visual identity could not convey the level of trust their target market demands. In the financial industry, visual perception is not just about aesthetics. It is about credibility. We were tasked with building a brand identity system from scratch that could bridge two narratives at once: technological innovation and financial reliability.',
   sections: [

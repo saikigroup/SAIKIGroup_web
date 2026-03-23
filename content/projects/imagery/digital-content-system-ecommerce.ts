@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Sistem Konten Digital untuk E-Commerce Fashion',
   subtitle: 'Scalable content production untuk ratusan produk baru setiap bulan.',
   industry: 'E-Commerce & Fashion',
-  year: '2024',
+  year: '2025',
   duration: '3 bulan',
   overview: 'Platform e-commerce fashion ini menghadapi bottleneck yang tidak terduga: bukan di teknologi atau logistik, tapi di produksi konten visual. Setiap bulan, ratusan produk baru harus difoto, di-edit, diberi deskripsi, dan dipublikasikan di berbagai channel. Tim konten mereka kewalahan, kualitas tidak konsisten, dan time-to-market untuk produk baru terlalu lama. Kami diminta untuk merancang sistem produksi konten yang scalable tanpa mengorbankan kualitas visual.',
   sections: [
@@ -90,7 +90,7 @@ const en: ProjectDetail = {
   title: 'Digital Content System for Fashion E-Commerce',
   subtitle: 'Scalable content production for hundreds of new products every month.',
   industry: 'E-Commerce & Fashion',
-  year: '2024',
+  year: '2025',
   duration: '3 months',
   overview: 'This fashion e-commerce platform hit an unexpected bottleneck: not in technology or logistics, but in visual content production. Every month, hundreds of new products needed to be photographed, edited, described, and published across multiple channels. Their content team was overwhelmed, quality was inconsistent, and time-to-market for new products was too long. We were asked to design a scalable content production system without sacrificing visual quality.',
   sections: [

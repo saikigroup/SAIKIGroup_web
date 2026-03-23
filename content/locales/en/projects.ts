@@ -29,7 +29,7 @@ export const projects = {
       title: 'Building a Visual Identity for a Fintech Startup',
       excerpt: 'A fintech startup needed a brand identity that could convey both trust and innovation. We designed a visual system that bridges both.',
       industry: 'Financial Technology',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'visual-campaign-fnb-chain',
@@ -38,7 +38,7 @@ export const projects = {
       title: 'Visual Campaign for a National F&B Chain',
       excerpt: 'A restaurant chain with 50+ locations needed visual campaigns that were consistent yet felt local in every city.',
       industry: 'Food & Beverage',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'corporate-rebranding-manufaktur',
@@ -47,7 +47,7 @@ export const projects = {
       title: 'Corporate Rebranding for a Manufacturing Company',
       excerpt: 'A 20-year-old manufacturing company wanted to look modern without losing the heritage and credibility they had built.',
       industry: 'Manufacturing',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'digital-content-system-ecommerce',
@@ -56,7 +56,7 @@ export const projects = {
       title: 'Digital Content System for Fashion E-Commerce',
       excerpt: 'A fashion e-commerce platform needed a scalable content production system for hundreds of new products every month.',
       industry: 'E-Commerce & Fashion',
-      year: '2024',
+      year: '2025',
     },
     // TECHNOLOGY (7 projects)
     {
@@ -66,7 +66,7 @@ export const projects = {
       title: 'Logistics Operation Backbone System',
       excerpt: 'A shipping company relied on spreadsheets to manage thousands of daily deliveries. We built a backbone system that transformed their operations.',
       industry: 'Logistics & Shipping',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'integrated-dashboard-sales',
@@ -75,7 +75,7 @@ export const projects = {
       title: 'Integrated Dashboard & Sales Management',
       excerpt: 'Several local-scale companies needed a unified dashboard connecting sales processes, order management, and reporting.',
       industry: 'Multi-Industry Local',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'custom-erp-distributor-fmcg',
@@ -84,7 +84,7 @@ export const projects = {
       title: 'Custom ERP for FMCG Distributor',
       excerpt: 'A large FMCG distributor struggled to manage multi-warehouse inventory and complex distribution chains with their legacy system.',
       industry: 'FMCG & Distribution',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'inventory-management-retail',
@@ -93,7 +93,7 @@ export const projects = {
       title: 'Inventory Management System for Retail Chain',
       excerpt: 'A retail chain with dozens of stores needed real-time stock visibility and accurate automated restocking.',
       industry: 'Retail',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'hr-payroll-automation',
@@ -102,7 +102,7 @@ export const projects = {
       title: 'HR & Payroll Automation Platform',
       excerpt: 'A professional services firm with hundreds of contract employees needed an HR and payroll system that could handle their complex compensation schemes.',
       industry: 'Professional Services',
-      year: '2023',
+      year: '2024',
     },
     {
       slug: 'customer-portal-ticketing-isp',
@@ -111,7 +111,7 @@ export const projects = {
       title: 'Customer Portal & Ticketing System',
       excerpt: 'A regional ISP faced a surge in customer complaints without a structured system. We built a customer portal and ticketing system that changed how they serve.',
       industry: 'Telecommunications & ISP',
-      year: '2024',
+      year: '2025',
     },
     {
       slug: 'data-analytics-platform-agritech',
@@ -120,17 +120,17 @@ export const projects = {
       title: 'Data Analytics Platform for Cold Storage Operations',
       excerpt: 'A cold storage operator needed an analytics platform that could turn data from hundreds of IoT sensors into actionable alerts and insights for warehouse operations.',
       industry: 'Warehouse & Cold Storage',
-      year: '2024',
+      year: '2025',
     },
     // CONSULTANCY (1 cumulative project)
     {
       slug: 'business-process-optimization',
       category: 'consultancy',
       categoryLabel: 'Consultancy',
-      title: 'Cross-Industry Business Process Optimization',
-      excerpt: 'A summary of SAIKI\'s consultative approach in helping various companies optimize their business processes, from assessment to implementation.',
-      industry: 'Multi-Industry',
-      year: '2023-2024',
+      title: 'Dozens of Professionals, One Personal Approach',
+      excerpt: 'A compilation of stories from professionals we have guided: from those confused about career direction, wanting to switch industries, to those ready to level up. Each person is unique, but the challenge patterns are often similar.',
+      industry: 'Career & Professional Development',
+      year: '2024-2025',
     },
   ],
 };

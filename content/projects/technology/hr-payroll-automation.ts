@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'HR & Payroll Automation Platform',
   subtitle: 'Otomasi HR dan payroll untuk skema kompensasi yang kompleks.',
   industry: 'Professional Services',
-  year: '2023',
+  year: '2024',
   duration: '5 bulan',
   overview: 'Perusahaan jasa profesional ini memiliki lebih dari 300 karyawan dengan campuran status: karyawan tetap, kontrak, freelance, dan project-based. Setiap kategori punya skema kompensasi, benefit, dan aturan pajak yang berbeda. Tim HR mereka menghabiskan minggu pertama setiap bulan hanya untuk menghitung payroll secara manual di spreadsheet. Kesalahan hitung terjadi hampir setiap bulan, menimbulkan ketidakpuasan karyawan dan risiko compliance. Kami membangun platform yang mengotomasi seluruh proses, dari pencatatan kehadiran hingga slip gaji.',
   sections: [
@@ -119,7 +119,7 @@ const en: ProjectDetail = {
   title: 'HR & Payroll Automation Platform',
   subtitle: 'HR and payroll automation for complex compensation schemes.',
   industry: 'Professional Services',
-  year: '2023',
+  year: '2024',
   duration: '5 months',
   overview: 'This professional services firm had over 300 employees with a mix of statuses: permanent, contract, freelance, and project-based. Each category had different compensation schemes, benefits, and tax rules. Their HR team spent the first week of every month just calculating payroll manually in spreadsheets. Calculation errors occurred almost every month, causing employee dissatisfaction and compliance risks. We built a platform that automates the entire process, from attendance tracking to payslip generation.',
   sections: [

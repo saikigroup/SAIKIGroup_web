@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Data Analytics Platform untuk Cold Storage Operations',
   subtitle: 'Mengubah data sensor IoT menjadi insight yang actionable untuk operasional gudang berpendingin.',
   industry: 'Warehouse & Cold Storage',
-  year: '2024',
+  year: '2025',
   duration: '5 bulan',
   overview: 'Operator cold storage dengan jaringan gudang berpendingin di beberapa kota sudah memasang ratusan sensor IoT: sensor suhu, kelembaban, kualitas udara, dan status pintu di setiap ruangan dan zona penyimpanan. Data mengalir terus-menerus, tapi ironisnya, hampir tidak ada yang bisa memanfaatkannya secara efektif. Data mentah yang menumpuk di server tidak membantu warehouse manager yang harus membuat keputusan cepat saat suhu berfluktuasi atau kapasitas mendekati batas. Kami membangun platform analitik yang menerjemahkan data sensor menjadi alert dan rekomendasi yang bisa langsung ditindaklanjuti.',
   sections: [
@@ -143,7 +143,7 @@ const en: ProjectDetail = {
   title: 'Data Analytics Platform for Cold Storage Operations',
   subtitle: 'Turning IoT sensor data into actionable insights for cold storage operations.',
   industry: 'Warehouse & Cold Storage',
-  year: '2024',
+  year: '2025',
   duration: '5 months',
   overview: 'A cold storage operator with a network of refrigerated warehouses across several cities had installed hundreds of IoT sensors: temperature, humidity, air quality, and door status sensors in every room and storage zone. Data flowed continuously, but ironically, almost no one could effectively use it. Raw data piling up on servers did not help warehouse managers who needed to make quick decisions when temperatures fluctuated or capacity approached limits. We built an analytics platform that translates sensor data into alerts and recommendations that are immediately actionable.',
   sections: [

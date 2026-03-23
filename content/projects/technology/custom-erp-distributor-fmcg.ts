@@ -6,7 +6,7 @@ const id: ProjectDetail = {
   title: 'Custom ERP untuk Distributor FMCG',
   subtitle: 'Mengganti sistem legacy dengan ERP custom untuk rantai distribusi kompleks.',
   industry: 'FMCG & Distribusi',
-  year: '2023',
+  year: '2024',
   duration: '8 bulan',
   overview: 'Distributor FMCG besar ini mengelola ratusan SKU dari belasan principal, didistribusikan ke ribuan outlet melalui jaringan multi-gudang di beberapa provinsi. Sistem ERP legacy yang mereka gunakan sudah berusia lebih dari satu dekade: lambat, sulit di-customize, dan biaya maintenance-nya terus meningkat setiap tahun. Tapi mengganti ERP bukan keputusan ringan. Ini adalah tulang punggung operasional yang jika salah langkah bisa melumpuhkan bisnis. Kami diminta untuk membangun ERP custom yang sesuai dengan cara kerja mereka, bukan sebaliknya.',
   sections: [
@@ -121,7 +121,7 @@ const en: ProjectDetail = {
   title: 'Custom ERP for FMCG Distributor',
   subtitle: 'Replacing a legacy system with a custom ERP for complex distribution chains.',
   industry: 'FMCG & Distribution',
-  year: '2023',
+  year: '2024',
   duration: '8 months',
   overview: 'This large FMCG distributor managed hundreds of SKUs from dozens of principals, distributed to thousands of outlets through a multi-warehouse network across several provinces. Their legacy ERP system was over a decade old: slow, difficult to customize, and maintenance costs kept increasing every year. But replacing an ERP is not a light decision. This is the operational backbone that, if mishandled, could cripple the business. We were asked to build a custom ERP that fits their way of working, not the other way around.',
   sections: [
