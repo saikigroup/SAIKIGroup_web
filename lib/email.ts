@@ -43,8 +43,8 @@ export async function sendVisitorConfirmation(data: {
   const isEN = data.locale === 'en';
 
   const subject = isEN
-    ? 'We received your inquiry — SAIKI Group'
-    : 'Inquiry Anda sudah kami terima — SAIKI Group';
+    ? 'We received your inquiry - SAIKI Group'
+    : 'Inquiry Anda sudah kami terima - SAIKI Group';
 
   const html = isEN
     ? `
@@ -146,7 +146,7 @@ export async function sendAdminNotification(data: {
     return;
   }
 
-  const subject = `[SAIKI Inquiry] ${categoryLabels[data.category] || data.category} — ${data.name}`;
+  const subject = `[SAIKI Inquiry] ${categoryLabels[data.category] || data.category} - ${data.name}`;
 
   const html = `
     <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #ffffff;">

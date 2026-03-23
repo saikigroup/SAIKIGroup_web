@@ -84,7 +84,7 @@ export const home = {
   products: {
     eyebrow: 'Our Products',
     headline: 'Solutions You Can\nUse Right Now.',
-    body: 'We don\'t just talk about solutions — we build them. These are live digital products ready to help you today.',
+    body: 'We don\'t just talk about solutions, we build them. These are live digital products ready to help you today.',
     items: [
       {
         name: 'BlastMail',
@@ -96,7 +96,7 @@ export const home = {
       },
       {
         name: 'apick',
-        description: 'Business management app for small businesses — from sales tracking, rental management, community fees, to event planning. As simple as using WhatsApp.',
+        description: 'Business management app for small businesses: from sales tracking, rental management, community fees, to event planning. As simple as using WhatsApp.',
         url: 'https://apick.id',
         logo: '/images/products/apick-logo.svg',
         accent: '#2e7795',

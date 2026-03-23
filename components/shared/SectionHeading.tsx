@@ -44,7 +44,7 @@ export function SectionHeading({
         {headline}
       </h2>
       {body && (
-        <p className="mt-5 text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl">
+        <p className={`mt-5 text-lg md:text-xl text-text-secondary leading-relaxed max-w-2xl ${align === 'center' ? 'mx-auto' : ''}`}>
           {body}
         </p>
       )}
