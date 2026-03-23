@@ -6,14 +6,16 @@ export async function POST(request: NextRequest) {
   try {
     const { email, name, locale } = await request.json();
 
-    if (!email || typeof email !== 'string') {
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return NextResponse.json(
-        { success: false, error: 'Email is required' },
+        { success: false, error: 'Valid email is required' },
         { status: 400 }
       );
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const validLocales = ['id', 'en'];
+    const safeLocale = validLocales.includes(locale) ? locale : 'id';
 
     const supabase = getSupabase();
     if (!supabase) {
@@ -37,7 +39,7 @@ export async function POST(request: NextRequest) {
           .update({
             saikiweb_status: 'active',
             saikiweb_name: name || undefined,
-            saikiweb_locale: locale || 'id',
+            saikiweb_locale: safeLocale,
             saikiweb_subscribed_at: new Date().toISOString(),
             saikiweb_unsubscribed_at: null,
           })
@@ -55,7 +57,7 @@ export async function POST(request: NextRequest) {
       .insert({
         saikiweb_email: normalizedEmail,
         saikiweb_name: name || null,
-        saikiweb_locale: locale || 'id',
+        saikiweb_locale: safeLocale,
         saikiweb_status: 'active',
         saikiweb_unsubscribe_token: token,
         saikiweb_source: 'contact_form',

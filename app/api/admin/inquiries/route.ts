@@ -38,8 +38,9 @@ export async function GET(request: NextRequest) {
   }
 
   if (search) {
+    const s = search.replace(/[%_\\]/g, '\\$&');
     query = query.or(
-      `saikiweb_name.ilike.%${search}%,saikiweb_email.ilike.%${search}%,saikiweb_company.ilike.%${search}%,saikiweb_message.ilike.%${search}%`
+      `saikiweb_name.ilike.%${s}%,saikiweb_email.ilike.%${s}%,saikiweb_company.ilike.%${s}%,saikiweb_message.ilike.%${s}%`
     );
   }
 
