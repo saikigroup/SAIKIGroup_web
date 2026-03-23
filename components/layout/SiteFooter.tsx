@@ -60,6 +60,14 @@ export function SiteFooter({ locale }: SiteFooterProps) {
               </li>
               <li>
                 <Link
+                  href={getLocalizedPath('projects', locale)}
+                  className="text-sm text-white/60 hover:text-brand-teal-light transition-colors"
+                >
+                  {t.nav.projects}
+                </Link>
+              </li>
+              <li>
+                <Link
                   href={getLocalizedPath('contact', locale)}
                   className="text-sm text-white/60 hover:text-brand-teal-light transition-colors"
                 >

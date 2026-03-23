@@ -33,6 +33,7 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
     { key: 'about', label: t.nav.about },
     { key: 'services', label: t.nav.services },
     { key: 'insights', label: t.nav.insights },
+    { key: 'projects', label: t.nav.projects },
     { key: 'contact', label: t.nav.contact },
   ];
 

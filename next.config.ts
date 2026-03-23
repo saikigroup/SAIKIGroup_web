@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
       { source: '/en/services', destination: '/en/layanan' },
       { source: '/en/services/:path*', destination: '/en/layanan/:path*' },
       { source: '/en/contact', destination: '/en/kontak' },
+      { source: '/en/projects', destination: '/en/proyek' },
+      { source: '/en/projects/:path*', destination: '/en/proyek/:path*' },
     ];
   },
 };

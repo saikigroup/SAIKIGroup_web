@@ -99,6 +99,18 @@ export const seoData: SeoMap = {
       keywords: ['business articles', 'career insights', 'branding tips', 'latest technology', 'SAIKI blog'],
     },
   },
+  projects: {
+    id: {
+      title: 'Proyek SAIKI | Portfolio & Studi Kasus',
+      description: 'Kumpulan project yang telah SAIKI selesaikan di bidang imagery, technology, dan consultancy. Cerita di balik setiap solusi.',
+      keywords: ['portfolio SAIKI', 'studi kasus', 'project teknologi', 'project branding', 'konsultansi bisnis'],
+    },
+    en: {
+      title: 'SAIKI Projects | Portfolio & Case Studies',
+      description: 'A collection of projects SAIKI has delivered across imagery, technology, and consultancy. The story behind every solution.',
+      keywords: ['SAIKI portfolio', 'case studies', 'technology projects', 'branding projects', 'business consultancy'],
+    },
+  },
   contact: {
     id: {
       title: 'Kontak SAIKI | Hubungi Kami',

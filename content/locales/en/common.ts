@@ -12,6 +12,7 @@ export const common = {
     imagery: 'Imagery',
     technology: 'Technology',
     insights: 'Insights',
+    projects: 'Projects',
     contact: 'Contact',
   },
   cta: {
