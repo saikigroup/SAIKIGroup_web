@@ -42,12 +42,12 @@ export const seoData: SeoMap = {
   services: {
     id: {
       title: 'Layanan SAIKI | Konsultansi, Imagery, Technology',
-      description: 'Tiga lini bisnis SAIKI: konsultansi karier, branding & pemasaran, dan pengembangan software. Temukan layanan yang tepat.',
+      description: 'Solusi lengkap dari SAIKI: konsultansi karier, branding & pemasaran, dan pengembangan software. Temukan solusi yang tepat untuk kebutuhan Anda.',
       keywords: ['layanan konsultansi', 'jasa branding', 'pengembangan software', 'layanan teknologi', 'SAIKI services'],
     },
     en: {
       title: 'SAIKI Services | Consultancy, Imagery, Technology',
-      description: 'Three SAIKI business lines: career consultancy, branding & marketing, and software development. Find the right service.',
+      description: 'Complete solutions from SAIKI: career consultancy, branding & marketing, and software development. Find the right solution for your needs.',
       keywords: ['consultancy services', 'branding services', 'software development', 'technology services', 'SAIKI services'],
     },
   },

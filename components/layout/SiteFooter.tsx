@@ -69,7 +69,7 @@ export function SiteFooter({ locale }: SiteFooterProps) {
             </ul>
           </div>
 
-          {/* Business Lines */}
+          {/* Our Solutions */}
           <div>
             <h4 className="text-xs font-semibold tracking-[0.15em] uppercase text-white/30 mb-5">
               {t.footer.businessLines}

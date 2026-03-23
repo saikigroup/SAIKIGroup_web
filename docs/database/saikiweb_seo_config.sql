@@ -75,16 +75,16 @@ VALUES (1, '{
     "services": {
       "id": {
         "title": "Layanan SAIKI | Konsultansi, Imagery, Technology",
-        "description": "Tiga lini bisnis SAIKI: konsultansi karier strategis, branding & pemasaran kreatif, dan pengembangan software custom. Temukan layanan yang tepat untuk kebutuhan Anda.",
+        "description": "Solusi lengkap dari SAIKI: konsultansi karier strategis, branding & pemasaran kreatif, dan pengembangan software custom. Temukan solusi yang tepat untuk kebutuhan Anda.",
         "ogTitle": "Layanan SAIKI Group",
-        "ogDescription": "Konsultansi, branding, dan teknologi dalam tiga lini bisnis terintegrasi.",
+        "ogDescription": "Solusi konsultansi, branding, dan teknologi dalam satu ekosistem terintegrasi.",
         "keywords": ["layanan konsultansi", "jasa branding", "pengembangan software", "layanan teknologi", "SAIKI services", "jasa konsultan karier", "digital agency Indonesia"]
       },
       "en": {
         "title": "SAIKI Services | Consultancy, Imagery, Technology",
-        "description": "Three SAIKI business lines: strategic career consultancy, creative branding & marketing, and custom software development. Find the right service for your needs.",
+        "description": "Complete solutions from SAIKI: strategic career consultancy, creative branding & marketing, and custom software development. Find the right solution for your needs.",
         "ogTitle": "SAIKI Group Services",
-        "ogDescription": "Consultancy, branding, and technology across three integrated business lines.",
+        "ogDescription": "Consultancy, branding, and technology solutions in one integrated ecosystem.",
         "keywords": ["consultancy services", "branding services", "software development", "technology services", "SAIKI services", "career consultant", "digital agency Indonesia"]
       }
     },

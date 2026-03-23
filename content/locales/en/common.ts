@@ -32,7 +32,7 @@ export const common = {
     followUs: 'Follow Us',
     quickLinks: 'Quick Links',
     contact: 'Contact',
-    businessLines: 'Business Lines',
+    businessLines: 'Our Solutions',
   },
   lang: {
     switch: 'Switch Language',
