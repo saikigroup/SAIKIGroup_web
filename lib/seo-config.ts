@@ -116,10 +116,15 @@ export async function getSeoConfig(): Promise<SeoConfig> {
     }
 
     // Deep merge DB config over defaults so missing fields use defaults
+    // Filter out empty strings from DB verification so env-var defaults are preserved
     const dbConfig = data.config as Partial<SeoConfig>;
+    const dbVerification = dbConfig.verification ?? {};
+    const filteredVerification = Object.fromEntries(
+      Object.entries(dbVerification).filter(([, v]) => v !== '' && v != null)
+    );
     const merged: SeoConfig = {
       global: { ...defaultSeoConfig.global, ...dbConfig.global },
-      verification: { ...defaultSeoConfig.verification, ...dbConfig.verification },
+      verification: { ...defaultSeoConfig.verification, ...filteredVerification },
       organization: { ...defaultSeoConfig.organization, ...dbConfig.organization },
       pages: { ...defaultSeoConfig.pages, ...dbConfig.pages },
       robots: { ...defaultSeoConfig.robots, ...dbConfig.robots },
