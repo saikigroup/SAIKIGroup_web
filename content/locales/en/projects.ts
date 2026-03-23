@@ -117,9 +117,9 @@ export const projects = {
       slug: 'data-analytics-platform-agritech',
       category: 'technology',
       categoryLabel: 'Technology',
-      title: 'Data Analytics Platform for Agritech',
-      excerpt: 'An agritech company needed an analytics platform that could turn IoT sensor data from the field into actionable insights for farmers.',
-      industry: 'Agriculture Technology',
+      title: 'Data Analytics Platform for Cold Storage Operations',
+      excerpt: 'A cold storage operator needed an analytics platform that could turn data from hundreds of IoT sensors into actionable alerts and insights for warehouse operations.',
+      industry: 'Warehouse & Cold Storage',
       year: '2024',
     },
     // CONSULTANCY (1 cumulative project)
