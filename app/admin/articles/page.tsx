@@ -798,7 +798,7 @@ export default function AdminArticlesPage() {
                   >
                     {layoutOptions.map((l) => (
                       <option key={l.value} value={l.value}>
-                        {l.label} — {l.desc}
+                        {l.label} - {l.desc}
                       </option>
                     ))}
                   </select>

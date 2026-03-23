@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Admin — SAIKI Group',
+  title: 'Admin - SAIKI Group',
   robots: 'noindex, nofollow',
 };
 

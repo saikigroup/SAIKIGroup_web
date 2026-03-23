@@ -1,11 +1,11 @@
-# SAIKI Group Website — Strategy & Architecture Document
+# SAIKI Group Website  - Strategy & Architecture Document
 
 ## 1. Public Brand Research Summary
 
 ### Website (saiki.id)
 - SAIKI Group positions itself as a multi-vertical Indonesian startup
 - Tagline: "Beyond Your Needs"
-- The brand mark is a stylized power-button / compass motif — symbolizing activation, direction, and immediacy
+- The brand mark is a stylized power-button / compass motif  - symbolizing activation, direction, and immediacy
 - Current public presence shows consulting and imagery as established lines
 - Visual language leans professional but not overly corporate
 
@@ -20,7 +20,7 @@
 ### apick (apick.id)
 - Practical, everyday-use digital product
 - More approachable and grounded personality than BlastMail
-- Copy feels local, useful, human — not overly formal
+- Copy feels local, useful, human  - not overly formal
 - Modular offering communication
 - Clean UI with clear product storytelling
 - Direct, no-nonsense CTA patterns
@@ -36,12 +36,12 @@
 ## 2. Business Correction Layer
 
 ### Removed: SAIKI Culinary
-SAIKI Culinary is **obsolete** and must not appear anywhere in the website — not in copy, nav, metadata, structured data, alt text, code comments, or documentation.
+SAIKI Culinary is **obsolete** and must not appear anywhere in the website  - not in copy, nav, metadata, structured data, alt text, code comments, or documentation.
 
 ### Current Business Lines (3)
-1. **SAIKI Consultancy** — career consultancy, career direction, professional development, job readiness/positioning/guidance
-2. **SAIKI Imagery** — branding & marketing, brand identity, communication, campaigns, content direction, marketing support
-3. **SAIKI Technology** — white-label software, custom software, software customization, internal business systems/portals/dashboards/workflow digitization
+1. **SAIKI Consultancy**  - career consultancy, career direction, professional development, job readiness/positioning/guidance
+2. **SAIKI Imagery**  - branding & marketing, brand identity, communication, campaigns, content direction, marketing support
+3. **SAIKI Technology**  - white-label software, custom software, software customization, internal business systems/portals/dashboards/workflow digitization
 
 ### Implications
 - IA must reflect exactly 3 business lines
@@ -68,7 +68,7 @@ SAIKI Culinary is **obsolete** and must not appear anywhere in the website — n
 | `SAIKI IMAGERY.svg` | SVG | Imagery sub-brand lockup | Web vector usage |
 
 ### Missing Assets
-- No SAIKI Technology sub-brand asset — Technology accent color will be derived from palette logic
+- No SAIKI Technology sub-brand asset  - Technology accent color will be derived from palette logic
 
 ### Extracted Color Palette
 
@@ -79,7 +79,7 @@ SAIKI Culinary is **obsolete** and must not appear anywhere in the website — n
 | Near Black | `#1d1d1b` | Primary text, "SAIKI" wordmark |
 | Consultancy Accent | `#660e36` | Deep burgundy/maroon |
 | Imagery Accent | `#117a8c` | Teal/cyan |
-| Technology Accent | `#1a3a5c` | Deep navy (derived — complements teal family) |
+| Technology Accent | `#1a3a5c` | Deep navy (derived  - complements teal family) |
 | White | `#ffffff` | Backgrounds, inverse elements |
 
 ### Usage Rules
@@ -95,23 +95,23 @@ SAIKI Culinary is **obsolete** and must not appear anywhere in the website — n
 
 **"Now, in motion."**
 
-SAIKI means "sekarang" — now. The website embodies this through an editorial lens: every element communicates present-tense relevance, active movement, and informed immediacy.
+SAIKI means "sekarang"  - now. The website embodies this through an editorial lens: every element communicates present-tense relevance, active movement, and informed immediacy.
 
-The design treats the company website like a contemporary editorial publication — story-led, typographically strong, rhythmically paced — merged with the precision and interactivity of a premium digital studio. The result is a site that feels alive, current, and strategically sharp.
+The design treats the company website like a contemporary editorial publication  - story-led, typographically strong, rhythmically paced  - merged with the precision and interactivity of a premium digital studio. The result is a site that feels alive, current, and strategically sharp.
 
-The "now" concept is not decorative. It is structural: reflected in the copy cadence, the section pacing, the interactive responses, and the positioning language. SAIKI doesn't promise the future — it operates in the present tense.
+The "now" concept is not decorative. It is structural: reflected in the copy cadence, the section pacing, the interactive responses, and the positioning language. SAIKI doesn't promise the future  - it operates in the present tense.
 
 ---
 
 ## 5. Design Principles
 
-1. **Editorial-first** — Layout, typography, and rhythm take cues from contemporary magazine design
-2. **Present tense** — Every element communicates currency and relevance
-3. **Interactive intelligence** — Motion and interaction reward exploration without overwhelming
-4. **Restrained premium** — Quality through proportion, spacing, and typography — not decoration
-5. **Unified diversity** — Three business lines feel distinct but unmistakably part of one brand
-6. **Bilingual by architecture** — Language is not patched in; it's designed into the content system
-7. **Conversion clarity** — Every page has purpose; every CTA has context
+1. **Editorial-first**  - Layout, typography, and rhythm take cues from contemporary magazine design
+2. **Present tense**  - Every element communicates currency and relevance
+3. **Interactive intelligence**  - Motion and interaction reward exploration without overwhelming
+4. **Restrained premium**  - Quality through proportion, spacing, and typography  - not decoration
+5. **Unified diversity**  - Three business lines feel distinct but unmistakably part of one brand
+6. **Bilingual by architecture**  - Language is not patched in; it's designed into the content system
+7. **Conversion clarity**  - Every page has purpose; every CTA has context
 
 ---
 
@@ -155,7 +155,7 @@ The "now" concept is not decorative. It is structural: reflected in the copy cad
 ### Content Sync Rules
 - All keys must exist in both locale files
 - TypeScript interfaces enforce completeness
-- Navigation, hero copy, service descriptions, CTAs, metadata, journal previews — all bilingual
+- Navigation, hero copy, service descriptions, CTAs, metadata, journal previews  - all bilingual
 - No mixed-language broken states
 
 ---
@@ -175,7 +175,7 @@ The "now" concept is not decorative. It is structural: reflected in the copy cad
 - Email (required)
 - Phone/WhatsApp (optional)
 - Company/Organization (optional)
-- Inquiry category (required — dropdown with service routing)
+- Inquiry category (required  - dropdown with service routing)
 - Message (required)
 - Budget range (optional)
 - Timeline (optional)
@@ -251,8 +251,8 @@ The "now" concept is not decorative. It is structural: reflected in the copy cad
 ## 11. Design System Direction
 
 ### Typography
-- Primary: **Inter** — clean, modern sans-serif with excellent multilingual support
-- Accent: **Playfair Display** — restrained serif for editorial headings only
+- Primary: **Inter**  - clean, modern sans-serif with excellent multilingual support
+- Accent: **Playfair Display**  - restrained serif for editorial headings only
 - Scale: 14/16/18/20/24/30/36/48/60/72px with responsive adjustments
 
 ### Color Tokens
@@ -284,53 +284,53 @@ The "now" concept is not decorative. It is structural: reflected in the copy cad
 ## 12. Component Map
 
 ### Layout
-- `SiteHeader` — sticky header with nav, language switch, mobile toggle
-- `SiteFooter` — brand info, nav links, social, legal
-- `MobileNav` — slide-out mobile navigation
-- `PageShell` — wraps pages with consistent layout
-- `SectionContainer` — max-width container with padding
-- `LanguageSwitch` — ID/EN toggle component
+- `SiteHeader`  - sticky header with nav, language switch, mobile toggle
+- `SiteFooter`  - brand info, nav links, social, legal
+- `MobileNav`  - slide-out mobile navigation
+- `PageShell`  - wraps pages with consistent layout
+- `SectionContainer`  - max-width container with padding
+- `LanguageSwitch`  - ID/EN toggle component
 
 ### Shared/UI
-- `Eyebrow` — small label above headings
-- `SectionHeading` — editorial section titles
-- `EditorialDivider` — styled section separators
-- `CTAButton` — primary/secondary button variants
-- `StatBlock` — number + label for stats
-- `ServiceTag` — colored tag for business lines
-- `JournalCard` — editorial article preview card
-- `Caption` — image/content captions
+- `Eyebrow`  - small label above headings
+- `SectionHeading`  - editorial section titles
+- `EditorialDivider`  - styled section separators
+- `CTAButton`  - primary/secondary button variants
+- `StatBlock`  - number + label for stats
+- `ServiceTag`  - colored tag for business lines
+- `JournalCard`  - editorial article preview card
+- `Caption`  - image/content captions
 
 ### Homepage Sections
-- `HeroEditorial` — full-width hero with editorial composition
-- `BrandStatement` — positioning narrative block
-- `ServiceOverviewGrid` — 3 business line cards
-- `WhySaiki` — approach/philosophy section
-- `CapabilityScenarios` — use case scenarios
-- `OperatingModel` — how SAIKI works
-- `JournalPreview` — latest insights cards
-- `ContactCTA` — bottom CTA section
+- `HeroEditorial`  - full-width hero with editorial composition
+- `BrandStatement`  - positioning narrative block
+- `ServiceOverviewGrid`  - 3 business line cards
+- `WhySaiki`  - approach/philosophy section
+- `CapabilityScenarios`  - use case scenarios
+- `OperatingModel`  - how SAIKI works
+- `JournalPreview`  - latest insights cards
+- `ContactCTA`  - bottom CTA section
 
 ### Service Sections
-- `ServiceHero` — service page hero with accent color
-- `ServiceScope` — what the service covers
-- `ServiceApproach` — methodology
-- `ServiceUseCases` — practical scenarios
-- `ServiceCTA` — service-specific contact CTA
+- `ServiceHero`  - service page hero with accent color
+- `ServiceScope`  - what the service covers
+- `ServiceApproach`  - methodology
+- `ServiceUseCases`  - practical scenarios
+- `ServiceCTA`  - service-specific contact CTA
 
 ### Contact/Conversion
-- `ContactHero` — contact page hero
-- `InquiryTypeSelector` — category selection
-- `ContactForm` — full form with validation
-- `ContactInfoPanel` — email, WhatsApp, social
-- `ContactSuccessState` — post-submission state
+- `ContactHero`  - contact page hero
+- `InquiryTypeSelector`  - category selection
+- `ContactForm`  - full form with validation
+- `ContactInfoPanel`  - email, WhatsApp, social
+- `ContactSuccessState`  - post-submission state
 
 ### Motion
-- `FadeIn` — opacity entrance
-- `RevealUp` — slide-up reveal
-- `StaggerGroup` — staggered children animation
-- `HoverLift` — card hover effect
-- `SectionTransition` — section-level scroll animation
+- `FadeIn`  - opacity entrance
+- `RevealUp`  - slide-up reveal
+- `StaggerGroup`  - staggered children animation
+- `HoverLift`  - card hover effect
+- `SectionTransition`  - section-level scroll animation
 
 ---
 

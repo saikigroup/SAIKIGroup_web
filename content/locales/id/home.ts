@@ -84,7 +84,7 @@ export const home = {
   products: {
     eyebrow: 'Produk Kami',
     headline: 'Solusi yang Sudah\nBisa Kamu Gunakan.',
-    body: 'Kami tidak hanya bicara soal solusi — kami membangunnya. Ini adalah produk digital yang sudah live dan siap membantu kamu hari ini.',
+    body: 'Kami tidak hanya bicara soal solusi, kami membangunnya. Ini adalah produk digital yang sudah live dan siap membantu kamu hari ini.',
     items: [
       {
         name: 'BlastMail',
@@ -96,7 +96,7 @@ export const home = {
       },
       {
         name: 'apick',
-        description: 'Aplikasi manajemen usaha untuk UMKM — dari catat penjualan, kelola sewa properti, iuran warga, hingga atur acara. Sesimpel pakai WhatsApp.',
+        description: 'Aplikasi manajemen usaha untuk UMKM: dari catat penjualan, kelola sewa properti, iuran warga, hingga atur acara. Sesimpel pakai WhatsApp.',
         url: 'https://apick.id',
         logo: '/images/products/apick-logo.svg',
         accent: '#2e7795',

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Send email notifications (non-blocking — don't fail the API response)
+    // Send email notifications (non-blocking - don't fail the API response)
     const emailData = {
       name: body.name,
       email: body.email,

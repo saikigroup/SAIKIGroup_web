@@ -1,12 +1,12 @@
-# SAIKI Group — Company Website
+# SAIKI Group  - Company Website
 
 Production-ready editorial bilingual company website for SAIKI Group, built with Next.js 16, TypeScript, Tailwind CSS, and Framer Motion.
 
 ## Business Lines
 
-1. **SAIKI Consultancy** — Career consultancy, career direction, professional development, job readiness
-2. **SAIKI Imagery** — Branding & marketing, brand identity, communication, campaigns, content direction
-3. **SAIKI Technology** — White-label software, custom software, internal business systems, workflow digitization
+1. **SAIKI Consultancy**  - Career consultancy, career direction, professional development, job readiness
+2. **SAIKI Imagery**  - Branding & marketing, brand identity, communication, campaigns, content direction
+3. **SAIKI Technology**  - White-label software, custom software, internal business systems, workflow digitization
 
 ## Stack
 
@@ -105,7 +105,7 @@ docs/
 ### Adding/editing translations
 
 1. Edit the corresponding file in `content/locales/id/` and `content/locales/en/`
-2. Both locale files share the same structure — keep them in sync
+2. Both locale files share the same structure  - keep them in sync
 3. All content keys must exist in both languages
 
 ## Contact Form & Inquiry Storage
@@ -118,7 +118,7 @@ The contact form submits to `/api/inquiry` which stores data in Supabase.
 2. Run the SQL in `docs/database/saikiweb_inquiries.sql` in the Supabase SQL Editor
 3. Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`
 
-Table: `saikiweb_inquiries` — stores all visitor inquiries with attribution data.
+Table: `saikiweb_inquiries`  - stores all visitor inquiries with attribution data.
 
 If Supabase is not configured, the form still works (inquiry is logged to console).
 
@@ -168,8 +168,8 @@ UTM parameters, referrer, landing page, and click IDs (gclid, fbclid) are captur
 
 ### Typography
 
-- **Primary**: Inter (sans-serif) — body text, headings, UI
-- **Accent**: Playfair Display (serif) — editorial headings
+- **Primary**: Inter (sans-serif)  - body text, headings, UI
+- **Accent**: Playfair Display (serif)  - editorial headings
 
 ### Brand Assets
 
