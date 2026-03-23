@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { motion, useInView, useSpring, useTransform } from 'framer-motion';
 
 interface AnimatedCounterProps {
@@ -11,11 +11,11 @@ interface AnimatedCounterProps {
 
 export function AnimatedCounter({ value, className = '', duration = 2 }: AnimatedCounterProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-50px' });
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
 
-  // Check if value is a number
   const numericValue = parseFloat(value);
   const isNumeric = !isNaN(numericValue) && isFinite(numericValue);
+  const hasDecimal = isNumeric && value.includes('.');
 
   const spring = useSpring(0, {
     duration: duration * 1000,
@@ -24,6 +24,10 @@ export function AnimatedCounter({ value, className = '', duration = 2 }: Animate
 
   const display = useTransform(spring, (current) => {
     if (!isNumeric) return value;
+    if (hasDecimal) {
+      const decimals = value.split('.')[1]?.length ?? 1;
+      return current.toFixed(decimals);
+    }
     return Math.round(current).toString();
   });
 

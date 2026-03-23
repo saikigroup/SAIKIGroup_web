@@ -84,7 +84,7 @@ export function ArticleBody({ blocks }: ArticleBodyProps) {
               key={index}
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.5 }}
               className="heading-sans text-2xl md:text-3xl text-brand-black mt-16 mb-6 relative pl-6 border-l-[3px] border-brand-teal"
             >
@@ -99,7 +99,7 @@ export function ArticleBody({ blocks }: ArticleBodyProps) {
               key={index}
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, margin: '-50px' }}
+              viewport={{ once: true, amount: 0.1 }}
               transition={{ duration: 0.6 }}
               className="my-12 md:my-16 py-8 md:py-10 px-8 md:px-12 relative bg-gradient-to-br from-surface-cream via-white to-surface-violet rounded-2xl"
             >
