@@ -40,6 +40,12 @@ export function CTAButton({
   style,
   onClick,
 }: CTAButtonProps) {
+  // When custom backgroundColor is provided via style, skip the default gradient
+  const hasCustomBg = style?.backgroundColor != null;
+  const variantClass = variant === 'primary' && hasCustomBg
+    ? 'text-white border-transparent hover:shadow-lg hover:brightness-110'
+    : variants[variant];
+
   return (
     <motion.div
       whileHover={{ scale: 1.03, y: -2 }}
@@ -52,7 +58,7 @@ export function CTAButton({
         className={`
           inline-flex items-center gap-2.5 font-semibold tracking-tight
           border rounded-xl transition-all duration-300
-          ${variants[variant]} ${sizes[size]} ${className}
+          ${variantClass} ${sizes[size]} ${className}
         `}
         style={style}
       >

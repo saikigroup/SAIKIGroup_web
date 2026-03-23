@@ -158,14 +158,8 @@ export function IconSparkle({ className = '', size = 24 }: IconProps) {
 export function IconCheck({ className = '', size = 24 }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
-      <defs>
-        <linearGradient id="ic-check-1" x1="2" y1="2" x2="22" y2="22">
-          <stop offset="0%" stopColor="#0d9488" />
-          <stop offset="100%" stopColor="#06b6d4" />
-        </linearGradient>
-      </defs>
-      <circle cx="12" cy="12" r="10" fill="url(#ic-check-1)" opacity="0.12" />
-      <path d="M8 12l3 3 5-5" stroke="url(#ic-check-1)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="12" cy="12" r="10" fill="currentColor" opacity="0.12" />
+      <path d="M8 12l3 3 5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }

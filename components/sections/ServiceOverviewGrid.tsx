@@ -1,13 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
-import { SectionHeading, IconConsultancy, IconImagery, IconTechnology } from '@/components/shared';
+import { SectionHeading } from '@/components/shared';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
-import { TiltCard } from '@/components/interactive/TiltCard';
 import { serviceAccentColors, type ServiceKey } from '@/lib/utils';
 
 interface ServiceData {
@@ -19,6 +17,7 @@ interface ServiceData {
 interface ServiceOverviewGridProps {
   eyebrow: string;
   headline: string;
+  ctaLabel?: string;
   consultancy: ServiceData;
   imagery: ServiceData;
   technology: ServiceData;
@@ -27,17 +26,10 @@ interface ServiceOverviewGridProps {
 
 const serviceKeys: ServiceKey[] = ['consultancy', 'imagery', 'technology'];
 
-const ServiceIcon = ({ serviceKey, size = 32 }: { serviceKey: ServiceKey; size?: number }) => {
-  switch (serviceKey) {
-    case 'consultancy': return <IconConsultancy size={size} />;
-    case 'imagery': return <IconImagery size={size} />;
-    case 'technology': return <IconTechnology size={size} />;
-  }
-};
-
 export function ServiceOverviewGrid({
   eyebrow,
   headline,
+  ctaLabel = 'Pelajari Lebih Lanjut',
   consultancy,
   imagery,
   technology,
@@ -62,93 +54,92 @@ export function ServiceOverviewGrid({
 
             return (
               <StaggerItem key={key}>
-                <TiltCard tiltAmount={8} className="h-full">
-                  <Link
-                    href={getLocalizedPath(key, locale)}
-                    className="group block glass-strong rounded-2xl p-8 md:p-10 h-full transition-all duration-300 relative overflow-hidden hover:shadow-xl"
-                    style={{
-                      // @ts-expect-error CSS custom properties
-                      '--service-color': colors.hex,
-                      '--service-color-light': `${colors.hex}08`,
-                      '--service-color-hover': `${colors.hex}12`,
-                    }}
-                  >
-                    {/* Gradient bg on hover - uses logo color */}
-                    <div
-                      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
-                      style={{
-                        background: `linear-gradient(135deg, ${colors.hex}08 0%, ${colors.hex}15 100%)`,
-                      }}
-                    />
-
-                    {/* Watermark icon - large background */}
-                    <div className="absolute -right-6 -bottom-6 opacity-[0.04] group-hover:opacity-[0.08] transition-opacity duration-500 pointer-events-none">
-                      <ServiceIcon serviceKey={key} size={180} />
-                    </div>
-
-                    <div className="relative">
-                      {/* Service sub-logo */}
-                      <div className="mb-6">
-                        <div
-                          className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 backdrop-blur-sm"
-                          style={{ backgroundColor: `${colors.hex}10` }}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={colors.logo}
-                            alt={service.title}
-                            className="h-10 w-auto object-contain"
-                          />
-                        </div>
+                <Link
+                  href={getLocalizedPath(key, locale)}
+                  className="group block h-full [perspective:1000px]"
+                >
+                  <div className="relative w-full h-full transition-transform duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]">
+                    {/* Front face */}
+                    <div className="glass-strong rounded-2xl p-8 md:p-10 [backface-visibility:hidden] relative overflow-hidden">
+                      {/* Watermark icon */}
+                      <div className="absolute -right-6 -bottom-6 opacity-[0.04] pointer-events-none">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={colors.logo}
+                          alt=""
+                          className="h-44 w-auto object-contain"
+                          aria-hidden="true"
+                        />
                       </div>
 
-                      <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
-                        {service.title}
-                      </h3>
+                      <div className="relative">
+                        {/* Service sub-logo */}
+                        <div className="mb-6">
+                          <div
+                            className="w-16 h-16 rounded-2xl flex items-center justify-center backdrop-blur-sm"
+                            style={{ backgroundColor: `${colors.hex}10` }}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={colors.logo}
+                              alt={service.title}
+                              className="h-10 w-auto object-contain"
+                            />
+                          </div>
+                        </div>
 
-                      <p className="text-text-secondary leading-relaxed mb-6">
+                        <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
+                          {service.title}
+                        </h3>
+
+                        <p className="text-text-secondary leading-relaxed mb-6">
+                          {service.description}
+                        </p>
+
+                        <div className="flex flex-wrap gap-2">
+                          {service.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              className="text-xs font-medium px-3 py-1.5 rounded-full border backdrop-blur-sm"
+                              style={{
+                                borderColor: `${colors.hex}30`,
+                                color: colors.hex,
+                                backgroundColor: `${colors.hex}08`,
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Back face */}
+                    <div
+                      className="absolute inset-0 rounded-2xl p-8 md:p-10 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col items-center justify-center text-center text-white"
+                      style={{ background: `linear-gradient(135deg, ${colors.hex}, ${colors.hexSecondary})` }}
+                    >
+                      {/* Logo full on back */}
+                      <div className="mb-6">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={colors.logoFull}
+                          alt={service.title}
+                          className="h-8 w-auto object-contain brightness-0 invert"
+                        />
+                      </div>
+
+                      <p className="text-white/80 text-sm leading-relaxed mb-8 max-w-xs">
                         {service.description}
                       </p>
 
-                      <div className="flex flex-wrap gap-2 mb-8">
-                        {service.tags.map((tag) => (
-                          <span
-                            key={tag}
-                            className="text-xs font-medium px-3 py-1.5 rounded-full border backdrop-blur-sm"
-                            style={{
-                              borderColor: `${colors.hex}30`,
-                              color: colors.hex,
-                              backgroundColor: `${colors.hex}08`,
-                            }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-
-                      <span
-                        className="inline-flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300"
-                        style={{
-                          backgroundColor: `${colors.hex}10`,
-                          color: colors.hex,
-                        }}
-                      >
-                        <motion.span
-                          className="inline-flex items-center justify-center w-10 h-10 rounded-full group-hover:text-white transition-all duration-300"
-                          style={{
-                            // On hover, fill with service color
-                          }}
-                        >
-                          <span
-                            className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                            style={{ backgroundColor: colors.hex }}
-                          />
-                          <ArrowRight className="w-4 h-4 relative z-10" />
-                        </motion.span>
+                      <span className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm text-white font-semibold px-6 py-3 rounded-full transition-all duration-300 group-hover:bg-white/30">
+                        {ctaLabel}
+                        <ArrowRight className="w-4 h-4" />
                       </span>
                     </div>
-                  </Link>
-                </TiltCard>
+                  </div>
+                </Link>
               </StaggerItem>
             );
           })}
