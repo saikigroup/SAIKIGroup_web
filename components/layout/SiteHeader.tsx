@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
 import { LanguageSwitch } from './LanguageSwitch';
+import { SearchDialog } from './SearchDialog';
 import { getLocalizedPath, type Locale } from '@/lib/i18n';
 import { getCommon } from '@/lib/content';
 
@@ -63,7 +64,8 @@ export function SiteHeader({ locale }: SiteHeaderProps) {
                   {item.label}
                 </Link>
               ))}
-              <div className="ml-3">
+              <SearchDialog locale={locale} />
+              <div className="ml-2">
                 <LanguageSwitch locale={locale} />
               </div>
             </div>
