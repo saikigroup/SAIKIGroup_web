@@ -15,6 +15,9 @@ import { Clock, Calendar } from 'lucide-react';
 // Allow dynamic rendering for Supabase articles not in generateStaticParams
 export const dynamicParams = true;
 
+// Revalidate every 60 seconds so new/updated articles appear without re-deploy
+export const revalidate = 60;
+
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id';
 
 export async function generateMetadata({
@@ -77,13 +80,16 @@ export async function generateMetadata({
   };
 }
 
-export function generateStaticParams() {
-  const idInsights = getInsights('id');
-  const enInsights = getInsights('en');
+export async function generateStaticParams() {
+  // Combine static + Supabase articles for pre-rendering
+  const [idArticles, enArticles] = await Promise.all([
+    getArticles('id'),
+    getArticles('en'),
+  ]);
 
   return [
-    ...idInsights.articles.map((a) => ({ locale: 'id', slug: a.slug })),
-    ...enInsights.articles.map((a) => ({ locale: 'en', slug: a.slug })),
+    ...idArticles.map((a) => ({ locale: 'id', slug: a.slug })),
+    ...enArticles.map((a) => ({ locale: 'en', slug: a.slug })),
   ];
 }
 

@@ -5,6 +5,9 @@ import { generatePageMetadata } from '@/lib/metadata';
 import { FadeIn, StaggerGroup, StaggerItem } from '@/components/motion';
 import { Eyebrow, JournalCard } from '@/components/shared';
 
+// Revalidate every 60 seconds so new articles appear without re-deploy
+export const revalidate = 60;
+
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return generatePageMetadata('insights', locale as Locale);
