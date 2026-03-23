@@ -15,9 +15,9 @@ export function MarqueeBanner({ items, variant = 'light' }: MarqueeBannerProps) 
   }[variant];
 
   const textClass = {
-    light: 'text-brand-black/20 text-5xl md:text-7xl font-black',
-    dark: 'text-white/10 text-5xl md:text-7xl font-black',
-    gradient: 'text-white/20 text-5xl md:text-7xl font-black',
+    light: 'text-brand-black/20 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black',
+    dark: 'text-white/10 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black',
+    gradient: 'text-white/20 text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black',
   }[variant];
 
   return (

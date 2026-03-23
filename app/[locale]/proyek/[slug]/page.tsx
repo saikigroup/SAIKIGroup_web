@@ -64,8 +64,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       {/* Hero */}
       <section className="relative overflow-hidden">
         <div className={`absolute inset-0 bg-gradient-to-br ${categoryGradients[project.category]} opacity-5`} />
-        <div className="absolute top-20 right-0 w-96 h-96 bg-brand-teal/8 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-10 w-80 h-80 bg-brand-violet/8 rounded-full blur-3xl" />
+        <div className="absolute top-20 right-0 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/8 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-10 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/8 rounded-full blur-3xl" />
 
         <div className="container-editorial pt-28 md:pt-36 pb-16 md:pb-24 relative">
           {/* Back link */}
@@ -86,7 +86,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 label={project.category.charAt(0).toUpperCase() + project.category.slice(1)}
               />
 
-              <h1 className="heading-display text-4xl md:text-5xl lg:text-6xl text-brand-black mt-6">
+              <h1 className="heading-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-brand-black mt-6">
                 {project.title}
               </h1>
 

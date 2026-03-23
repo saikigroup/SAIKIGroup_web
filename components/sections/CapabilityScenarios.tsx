@@ -29,8 +29,8 @@ export function CapabilityScenarios({
     <section className="py-20 md:py-32 relative overflow-hidden">
       {/* Dark gradient bg */}
       <div className="absolute inset-0 bg-gradient-dark" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-teal/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/10 rounded-full blur-3xl" />
 
       <div className="container-editorial relative">
         <FadeIn>

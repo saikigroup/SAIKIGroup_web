@@ -219,15 +219,15 @@ export default function PromptLibraryPage() {
     <div className="min-h-screen">
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+            <div className="flex items-center gap-3 shrink-0">
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">S</span>
               </div>
               <h1 className="text-lg font-bold text-gray-900">SAIKI Admin</h1>
             </div>
-            <nav className="flex items-center gap-1">
+            <nav className="flex items-center gap-1 overflow-x-auto max-w-full">
               <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">Inquiries</a>
               <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">Articles</a>
               <a href="/admin/social-posts" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">Social Posts</a>
@@ -254,7 +254,7 @@ export default function PromptLibraryPage() {
             {/* AI Model */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">AI Model</label>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                 {aiModels.map((model) => (
                   <button
                     key={model.value}
@@ -285,7 +285,7 @@ export default function PromptLibraryPage() {
 
             {/* Category + Locale */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Category</label>
                   <select value={category} onChange={(e) => setCategory(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
@@ -307,7 +307,7 @@ export default function PromptLibraryPage() {
 
             {/* Tone + Length */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Tone</label>
                   <select value={tone} onChange={(e) => setTone(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
@@ -356,7 +356,7 @@ export default function PromptLibraryPage() {
 
             {/* Avoid Topics */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Yang Harus Dihindari</label>
                   <input

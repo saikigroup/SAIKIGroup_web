@@ -12,9 +12,9 @@ interface SectionHeadingProps {
 }
 
 const sizeClasses = {
-  lg: 'text-3xl md:text-4xl',
-  xl: 'text-4xl md:text-5xl',
-  '2xl': 'text-5xl md:text-6xl lg:text-7xl',
+  lg: 'text-2xl sm:text-3xl md:text-4xl',
+  xl: 'text-2xl sm:text-3xl md:text-4xl lg:text-5xl',
+  '2xl': 'text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl',
 };
 
 export function SectionHeading({

@@ -78,7 +78,7 @@ function MetricsBlock({ heading, items }: { heading?: string; items: Array<{ val
 function QuoteBlock({ text, attribution }: { text: string; attribution?: string }) {
   return (
     <section className="py-16 md:py-24 bg-gradient-teal relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-40 h-40 md:w-80 md:h-80 bg-white/10 rounded-full blur-3xl" />
       <div className="container-editorial max-w-4xl mx-auto text-center relative">
         <FadeIn>
           <blockquote className="text-2xl md:text-3xl lg:text-4xl text-white font-light leading-relaxed italic">
@@ -99,7 +99,7 @@ function TwoColumnBlock({ left, right }: { left: { heading: string; body: string
   return (
     <section className="py-12 md:py-16">
       <div className="container-editorial">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 lg:gap-16">
           <FadeIn>
             <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-4">
               {left.heading}
@@ -172,10 +172,10 @@ function ChallengeSolutionBlock({
   return (
     <section className="py-12 md:py-16">
       <div className="container-editorial">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16">
           {/* Challenges */}
           <FadeIn>
-            <div className="glass-strong rounded-2xl p-8 md:p-10 border-l-4 border-rose-400">
+            <div className="glass-strong rounded-2xl p-5 md:p-8 lg:p-10 border-l-4 border-rose-400">
               <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-6">
                 {challengeHeading || 'Tantangan'}
               </h3>
@@ -192,7 +192,7 @@ function ChallengeSolutionBlock({
 
           {/* Solutions */}
           <FadeIn delay={0.15}>
-            <div className="glass-strong rounded-2xl p-8 md:p-10 border-l-4 border-brand-teal">
+            <div className="glass-strong rounded-2xl p-5 md:p-8 lg:p-10 border-l-4 border-brand-teal">
               <h3 className="heading-sans text-xl md:text-2xl text-brand-black mb-6">
                 {solutionHeading || 'Solusi'}
               </h3>
@@ -216,7 +216,7 @@ function GalleryTextBlock({ heading, body, items }: { heading: string; body: str
   return (
     <section className="py-12 md:py-16">
       <div className="container-editorial">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12">
           <FadeIn>
             <h3 className="heading-sans text-2xl md:text-3xl text-brand-black mb-4">
               {heading}
@@ -251,8 +251,8 @@ function GalleryTextBlock({ heading, body, items }: { heading: string; body: str
 function FullWidthStatementBlock({ statement, subtext }: { statement: string; subtext?: string }) {
   return (
     <section className="py-16 md:py-24 bg-brand-black relative overflow-hidden">
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-brand-teal/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-brand-violet/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/10 rounded-full blur-3xl" />
       <div className="container-editorial max-w-4xl mx-auto text-center relative">
         <FadeIn>
           <p className="heading-display text-2xl md:text-3xl lg:text-4xl text-white leading-relaxed">

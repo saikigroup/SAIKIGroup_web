@@ -18,7 +18,7 @@ export function JournalPreview({ eyebrow, headline, viewAll, locale }: JournalPr
 
   return (
     <section className="py-20 md:py-32 bg-white relative overflow-hidden">
-      <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-coral/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-brand-coral/5 rounded-full blur-3xl" />
 
       <div className="container-editorial relative">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
