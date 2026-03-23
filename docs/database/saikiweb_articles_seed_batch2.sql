@@ -106,4 +106,94 @@ INSERT INTO saikiweb_articles (
 
 <p>What matters most is starting. A skill gap analysis does not have to be perfect from the beginning. Even a rough analysis done today is far more valuable than a perfect plan that never gets started. Know where you stand, decide where you want to go, and start bridging the distance one step at a time.</p>', 'Career', 'consultancy', 'Mar 20, 2025', '6 min read', false, true, 'Skill Gap Analysis: Identify & Develop the Right Skills | SAIKI', 'Feeling stuck in your career? Learn 4 steps to conduct a skill gap analysis and discover what skills to develop next. Practical guide from SAIKI Consultancy.', ARRAY['skill gap analysis', 'career development', 'professional growth', 'skill mapping', 'competency assessment', 'career consulting', 'SAIKI Consultancy'])
 
+-- =============================================
+-- ARTICLE 2: BRANDING 1 - PSIKOLOGI WARNA (ID)
+-- =============================================
+('psikologi-warna-dalam-branding', 'id', 'Psikologi Warna dalam Branding: Lebih dari Sekadar Estetika', 'Warna bukan cuma soal cantik. Di balik setiap palet brand yang berhasil, ada sains tentang bagaimana otak manusia merespons warna.', '<p>Pernahkah kamu bertanya mengapa hampir semua aplikasi fintech di Indonesia menggunakan warna biru atau hijau? Atau mengapa brand makanan cepat saji hampir selalu menggunakan merah dan kuning? Ini bukan kebetulan. Ada alasan psikologis yang sangat kuat di balik setiap pilihan warna dalam branding, dan memahaminya bisa menjadi pembeda antara brand yang langsung terasa "klik" dan brand yang terlihat bagus tapi tidak meninggalkan kesan.</p>
+
+<p>Warna adalah elemen pertama yang diproses otak ketika melihat sebuah brand. Sebelum membaca nama, sebelum memahami logo, otak sudah merespons warna dan membentuk asosiasi emosional. Riset menunjukkan bahwa warna meningkatkan pengenalan brand hingga 80%. Artinya, pilihan warna yang tepat bukan sekadar keputusan estetika. Ini adalah keputusan bisnis.</p>
+
+<blockquote><p>Warna adalah elemen pertama yang diproses otak. Sebelum membaca nama brand, otak sudah membentuk asosiasi emosional dari warnanya.</p></blockquote>
+
+<h2>Bagaimana Otak Merespons Warna</h2>
+
+<p>Ketika mata menangkap warna, sinyal dikirim ke hipotalamus, bagian otak yang mengatur emosi dan respons fisiologis. Warna hangat seperti merah dan oranye meningkatkan detak jantung dan menciptakan rasa urgensi. Warna dingin seperti biru dan hijau menurunkan tekanan darah dan menciptakan perasaan tenang.</p>
+
+<p>Tapi psikologi warna tidak sesederhana "biru sama dengan tenang." Respons terhadap warna dipengaruhi konteks budaya, pengalaman personal, dan bagaimana warna tersebut dikombinasikan dengan elemen lain. Biru dalam konteks perbankan menyampaikan kepercayaan. Biru yang sama dalam konteks makanan bisa menekan nafsu makan. Konteks adalah segalanya.</p>
+
+<h2>Palet Warna dan Kepribadian Brand</h2>
+
+<p>Setiap brand punya kepribadian, sama seperti manusia. Dan sama seperti manusia memilih pakaian yang mencerminkan siapa mereka, brand memilih warna yang mencerminkan kepribadiannya. Brand yang ingin terasa premium dan eksklusif cenderung menggunakan hitam, emas, atau warna gelap yang deep. Brand yang ingin terasa ramah dan accessible lebih memilih warna cerah dan saturasi tinggi.</p>
+
+<p>Yang sering salah kaprah adalah mengikuti tren warna tanpa mempertimbangkan apakah warna tersebut sesuai dengan kepribadian brand. Sebuah firma hukum yang tiba-tiba mengadopsi palet warna millennial pink mungkin terlihat modern, tapi bisa kehilangan kesan profesional yang justru menjadi fondasi kepercayaan kliennya.</p>
+
+<p>Pendekatan yang lebih efektif adalah memulai dari nilai dan kepribadian brand terlebih dahulu, baru kemudian menerjemahkannya ke dalam bahasa warna. Jika brand kamu tentang inovasi dan keberanian, palet warna yang bold dan unexpected bisa bekerja. Jika brand kamu tentang ketenangan dan kepercayaan, palet yang terlalu mencolok justru akan kontraproduktif.</p>
+
+<h2>Konteks Lokal yang Sering Diabaikan</h2>
+
+<p>Salah satu kesalahan terbesar dalam pemilihan warna brand di Indonesia adalah mengadopsi mentah-mentah referensi dari pasar Barat tanpa mempertimbangkan konteks lokal. Warna putih yang di Barat diasosiasikan dengan kemurnian dan kebersihan, di beberapa budaya Asia justru diasosiasikan dengan berkabung. Warna hijau punya konotasi religius yang kuat di Indonesia yang mungkin tidak relevan di pasar lain.</p>
+
+<p>Ini bukan berarti kamu harus menghindari warna-warna tertentu. Ini berarti kamu perlu memahami bagaimana target audiens spesifik kamu akan merespons pilihan warna tersebut. Brand yang menyasar anak muda urban di Jakarta dan brand yang menyasar keluarga di kota-kota tier dua mungkin membutuhkan pendekatan warna yang berbeda, meskipun menjual produk yang sama.</p>
+
+<blockquote><p>Mengadopsi referensi warna dari pasar Barat tanpa memahami konteks lokal adalah salah satu kesalahan branding yang paling mahal.</p></blockquote>
+
+<h2>Cara Memilih Palet Warna yang Bekerja</h2>
+
+<p>Langkah pertama adalah mengaudit kompetitor. Bukan untuk meniru, tapi untuk memahami lanskap visual di industri kamu. Jika semua kompetitor menggunakan biru, ada dua strategi: ikut menggunakan biru karena audiens sudah mengasosiasikan warna tersebut dengan industri kamu, atau justru memilih warna yang berbeda untuk menonjol. Keduanya valid, tergantung positioning brand kamu.</p>
+
+<p>Langkah kedua adalah membangun hierarki warna. Setiap brand butuh warna primer yang menjadi identitas utama, warna sekunder untuk variasi, dan warna netral untuk konten dan teks. Kesalahan umum adalah memilih terlalu banyak warna primer sehingga identitas visual menjadi membingungkan.</p>
+
+<p>Langkah ketiga adalah menguji palet di konteks nyata. Warna yang terlihat bagus di mockup Figma bisa terasa sangat berbeda ketika diterapkan di kemasan produk, banner media sosial, atau signage toko. Selalu uji palet warna di semua touchpoint sebelum finalisasi.</p>
+
+<h2>Warna Bukan Satu-satunya Faktor</h2>
+
+<p>Penting untuk diingat bahwa warna bekerja sebagai bagian dari sistem, bukan secara terisolasi. Warna yang sama bisa menyampaikan pesan yang sangat berbeda tergantung tipografi yang mendampinginya, whitespace di sekitarnya, dan gaya visual keseluruhan brand. Jangan perlakukan pemilihan warna sebagai keputusan yang berdiri sendiri. Lakukan dalam konteks brand system yang utuh.</p>
+
+<p>Dan yang paling penting: konsistensi. Warna yang dipilih dengan baik tapi diaplikasikan secara tidak konsisten akan kehilangan kekuatannya. Pastikan setiap orang yang memproduksi materi untuk brand kamu memiliki akses ke guideline warna yang jelas, termasuk kode hex, RGB, dan CMYK untuk setiap warna dalam palet.</p>', 'Branding', 'imagery', '12 Mar 2025', '7 menit', true, true, 'Psikologi Warna dalam Branding: Panduan Memilih Palet Warna | SAIKI', 'Mengapa brand tertentu langsung terasa klik? Rahasianya ada di psikologi warna. Pelajari cara memilih palet warna brand yang tepat untuk audiens Indonesia. Tips dari SAIKI Imagery.', ARRAY['psikologi warna', 'branding warna', 'palet warna brand', 'warna dalam desain', 'brand identity', 'color psychology branding', 'SAIKI Imagery']),
+
+-- =============================================
+-- ARTICLE 2: BRANDING 1 - COLOR PSYCHOLOGY (EN)
+-- =============================================
+('color-psychology-in-branding', 'en', 'Color Psychology in Branding: More Than Just Aesthetics', 'Color is not just about looking good. Behind every successful brand palette, there is science about how the human brain responds to color.', '<p>Have you ever wondered why nearly every fintech app uses blue or green? Or why fast food brands almost always use red and yellow? This is not coincidence. There are powerful psychological reasons behind every color choice in branding, and understanding them can be the difference between a brand that instantly clicks and one that looks good but leaves no lasting impression.</p>
+
+<p>Color is the first element the brain processes when encountering a brand. Before reading the name, before understanding the logo, the brain has already responded to the color and formed emotional associations. Research shows that color increases brand recognition by up to 80%. This means choosing the right color is not merely an aesthetic decision. It is a business decision.</p>
+
+<blockquote><p>Color is the first element the brain processes. Before reading a brand name, the brain has already formed emotional associations from its colors.</p></blockquote>
+
+<h2>How the Brain Responds to Color</h2>
+
+<p>When the eye captures color, signals are sent to the hypothalamus, the part of the brain that regulates emotions and physiological responses. Warm colors like red and orange increase heart rate and create a sense of urgency. Cool colors like blue and green lower blood pressure and create feelings of calm.</p>
+
+<p>But color psychology is not as simple as "blue equals calm." Responses to color are influenced by cultural context, personal experience, and how the color is combined with other elements. Blue in the context of banking communicates trust. The same blue in the context of food can suppress appetite. Context is everything.</p>
+
+<h2>Color Palettes and Brand Personality</h2>
+
+<p>Every brand has a personality, just like people. And just like people choose clothing that reflects who they are, brands choose colors that reflect their personality. Brands that want to feel premium and exclusive tend to use black, gold, or deep dark colors. Brands that want to feel friendly and accessible prefer bright colors with high saturation.</p>
+
+<p>A common misconception is following color trends without considering whether the color fits the brand personality. A law firm that suddenly adopts a millennial pink palette might look modern, but could lose the professional impression that forms the foundation of client trust.</p>
+
+<p>A more effective approach is to start from brand values and personality first, then translate those into the language of color. If your brand is about innovation and boldness, a bold and unexpected color palette can work. If your brand is about calm and trust, an overly flashy palette will be counterproductive.</p>
+
+<h2>Local Context Often Overlooked</h2>
+
+<p>One of the biggest mistakes in brand color selection is adopting Western market references without considering local context. White, which in Western cultures is associated with purity and cleanliness, in some Asian cultures is associated with mourning. Green carries strong religious connotations in certain markets that may not be relevant elsewhere.</p>
+
+<p>This does not mean you should avoid certain colors. It means you need to understand how your specific target audience will respond to those color choices. A brand targeting young urban professionals in a major city and a brand targeting families in smaller towns may need different color approaches, even if they sell the same product.</p>
+
+<blockquote><p>Adopting color references from Western markets without understanding local context is one of the most expensive branding mistakes.</p></blockquote>
+
+<h2>How to Choose a Color Palette That Works</h2>
+
+<p>The first step is auditing competitors. Not to copy, but to understand the visual landscape in your industry. If all competitors use blue, there are two strategies: follow suit because audiences already associate that color with your industry, or deliberately choose a different color to stand out. Both are valid, depending on your brand positioning.</p>
+
+<p>The second step is building a color hierarchy. Every brand needs a primary color as its main identity, secondary colors for variation, and neutral colors for content and text. A common mistake is choosing too many primary colors, making the visual identity confusing.</p>
+
+<p>The third step is testing the palette in real contexts. Colors that look great in a Figma mockup can feel very different when applied to product packaging, social media banners, or store signage. Always test your color palette across all touchpoints before finalizing.</p>
+
+<h2>Color Is Not the Only Factor</h2>
+
+<p>It is important to remember that color works as part of a system, not in isolation. The same color can convey very different messages depending on the typography accompanying it, the whitespace surrounding it, and the overall visual style of the brand. Do not treat color selection as a standalone decision. Approach it within the context of a complete brand system.</p>
+
+<p>And most importantly: consistency. A well-chosen color applied inconsistently will lose its power. Ensure everyone producing materials for your brand has access to clear color guidelines, including hex codes, RGB, and CMYK values for every color in the palette.</p>', 'Branding', 'imagery', 'Mar 12, 2025', '7 min read', true, true, 'Color Psychology in Branding: How to Choose the Right Palette | SAIKI', 'Why do some brands instantly click? The secret lies in color psychology. Learn how to choose the right brand color palette for your audience. Tips from SAIKI Imagery.', ARRAY['color psychology', 'branding colors', 'brand color palette', 'color in design', 'brand identity', 'color psychology branding', 'SAIKI Imagery'])
+
 ON CONFLICT (saikiweb_slug, saikiweb_locale) DO NOTHING;
