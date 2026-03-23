@@ -14,9 +14,6 @@ export function AnalyticsProvider({ locale }: { locale: string }) {
 
   useEffect(() => {
     captureAttribution();
-  }, []);
-
-  useEffect(() => {
     analytics.pageView(pathname, locale);
   }, [pathname, locale]);
 
