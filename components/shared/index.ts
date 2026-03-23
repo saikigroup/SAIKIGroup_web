@@ -3,6 +3,7 @@ export { SectionHeading } from './SectionHeading';
 export { CTAButton } from './CTAButton';
 export { ServiceTag } from './ServiceTag';
 export { JournalCard } from './JournalCard';
+export { ProjectCard } from './ProjectCard';
 export { ArticleBody } from './ArticleBody';
 export { BackToInsights } from './BackToInsights';
 export { ShareButton } from './ShareButton';

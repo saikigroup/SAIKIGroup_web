@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { locales, routeMap, type Locale } from '@/lib/i18n';
 import { getArticles } from '@/lib/articles';
+import { getAllProjectSlugs } from '@/content/projects';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id';
@@ -16,6 +17,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(),
         changeFrequency: routeKey === 'home' ? 'weekly' : 'monthly',
         priority: routeKey === 'home' ? 1 : routeKey === 'services' ? 0.9 : 0.8,
+      });
+    }
+  }
+
+  // Dynamic project detail pages
+  const projectSlugs = getAllProjectSlugs();
+  for (const slug of projectSlugs) {
+    for (const locale of locales) {
+      const subPath = locale === 'id' ? 'proyek' : 'projects';
+      pages.push({
+        url: `${baseUrl}/${locale}/${subPath}/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7,
       });
     }
   }

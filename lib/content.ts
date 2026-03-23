@@ -31,3 +31,7 @@ export function getContact(locale: Locale) {
 export function getInsights(locale: Locale) {
   return dictionaries[locale].insights;
 }
+
+export function getProjects(locale: Locale) {
+  return dictionaries[locale].projects;
+}

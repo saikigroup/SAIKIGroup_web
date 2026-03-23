@@ -31,6 +31,7 @@ export const routeMap: Record<string, Record<Locale, string>> = {
   imagery: { id: 'layanan/imagery', en: 'services/imagery' },
   technology: { id: 'layanan/technology', en: 'services/technology' },
   insights: { id: 'insights', en: 'insights' },
+  projects: { id: 'proyek', en: 'projects' },
   contact: { id: 'kontak', en: 'contact' },
 };
 
@@ -61,6 +62,16 @@ export function switchLocale(currentPath: string, targetLocale: Locale): string 
   for (const [key, paths] of Object.entries(routeMap)) {
     if (paths[currentLocale as Locale] === currentSubPath) {
       return getLocalizedPath(key, targetLocale);
+    }
+  }
+
+  // Handle project slug switching: /locale/proyek/slug <-> /locale/projects/slug
+  const projectPrefixes: Record<string, string> = { proyek: 'projects', projects: 'proyek' };
+  for (const [fromPrefix, toPrefix] of Object.entries(projectPrefixes)) {
+    if (currentSubPath.startsWith(`${fromPrefix}/`)) {
+      const slug = currentSubPath.replace(`${fromPrefix}/`, '');
+      const targetPrefix = targetLocale === 'id' ? 'proyek' : 'projects';
+      return `/${targetLocale}/${targetPrefix}/${slug}`;
     }
   }
 
