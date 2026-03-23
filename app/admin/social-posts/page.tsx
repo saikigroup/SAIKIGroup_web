@@ -113,9 +113,21 @@ const categoryOptions = [
   { value: 'technology', label: 'Technology' },
 ];
 
+// UTM URL builder for tracking article shares per platform
+function buildUtmUrl(siteUrl: string, locale: string, slug: string, platform: string, postType: string): string {
+  const base = `${siteUrl}/${locale}/insights/${slug}`;
+  const params = new URLSearchParams({
+    utm_source: platform,
+    utm_medium: 'social',
+    utm_campaign: `article_share_${slug}`,
+    utm_content: postType,
+  });
+  return `${base}?${params.toString()}`;
+}
+
 // Platform-specific copywriting prompt generator
 function generateCaptionPrompt(platform: string, postType: string, article: { title: string; excerpt: string; slug: string; locale: string }, siteUrl: string): string {
-  const articleUrl = `${siteUrl}/${article.locale}/insights/${article.slug}`;
+  const articleUrl = buildUtmUrl(siteUrl, article.locale, article.slug, platform, postType);
   const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
 
   const platformRules: Record<string, string> = {
@@ -748,6 +760,36 @@ export default function AdminSocialPostsPage() {
                   ) : null;
                 })()}
               </div>
+
+              {/* UTM Tracked Link */}
+              {form.articleSlug && (() => {
+                const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
+                if (!linked) return null;
+                const utmUrl = buildUtmUrl('https://saiki.id', linked.saikiweb_locale, linked.saikiweb_slug, form.platform, form.postType);
+                return (
+                  <div className="bg-amber-50 rounded-2xl border border-amber-200 p-6">
+                    <h2 className="text-sm font-semibold text-amber-900 mb-2">UTM Tracked Link</h2>
+                    <p className="text-xs text-amber-600 mb-2">Gunakan link ini di caption agar bisa di-track di analytics</p>
+                    <div className="bg-white rounded-lg p-3 border border-amber-100">
+                      <code className="text-xs text-gray-700 break-all leading-relaxed">{utmUrl}</code>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await navigator.clipboard.writeText(utmUrl);
+                      }}
+                      className="mt-2 px-3 py-1.5 text-xs font-medium text-amber-700 bg-white border border-amber-200 rounded-lg hover:bg-amber-100 transition"
+                    >
+                      Copy UTM Link
+                    </button>
+                    <div className="mt-3 text-xs text-amber-500 space-y-0.5">
+                      <p>utm_source: <span className="font-mono text-amber-700">{form.platform}</span></p>
+                      <p>utm_medium: <span className="font-mono text-amber-700">social</span></p>
+                      <p>utm_campaign: <span className="font-mono text-amber-700">article_share_{linked.saikiweb_slug}</span></p>
+                      <p>utm_content: <span className="font-mono text-amber-700">{form.postType}</span></p>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Post URL */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6">
