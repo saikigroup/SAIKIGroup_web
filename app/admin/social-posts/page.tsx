@@ -2,6 +2,16 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
+interface Article {
+  saikiweb_article_id: number;
+  saikiweb_slug: string;
+  saikiweb_locale: string;
+  saikiweb_title: string;
+  saikiweb_excerpt: string;
+  saikiweb_category_key: string;
+  saikiweb_published: boolean;
+}
+
 interface SocialPost {
   saikiweb_post_id: number;
   saikiweb_platform: string;
@@ -121,6 +131,7 @@ export default function AdminSocialPostsPage() {
   const [saveError, setSaveError] = useState('');
   const [saveSuccess, setSaveSuccess] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
+  const [articles, setArticles] = useState<Article[]>([]);
 
   // Auth
   const handleLogin = async (e: React.FormEvent) => {
@@ -172,9 +183,21 @@ export default function AdminSocialPostsPage() {
     setLoading(false);
   }, [platformFilter, statusFilter]);
 
+  const fetchArticles = useCallback(async () => {
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+    try {
+      const res = await fetch('/api/admin/articles?published=true', {
+        headers: { 'x-admin-password': pw },
+      });
+      const data = await res.json();
+      if (data.success) setArticles(data.data || []);
+    } catch { /* silent */ }
+  }, []);
+
   useEffect(() => {
-    if (authenticated) fetchPosts();
-  }, [authenticated, platformFilter, statusFilter, fetchPosts]);
+    if (authenticated) { fetchPosts(); fetchArticles(); }
+  }, [authenticated, platformFilter, statusFilter, fetchPosts, fetchArticles]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem('admin_pw');
@@ -551,13 +574,45 @@ export default function AdminSocialPostsPage() {
               {/* Linked Article */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6">
                 <h2 className="text-sm font-semibold text-gray-900 mb-2">Linked Article</h2>
-                <p className="text-xs text-gray-400 mb-2">Connect to an existing article by slug</p>
-                <input
+                <p className="text-xs text-gray-400 mb-2">Pilih artikel yang ingin dibagikan</p>
+                <select
                   value={form.articleSlug}
-                  onChange={(e) => setForm((f) => ({ ...f, articleSlug: e.target.value }))}
-                  placeholder="e.g. mengapa-personal-branding"
+                  onChange={(e) => {
+                    const slug = e.target.value;
+                    const article = articles.find((a) => a.saikiweb_slug === slug);
+                    setForm((f) => ({
+                      ...f,
+                      articleSlug: slug,
+                      locale: article?.saikiweb_locale || f.locale,
+                      categoryKey: article?.saikiweb_category_key || f.categoryKey,
+                    }));
+                  }}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:border-teal-500 outline-none"
-                />
+                >
+                  <option value="">-- No article linked --</option>
+                  {articles.map((a) => (
+                    <option key={`${a.saikiweb_article_id}`} value={a.saikiweb_slug}>
+                      [{a.saikiweb_locale.toUpperCase()}] {a.saikiweb_title}
+                    </option>
+                  ))}
+                </select>
+                {form.articleSlug && (() => {
+                  const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
+                  return linked ? (
+                    <div className="mt-3 p-3 bg-teal-50 rounded-lg">
+                      <p className="text-xs font-medium text-teal-800 mb-1">{linked.saikiweb_title}</p>
+                      <p className="text-xs text-teal-600 line-clamp-2">{linked.saikiweb_excerpt}</p>
+                      <a
+                        href={`/${linked.saikiweb_locale}/insights/${linked.saikiweb_slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block mt-1.5 text-xs text-teal-700 font-medium hover:underline"
+                      >
+                        View article &rarr;
+                      </a>
+                    </div>
+                  ) : null;
+                })()}
               </div>
 
               {/* Post URL */}
