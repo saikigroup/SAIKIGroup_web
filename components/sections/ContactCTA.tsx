@@ -39,7 +39,7 @@ export function ContactCTA({ eyebrow, headline, body, cta, locale }: ContactCTAP
             <CTAButton
               href={getLocalizedPath('contact', locale)}
               variant="secondary"
-              className="border-white/30 text-white hover:bg-white hover:text-brand-teal backdrop-blur-sm"
+              className="bg-white border-white text-brand-teal hover:brightness-95"
             >
               {cta}
             </CTAButton>

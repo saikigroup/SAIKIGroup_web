@@ -40,27 +40,27 @@ export function ServicePageTemplate({
         <div className="absolute top-20 -left-32 w-96 h-96 rounded-full blur-3xl" style={{ backgroundColor: `${colors.hex}15` }} />
         <div className="absolute bottom-10 right-0 w-80 h-80 rounded-full blur-3xl" style={{ backgroundColor: `${colors.hex}08` }} />
 
+        {/* Watermark icon - large on right side */}
+        <div className="absolute right-0 top-1/2 -translate-y-1/2 opacity-[0.06] pointer-events-none hidden md:block">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={colors.logo}
+            alt=""
+            className="h-[28rem] w-auto object-contain"
+            aria-hidden="true"
+          />
+        </div>
+
         <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
-              {/* Service Logo */}
-              <div className="flex items-center gap-5 mb-8">
-                <div
-                  className="w-16 h-20 rounded-2xl flex items-center justify-center backdrop-blur-sm"
-                  style={{ backgroundColor: `${colors.hex}10` }}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={colors.logo}
-                    alt={hero.eyebrow}
-                    className="h-14 w-auto object-contain"
-                  />
-                </div>
+              {/* Full logo only */}
+              <div className="mb-8">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={colors.logoFull}
                   alt={hero.eyebrow}
-                  className="h-8 w-auto object-contain"
+                  className="h-10 w-auto object-contain"
                 />
               </div>
               <Eyebrow style={{ color: colors.hex }}>{hero.eyebrow}</Eyebrow>
@@ -200,7 +200,8 @@ export function ServicePageTemplate({
             <CTAButton
               href={getLocalizedPath('contact', locale)}
               variant="secondary"
-              className="border-white/30 text-white hover:bg-white hover:text-brand-black backdrop-blur-sm"
+              className="bg-white border-white hover:brightness-95"
+              style={{ color: colors.hex }}
             >
               {cta.button}
             </CTAButton>
