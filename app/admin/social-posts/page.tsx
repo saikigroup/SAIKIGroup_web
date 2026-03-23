@@ -113,6 +113,85 @@ const categoryOptions = [
   { value: 'technology', label: 'Technology' },
 ];
 
+// Platform-specific copywriting prompt generator
+function generateCaptionPrompt(platform: string, postType: string, article: { title: string; excerpt: string; slug: string; locale: string }, siteUrl: string): string {
+  const articleUrl = `${siteUrl}/${article.locale}/insights/${article.slug}`;
+  const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
+
+  const platformRules: Record<string, string> = {
+    instagram: `PLATFORM: Instagram ${postType === 'carousel' ? 'Carousel' : postType === 'reel' ? 'Reel' : 'Feed Post'}
+STYLE RULES:
+- Buka dengan hook yang bikin stop scrolling (1 kalimat pendek, bold, provokatif)
+- Gunakan line breaks untuk readability (jangan paragraf panjang)
+- Pakai emoji secukupnya untuk visual cue, JANGAN berlebihan
+- Akhiri dengan CTA yang engaging: ajak comment, save, atau share
+- ${postType === 'carousel' ? 'Buat outline 7-10 slide: Slide 1 = cover hook, Slide 2-8 = poin utama (1 insight per slide), Slide terakhir = CTA + link' : 'Tulis caption 150-300 kata'}
+- Tambahkan 15-20 hashtag yang relevan (campuran populer + niche)
+- Tone: conversational, relatable, kayak teman yang expert`,
+
+    linkedin: `PLATFORM: LinkedIn ${postType === 'text' ? 'Text Post' : postType === 'carousel' ? 'Document Post' : 'Post'}
+STYLE RULES:
+- Buka dengan hook 1-2 baris yang memancing rasa ingin tahu (personal story atau data mengejutkan)
+- Gunakan format pendek per paragraf (1-2 kalimat per paragraf, banyak white space)
+- Sertakan personal insight atau pengalaman nyata
+- Gunakan angka dan data jika ada
+- ${postType === 'carousel' ? 'Buat outline 8-12 slide dokumen PDF: judul tiap slide + poin utama' : 'Tulis post 200-400 kata'}
+- Akhiri dengan pertanyaan terbuka untuk memancing diskusi
+- Tambahkan 3-5 hashtag profesional saja
+- Tone: professional tapi approachable, thought leadership`,
+
+    tiktok: `PLATFORM: TikTok ${postType === 'reel' ? 'Video' : 'Post'}
+STYLE RULES:
+- Buka dengan hook 3 detik pertama: "Kamu pasti belum tahu ini..." / "Stop! Jangan [X] sebelum baca ini"
+- ${postType === 'reel' ? 'Tulis script video 30-60 detik: hook > masalah > insight > solusi > CTA. Format: [SCENE 1] narasi...' : 'Tulis caption pendek 50-100 kata'}
+- Bahasa super casual, kayak ngomong ke teman
+- Pakai trending angle: myth-busting, "things nobody tells you", listicle
+- CTA: "Follow untuk tips lainnya" / "Save biar nggak lupa"
+- Tambahkan 5-8 hashtag (campuran trending + niche)
+- Tone: energetic, fun, to the point`,
+
+    twitter: `PLATFORM: X (Twitter) Thread/Tweet
+STYLE RULES:
+- Tweet utama: max 280 karakter, hook yang bikin penasaran
+- Buat thread 5-8 tweet: Tweet 1 = hook, Tweet 2-6 = insight per poin, Tweet terakhir = ringkasan + CTA
+- Setiap tweet harus bisa berdiri sendiri tapi connect ke keseluruhan
+- Gunakan angka di awal: "5 alasan...", "3 kesalahan..."
+- Tambahkan 2-3 hashtag saja
+- Tone: sharp, witty, concise`,
+
+    facebook: `PLATFORM: Facebook ${postType === 'reel' ? 'Reel' : 'Post'}
+STYLE RULES:
+- Buka dengan storytelling singkat atau pertanyaan relatable
+- ${postType === 'reel' ? 'Tulis script video 30-60 detik dengan narasi' : 'Tulis post 150-300 kata'}
+- Bahasa warm dan conversational
+- Sertakan pertanyaan di akhir untuk engagement
+- CTA: ajak share ke teman yang butuh info ini
+- Tambahkan 3-5 hashtag
+- Tone: friendly, community-oriented, shareable`,
+  };
+
+  return `Kamu adalah social media copywriter untuk SAIKI Group, ekosistem terintegrasi untuk konsultansi karier, branding & marketing, dan teknologi.
+
+TUGAS: Buat caption/copy untuk membagikan artikel berikut ke ${platforms.find(p => p.value === platform)?.label || platform}:
+
+ARTIKEL:
+- Judul: "${article.title}"
+- Ringkasan: "${article.excerpt}"
+- URL: ${articleUrl}
+
+${platformRules[platform] || platformRules.instagram}
+
+BAHASA: ${lang}
+
+ATURAN UMUM:
+- JANGAN copy-paste isi artikel. Buat caption yang bikin orang PENASARAN untuk klik dan baca
+- Sertakan link artikel di akhir caption
+- JANGAN gunakan emdash (--)
+- Output HANYA caption/copy yang siap dipakai (tanpa penjelasan tambahan)
+- Pastikan sesuai character limit platform`;
+}
+
+
 export default function AdminSocialPostsPage() {
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
@@ -132,6 +211,8 @@ export default function AdminSocialPostsPage() {
   const [saveSuccess, setSaveSuccess] = useState('');
   const [deleteConfirm, setDeleteConfirm] = useState<number | null>(null);
   const [articles, setArticles] = useState<Article[]>([]);
+  const [captionPrompt, setCaptionPrompt] = useState('');
+  const [promptCopied, setPromptCopied] = useState(false);
 
   // Auth
   const handleLogin = async (e: React.FormEvent) => {
@@ -457,6 +538,59 @@ export default function AdminSocialPostsPage() {
                   className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition text-sm leading-relaxed resize-y"
                 />
               </div>
+
+              {/* Caption Generator */}
+              {form.articleSlug && (() => {
+                const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
+                if (!linked) return null;
+                return (
+                  <div className="bg-gradient-to-br from-teal-50 to-cyan-50 rounded-2xl border border-teal-200 p-6">
+                    <div className="flex items-center justify-between mb-3">
+                      <div>
+                        <h2 className="text-sm font-semibold text-teal-900">Caption Generator</h2>
+                        <p className="text-xs text-teal-600 mt-0.5">Generate AI prompt sesuai gaya {platforms.find(p => p.value === form.platform)?.label}</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          const prompt = generateCaptionPrompt(
+                            form.platform,
+                            form.postType,
+                            { title: linked.saikiweb_title, excerpt: linked.saikiweb_excerpt, slug: linked.saikiweb_slug, locale: linked.saikiweb_locale },
+                            'https://saiki.id'
+                          );
+                          setCaptionPrompt(prompt);
+                          setPromptCopied(false);
+                        }}
+                        className="px-4 py-2 bg-teal-600 text-white text-xs font-semibold rounded-lg hover:bg-teal-700 transition"
+                      >
+                        Generate Prompt
+                      </button>
+                    </div>
+                    {captionPrompt && (
+                      <div className="mt-3">
+                        <div className="bg-white rounded-xl p-4 max-h-48 overflow-y-auto">
+                          <pre className="text-xs text-gray-700 whitespace-pre-wrap leading-relaxed font-sans">{captionPrompt}</pre>
+                        </div>
+                        <div className="flex items-center gap-2 mt-3">
+                          <button
+                            onClick={async () => {
+                              await navigator.clipboard.writeText(captionPrompt);
+                              setPromptCopied(true);
+                              setTimeout(() => setPromptCopied(false), 2000);
+                            }}
+                            className={`px-4 py-2 text-xs font-semibold rounded-lg transition ${
+                              promptCopied ? 'bg-green-100 text-green-700' : 'bg-white text-teal-700 border border-teal-200 hover:bg-teal-50'
+                            }`}
+                          >
+                            {promptCopied ? 'Copied!' : 'Copy Prompt'}
+                          </button>
+                          <span className="text-xs text-teal-500">Paste ke ChatGPT / Claude / Gemini, lalu paste hasilnya di Caption</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
 
               {/* Hashtags */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6">
