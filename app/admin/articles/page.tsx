@@ -105,6 +105,20 @@ const categoryOptions = [
   { key: 'technology', labelId: 'Teknologi', labelEn: 'Technology' },
 ];
 
+interface SocialPostTrack {
+  saikiweb_post_id: number;
+  saikiweb_platform: string;
+  saikiweb_status: string;
+  saikiweb_post_url: string | null;
+  saikiweb_article_slug: string | null;
+  saikiweb_published_at: string | null;
+  saikiweb_created_at: string;
+}
+
+const platformIcons: Record<string, string> = {
+  instagram: '📷', linkedin: '💼', tiktok: '🎵', twitter: '𝕏', facebook: '📘',
+};
+
 export default function AdminArticlesPage() {
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
@@ -114,6 +128,7 @@ export default function AdminArticlesPage() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
   const [localeFilter, setLocaleFilter] = useState('all');
+  const [socialPosts, setSocialPosts] = useState<SocialPostTrack[]>([]);
 
   const [editing, setEditing] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -181,9 +196,21 @@ export default function AdminArticlesPage() {
     setLoading(false);
   }, [localeFilter]);
 
+  const fetchSocialPosts = useCallback(async () => {
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+    try {
+      const res = await fetch('/api/admin/social-posts', {
+        headers: { 'x-admin-password': pw },
+      });
+      const data = await res.json();
+      if (data.success) setSocialPosts(data.data || []);
+    } catch { /* silent */ }
+  }, []);
+
   useEffect(() => {
-    if (authenticated) fetchArticles();
-  }, [authenticated, localeFilter, fetchArticles]);
+    if (authenticated) { fetchArticles(); fetchSocialPosts(); }
+  }, [authenticated, localeFilter, fetchArticles, fetchSocialPosts]);
 
   useEffect(() => {
     const saved = sessionStorage.getItem('admin_pw');
@@ -1165,8 +1192,44 @@ export default function AdminArticlesPage() {
                         <span>Updated {formatDate(article.saikiweb_updated_at)}</span>
                       )}
                     </div>
+                    {/* Sharing tracker */}
+                    {(() => {
+                      const shares = socialPosts.filter((p) => p.saikiweb_article_slug === article.saikiweb_slug);
+                      if (shares.length === 0) return null;
+                      return (
+                        <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+                          <span className="text-xs text-gray-400 mr-1">Shared:</span>
+                          {shares.map((s) => (
+                            <span
+                              key={s.saikiweb_post_id}
+                              title={`${s.saikiweb_platform} (${s.saikiweb_status})${s.saikiweb_published_at ? ' - ' + new Date(s.saikiweb_published_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : ''}`}
+                              className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs ${
+                                s.saikiweb_status === 'published' ? 'bg-green-50 text-green-700' :
+                                s.saikiweb_status === 'scheduled' ? 'bg-amber-50 text-amber-700' :
+                                'bg-gray-50 text-gray-500'
+                              }`}
+                            >
+                              {s.saikiweb_post_url ? (
+                                <a href={s.saikiweb_post_url} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                  {platformIcons[s.saikiweb_platform] || '📱'} {s.saikiweb_platform}
+                                </a>
+                              ) : (
+                                <>{platformIcons[s.saikiweb_platform] || '📱'} {s.saikiweb_platform}</>
+                              )}
+                            </span>
+                          ))}
+                        </div>
+                      );
+                    })()}
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href={`/admin/social-posts`}
+                      className="px-3 py-1.5 text-sm text-violet-600 hover:text-violet-800 font-medium hover:bg-violet-50 rounded-lg transition"
+                      title="Share artikel ini ke social media"
+                    >
+                      Share
+                    </a>
                     <button
                       onClick={() => handleEdit(article)}
                       className="px-3 py-1.5 text-sm text-teal-600 hover:text-teal-800 font-medium hover:bg-teal-50 rounded-lg transition"
