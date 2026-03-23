@@ -74,5 +74,6 @@ export interface SaikiwebInquiry {
   saikiweb_referrer?: string;
   saikiweb_landing_page?: string;
   saikiweb_current_page?: string;
+  saikiweb_visitor_id?: string;
   saikiweb_created_at?: string;
 }

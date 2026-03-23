@@ -4,6 +4,7 @@ import Script from 'next/script';
 import { useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { captureAttribution } from '@/lib/attribution';
+import { ensureVisitorId } from '@/lib/visitor';
 import { analytics } from '@/lib/analytics';
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID;
@@ -13,6 +14,7 @@ export function AnalyticsProvider({ locale }: { locale: string }) {
   const pathname = usePathname();
 
   useEffect(() => {
+    ensureVisitorId();
     captureAttribution();
     analytics.pageView(pathname, locale);
   }, [pathname, locale]);

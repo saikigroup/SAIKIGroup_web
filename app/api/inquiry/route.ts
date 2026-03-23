@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
       saikiweb_referrer: body.referrer || null,
       saikiweb_landing_page: body.landing_page || null,
       saikiweb_current_page: body.current_page || null,
+      saikiweb_visitor_id: body.visitor_id || null,
     };
 
     const supabase = getSupabase();

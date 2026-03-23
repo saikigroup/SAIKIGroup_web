@@ -109,7 +109,6 @@ export function getAttributionForForm(): Record<string, string> {
   // Merge: session (last-touch) takes priority, first-touch fills gaps
   const merged: AttributionData = { ...firstTouch, ...session };
 
-  // Also include first-touch separately so we can distinguish in DB
   const result: Record<string, string> = {};
   for (const [key, value] of Object.entries(merged)) {
     if (value) result[key] = String(value);
@@ -122,6 +121,10 @@ export function getAttributionForForm(): Record<string, string> {
   if (firstTouch.utm_campaign && firstTouch.utm_campaign !== session.utm_campaign) {
     result.first_touch_campaign = firstTouch.utm_campaign;
   }
+
+  // Include visitor ID from cookie
+  const vid = document.cookie.match(/(?:^|; )saiki_vid=([^;]*)/);
+  if (vid) result.visitor_id = decodeURIComponent(vid[1]);
 
   return result;
 }
