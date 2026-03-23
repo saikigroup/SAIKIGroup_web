@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 interface Article {
   saikiweb_article_id: number;
@@ -205,6 +206,18 @@ ATURAN UMUM:
 
 
 export default function AdminSocialPostsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Loading...</div>}>
+      <SocialPostsContent />
+    </Suspense>
+  );
+}
+
+function SocialPostsContent() {
+  const searchParams = useSearchParams();
+  const shareSlug = searchParams.get('share');
+  const hasAutoOpened = useRef(false);
+
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
@@ -299,6 +312,24 @@ export default function AdminSocialPostsPage() {
       setAuthenticated(true);
     }
   }, []);
+
+  // Auto-open editor when ?share= param is present
+  useEffect(() => {
+    if (shareSlug && authenticated && articles.length > 0 && !hasAutoOpened.current) {
+      hasAutoOpened.current = true;
+      const article = articles.find((a) => a.saikiweb_slug === shareSlug);
+      if (article) {
+        setForm({
+          ...emptyForm,
+          articleSlug: article.saikiweb_slug,
+          locale: article.saikiweb_locale,
+          categoryKey: article.saikiweb_category_key || 'general',
+        });
+        setEditingId(null);
+        setEditing(true);
+      }
+    }
+  }, [shareSlug, authenticated, articles]);
 
   // CRUD handlers
   const handleNew = () => {

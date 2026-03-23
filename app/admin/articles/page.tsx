@@ -1224,7 +1224,7 @@ export default function AdminArticlesPage() {
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <a
-                      href={`/admin/social-posts`}
+                      href={`/admin/social-posts?share=${encodeURIComponent(article.saikiweb_slug)}`}
                       className="px-3 py-1.5 text-sm text-violet-600 hover:text-violet-800 font-medium hover:bg-violet-50 rounded-lg transition"
                       title="Share artikel ini ke social media"
                     >
