@@ -23,7 +23,7 @@ export function FadeIn({
   once = true,
 }: FadeInProps) {
   const ref = useRef(null);
-  const isInView = useInView(ref, { once, margin: '-50px' });
+  const isInView = useInView(ref, { once, amount: 0.1 });
 
   const variants = direction === 'up' ? fadeInUp : fadeIn;
 
