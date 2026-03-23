@@ -5,3 +5,4 @@ export { services } from './services';
 export { contact } from './contact';
 export { insights } from './insights';
 export { projects } from './projects';
+export { legal } from './legal';

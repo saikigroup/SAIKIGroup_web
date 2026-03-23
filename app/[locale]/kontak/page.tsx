@@ -4,6 +4,7 @@ import { generatePageMetadata } from '@/lib/metadata';
 import { FadeIn } from '@/components/motion';
 import { Eyebrow } from '@/components/shared';
 import { ContactForm } from '@/components/forms/ContactForm';
+import { buildWhatsAppURL } from '@/lib/phone';
 import { Mail, MessageCircle, MapPin, Clock } from 'lucide-react';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
@@ -82,7 +83,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
                       </a>
 
                       <a
-                        href={`https://wa.me/62${t.info.phone.slice(1)}`}
+                        href={buildWhatsAppURL(t.info.phone) || '#'}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center gap-3 text-sm font-semibold text-white bg-green-600 hover:bg-green-700 rounded-xl px-4 py-3 transition-colors group"

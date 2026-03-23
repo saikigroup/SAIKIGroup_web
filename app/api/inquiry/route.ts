@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSupabase, TABLES, type SaikiwebInquiry } from '@/lib/supabase';
 import { sendVisitorConfirmation, sendAdminNotification } from '@/lib/email';
+import { normalizePhoneToWA } from '@/lib/phone';
 
 export async function POST(request: NextRequest) {
   try {
@@ -9,7 +10,7 @@ export async function POST(request: NextRequest) {
     const inquiry: SaikiwebInquiry = {
       saikiweb_name: body.name,
       saikiweb_email: body.email,
-      saikiweb_phone: body.phone || null,
+      saikiweb_phone: body.phone ? normalizePhoneToWA(body.phone) || body.phone : null,
       saikiweb_company: body.company || null,
       saikiweb_category: body.category,
       saikiweb_message: body.message,
@@ -25,6 +26,7 @@ export async function POST(request: NextRequest) {
       saikiweb_referrer: body.referrer || null,
       saikiweb_landing_page: body.landing_page || null,
       saikiweb_current_page: body.current_page || null,
+      saikiweb_visitor_id: body.visitor_id || null,
     };
 
     const supabase = getSupabase();

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { buildWhatsAppURL } from '@/lib/phone';
 
 interface Inquiry {
   saikiweb_inquiry_id: number;
@@ -448,7 +449,7 @@ export default function AdminPage() {
                 </a>
                 {selectedInquiry.saikiweb_phone && (
                   <a
-                    href={`https://wa.me/${selectedInquiry.saikiweb_phone.replace(/\D/g, '')}`}
+                    href={buildWhatsAppURL(selectedInquiry.saikiweb_phone) || '#'}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex-1 py-2.5 bg-green-600 text-white text-sm font-medium rounded-xl hover:bg-green-700 transition text-center"

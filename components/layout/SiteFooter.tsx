@@ -149,8 +149,8 @@ export function SiteFooter({ locale }: SiteFooterProps) {
             &copy; {year} SAIKI Group. {t.footer.rights}
           </p>
           <div className="flex items-center gap-6">
-            <span className="text-xs text-white/30 hover:text-white/50 transition-colors cursor-pointer">{t.footer.privacy}</span>
-            <span className="text-xs text-white/30 hover:text-white/50 transition-colors cursor-pointer">{t.footer.terms}</span>
+            <Link href={getLocalizedPath('privacy', locale)} className="text-xs text-white/30 hover:text-white/50 transition-colors">{t.footer.privacy}</Link>
+            <Link href={getLocalizedPath('terms', locale)} className="text-xs text-white/30 hover:text-white/50 transition-colors">{t.footer.terms}</Link>
           </div>
         </div>
       </div>
