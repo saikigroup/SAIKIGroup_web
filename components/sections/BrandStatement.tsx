@@ -14,11 +14,11 @@ export function BrandStatement({ eyebrow, headline, body, body2 }: BrandStatemen
   return (
     <section className="py-20 md:py-32 bg-white relative overflow-hidden">
       {/* Subtle mesh bg */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-teal/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-violet/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/5 rounded-full blur-3xl" />
 
       <div className="container-editorial relative">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 lg:gap-16">
           <div className="lg:col-span-4">
             <FadeIn>
               <Eyebrow>{eyebrow}</Eyebrow>

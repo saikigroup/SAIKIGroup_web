@@ -20,8 +20,8 @@ export function ContactCTA({ eyebrow, headline, body, cta, locale }: ContactCTAP
     <CursorGlow className="py-20 md:py-32 relative" color="rgba(255, 255, 255, 0.08)" size={500}>
       {/* Gradient bg */}
       <div className="absolute inset-0 bg-gradient-teal" />
-      <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-brand-violet/20 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-white/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 left-0 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/20 rounded-full blur-3xl" />
 
       <div className="container-editorial text-center max-w-3xl mx-auto relative">
         <FadeIn>
@@ -29,7 +29,7 @@ export function ContactCTA({ eyebrow, headline, body, cta, locale }: ContactCTAP
             <IconRocket size={32} className="text-white" />
           </div>
           <Eyebrow color="text-white/60">{eyebrow}</Eyebrow>
-          <h2 className="heading-display text-4xl md:text-5xl lg:text-6xl text-white mt-4">
+          <h2 className="heading-display text-2xl sm:text-3xl md:text-5xl lg:text-6xl text-white mt-4">
             {headline}
           </h2>
           <p className="text-lg md:text-xl text-white/80 leading-relaxed mt-6 mb-10">

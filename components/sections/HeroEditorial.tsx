@@ -39,9 +39,9 @@ export function HeroEditorial({
       <ParticleField particleCount={25} />
 
       {/* Decorative blobs */}
-      <div className="absolute top-20 -left-32 w-96 h-96 bg-brand-teal/20 rounded-full blur-3xl animate-float" />
-      <div className="absolute bottom-10 right-0 w-80 h-80 bg-brand-violet/15 rounded-full blur-3xl animate-float-delayed" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-brand-coral/8 rounded-full blur-3xl animate-float-slow" />
+      <div className="absolute top-20 -left-32 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/20 rounded-full blur-3xl animate-float" />
+      <div className="absolute bottom-10 right-0 w-40 h-40 md:w-80 md:h-80 bg-brand-violet/15 rounded-full blur-3xl animate-float-delayed" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-brand-coral/8 rounded-full blur-3xl animate-float-slow" />
 
       <div className="container-editorial relative z-10 py-20 md:py-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -66,7 +66,7 @@ export function HeroEditorial({
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: easings.editorial, delay: 0.2 }}
-              className="heading-display text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-brand-black"
+              className="heading-display text-4xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-9xl text-brand-black"
             >
               {headlineParts[0]}
               {headlineParts.length > 1 && (

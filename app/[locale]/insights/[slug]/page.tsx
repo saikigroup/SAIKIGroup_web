@@ -230,7 +230,7 @@ export default async function InsightArticlePage({
             <div className="max-w-4xl mt-10 md:mt-14">
               <FadeIn delay={0.1}>{metaBar}</FadeIn>
               <FadeIn delay={0.2}>
-                <h1 className="heading-display text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl text-brand-black leading-[1.08] mt-8">
+                <h1 className="heading-display text-2xl sm:text-3xl md:text-5xl lg:text-[3.5rem] xl:text-6xl text-brand-black leading-[1.08] mt-8">
                   {article.title}
                 </h1>
               </FadeIn>
@@ -272,7 +272,7 @@ export default async function InsightArticlePage({
             <div className="max-w-3xl mx-auto text-center mt-12 md:mt-16">
               <FadeIn delay={0.1}>{metaBar}</FadeIn>
               <FadeIn delay={0.2}>
-                <h1 className="heading-display text-4xl md:text-5xl lg:text-[3.5rem] text-brand-black leading-[1.08] mt-8">
+                <h1 className="heading-display text-2xl sm:text-3xl md:text-5xl lg:text-[3.5rem] text-brand-black leading-[1.08] mt-8">
                   {article.title}
                 </h1>
               </FadeIn>
@@ -336,7 +336,7 @@ export default async function InsightArticlePage({
               </div>
             </FadeIn>
             <FadeIn delay={0.2}>
-              <h1 className="heading-display text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl text-white leading-[1.08] mt-8">
+              <h1 className="heading-display text-2xl sm:text-3xl md:text-5xl lg:text-[3.5rem] xl:text-6xl text-white leading-[1.08] mt-8">
                 {article.title}
               </h1>
             </FadeIn>

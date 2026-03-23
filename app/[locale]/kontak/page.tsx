@@ -21,14 +21,14 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
     <>
       {/* Hero */}
       <section className="py-20 md:py-32 bg-mesh relative overflow-hidden">
-        <div className="absolute top-20 -right-32 w-96 h-96 bg-brand-teal/15 rounded-full blur-3xl" />
-        <div className="absolute bottom-10 left-0 w-80 h-80 bg-brand-coral/10 rounded-full blur-3xl" />
+        <div className="absolute top-20 -right-32 w-48 h-48 md:w-96 md:h-96 bg-brand-teal/15 rounded-full blur-3xl" />
+        <div className="absolute bottom-10 left-0 w-40 h-40 md:w-80 md:h-80 bg-brand-coral/10 rounded-full blur-3xl" />
 
         <div className="container-editorial relative">
           <div className="max-w-3xl">
             <FadeIn>
               <Eyebrow>{t.hero.eyebrow}</Eyebrow>
-              <h1 className="heading-display text-5xl md:text-6xl lg:text-7xl text-brand-black mt-4">
+              <h1 className="heading-display text-3xl sm:text-4xl md:text-6xl lg:text-7xl text-brand-black mt-4">
                 {t.hero.headline}
               </h1>
               <div className="editorial-divider-bold w-20 mt-8" />
@@ -42,10 +42,10 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
       {/* Form + Info */}
       <section className="py-20 md:py-32 bg-white relative overflow-hidden">
-        <div className="absolute bottom-0 right-0 w-96 h-96 bg-brand-violet/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-brand-violet/5 rounded-full blur-3xl" />
 
         <div className="container-editorial relative">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-12 lg:gap-16">
             {/* Form */}
             <div className="lg:col-span-7">
               <FadeIn>

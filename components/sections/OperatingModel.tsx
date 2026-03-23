@@ -24,7 +24,7 @@ const statColors = ['#0d9488', '#8b5cf6', '#f97316'];
 export function OperatingModel({ eyebrow, headline, body, stats }: OperatingModelProps) {
   return (
     <section className="py-20 md:py-32 bg-gradient-cool relative overflow-hidden">
-      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-violet/5 rounded-full blur-3xl" />
+      <div className="absolute top-0 right-0 w-48 h-48 md:w-96 md:h-96 bg-brand-violet/5 rounded-full blur-3xl" />
 
       <div className="container-editorial relative">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
