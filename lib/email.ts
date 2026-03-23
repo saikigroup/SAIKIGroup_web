@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { normalizePhoneToWA } from '@/lib/phone';
 
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
 const smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
@@ -169,7 +170,10 @@ export async function sendAdminNotification(data: {
           ${data.phone ? `
           <tr>
             <td style="padding: 10px 0; color: #94a3b8; font-size: 13px; vertical-align: top;">Phone</td>
-            <td style="padding: 10px 0; color: #1a1a2e;">${data.phone}</td>
+            <td style="padding: 10px 0; color: #1a1a2e;">
+              ${data.phone}
+              ${normalizePhoneToWA(data.phone) ? ` &nbsp;<a href="https://wa.me/${normalizePhoneToWA(data.phone)}" style="color: #0d9488; font-size: 12px;">[WhatsApp]</a>` : ''}
+            </td>
           </tr>
           ` : ''}
           ${data.company ? `
@@ -205,8 +209,14 @@ export async function sendAdminNotification(data: {
 
         <div style="margin-top: 24px; text-align: center;">
           <a href="mailto:${data.email}" style="display: inline-block; background: #0d9488; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
-            Reply to ${data.name}
+            Reply via Email
           </a>
+          ${data.phone && normalizePhoneToWA(data.phone) ? `
+          &nbsp;&nbsp;
+          <a href="https://wa.me/${normalizePhoneToWA(data.phone)}" style="display: inline-block; background: #25d366; color: #fff; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
+            Reply via WhatsApp
+          </a>
+          ` : ''}
         </div>
       </div>
     </div>
