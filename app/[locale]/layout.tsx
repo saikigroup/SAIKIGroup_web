@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { isValidLocale, type Locale } from '@/lib/i18n';
 import { SiteHeader } from '@/components/layout/SiteHeader';
@@ -9,6 +8,26 @@ import { organizationSchema, websiteSchema } from '@/lib/metadata';
 
 export function generateStaticParams() {
   return [{ locale: 'id' }, { locale: 'en' }];
+}
+
+async function SchemaScripts() {
+  const [orgSchema, siteSchema] = await Promise.all([
+    organizationSchema(),
+    websiteSchema(),
+  ]);
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(siteSchema) }}
+      />
+    </>
+  );
 }
 
 export default async function LocaleLayout({
@@ -28,18 +47,7 @@ export default async function LocaleLayout({
     <html lang={locale} className="h-full antialiased">
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema()),
-          }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(websiteSchema()),
-          }}
-        />
+        <SchemaScripts />
       </head>
       <body className="min-h-full flex flex-col bg-brand-white text-text-primary">
         <ScrollProgress />

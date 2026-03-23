@@ -2,17 +2,32 @@ import type { Metadata } from 'next';
 import type { Locale } from './i18n';
 import { routeMap } from './i18n';
 import { getPageSeo } from '@/content/seo';
+import { getSeoConfig, type SeoConfig } from './seo-config';
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id';
 
-function getPageUrl(page: string, locale: Locale): string {
+function getPageUrl(page: string, locale: Locale, siteUrl?: string): string {
+  const base = siteUrl || BASE_URL;
   const path = routeMap[page]?.[locale] ?? '';
-  return `${BASE_URL}/${locale}${path ? `/${path}` : ''}`;
+  return `${base}/${locale}${path ? `/${path}` : ''}`;
 }
 
-export function generatePageMetadata(page: string, locale: Locale): Metadata {
-  const seo = getPageSeo(page, locale);
-  const pageUrl = getPageUrl(page, locale);
+export async function generatePageMetadata(page: string, locale: Locale): Promise<Metadata> {
+  const config = await getSeoConfig();
+  const siteUrl = config.global.siteUrl || BASE_URL;
+
+  // DB page SEO takes priority, static as fallback
+  const dbPageSeo = config.pages[page]?.[locale];
+  const staticSeo = getPageSeo(page, locale);
+  const seo = {
+    ...staticSeo,
+    ...Object.fromEntries(
+      Object.entries(dbPageSeo || {}).filter(([, v]) => v !== undefined && v !== '' && !(Array.isArray(v) && v.length === 0))
+    ),
+  };
+
+  const pageUrl = getPageUrl(page, locale, siteUrl);
+  const ogImage = `${siteUrl}${config.global.ogImage || '/og-image.png'}`;
 
   return {
     title: seo.title,
@@ -22,12 +37,12 @@ export function generatePageMetadata(page: string, locale: Locale): Metadata {
       title: seo.ogTitle || seo.title,
       description: seo.ogDescription || seo.description,
       url: pageUrl,
-      siteName: 'SAIKI Group',
+      siteName: config.global.siteName || 'SAIKI Group',
       locale: locale === 'id' ? 'id_ID' : 'en_US',
       type: 'website',
       images: [
         {
-          url: `${BASE_URL}/og-image.png`,
+          url: ogImage,
           width: 1200,
           height: 630,
           alt: seo.ogTitle || seo.title,
@@ -38,13 +53,13 @@ export function generatePageMetadata(page: string, locale: Locale): Metadata {
       card: 'summary_large_image',
       title: seo.ogTitle || seo.title,
       description: seo.ogDescription || seo.description,
-      images: [`${BASE_URL}/og-image.png`],
+      images: [ogImage],
     },
     alternates: {
       canonical: pageUrl,
       languages: {
-        'id': getPageUrl(page, 'id'),
-        'en': getPageUrl(page, 'en'),
+        'id': getPageUrl(page, 'id', siteUrl),
+        'en': getPageUrl(page, 'en', siteUrl),
       },
     },
     robots: {
@@ -61,42 +76,52 @@ export function generatePageMetadata(page: string, locale: Locale): Metadata {
   };
 }
 
-// JSON-LD structured data generators
-export function organizationSchema() {
+// JSON-LD structured data generators (async, reads from DB config)
+
+export async function organizationSchema(): Promise<Record<string, unknown>> {
+  const config = await getSeoConfig();
+  const siteUrl = config.global.siteUrl || BASE_URL;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'SAIKI Group',
-    url: BASE_URL,
-    logo: `${BASE_URL}/images/logo.svg`,
-    description: 'Integrated ecosystem for career consultancy, branding & marketing, and technology development.',
-    sameAs: [],
+    name: config.organization.name,
+    url: siteUrl,
+    logo: `${siteUrl}${config.organization.logo}`,
+    description: config.global.defaultDescription,
+    sameAs: config.organization.socialLinks || [],
     contactPoint: {
       '@type': 'ContactPoint',
-      email: 'info@saiki.id',
-      telephone: '+6287788980088',
+      email: config.organization.email,
+      telephone: config.organization.phone,
       contactType: 'customer service',
       availableLanguage: ['Indonesian', 'English'],
     },
   };
 }
 
-export function websiteSchema() {
+export async function websiteSchema(): Promise<Record<string, unknown>> {
+  const config = await getSeoConfig();
+  const siteUrl = config.global.siteUrl || BASE_URL;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'SAIKI Group',
-    url: BASE_URL,
+    name: config.global.siteName,
+    url: siteUrl,
     inLanguage: ['id', 'en'],
     potentialAction: {
       '@type': 'SearchAction',
-      target: `${BASE_URL}/search?q={search_term_string}`,
+      target: `${siteUrl}/search?q={search_term_string}`,
       'query-input': 'required name=search_term_string',
     },
   };
 }
 
-export function serviceSchema(name: string, description: string) {
+export async function serviceSchema(name: string, description: string): Promise<Record<string, unknown>> {
+  const config = await getSeoConfig();
+  const siteUrl = config.global.siteUrl || BASE_URL;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Service',
@@ -104,24 +129,30 @@ export function serviceSchema(name: string, description: string) {
     description,
     provider: {
       '@type': 'Organization',
-      name: 'SAIKI Group',
-      url: BASE_URL,
+      name: config.organization.name,
+      url: siteUrl,
     },
   };
 }
 
-export function articleSchema(title: string, description: string, date: string, slug: string) {
+export async function articleSchema(title: string, description: string, date: string, slug: string): Promise<Record<string, unknown>> {
+  const config = await getSeoConfig();
+  const siteUrl = config.global.siteUrl || BASE_URL;
+
   return {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: title,
     description,
     datePublished: date,
-    url: `${BASE_URL}/insights/${slug}`,
+    url: `${siteUrl}/insights/${slug}`,
     publisher: {
       '@type': 'Organization',
-      name: 'SAIKI Group',
-      url: BASE_URL,
+      name: config.organization.name,
+      url: siteUrl,
     },
   };
 }
+
+// Re-export for backward compatibility
+export { getSeoConfig, type SeoConfig };

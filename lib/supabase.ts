@@ -28,6 +28,7 @@ export function getSupabaseAdmin(): SupabaseClient | null {
 export const TABLES = {
   INQUIRIES: 'saikiweb_inquiries',
   ARTICLES: 'saikiweb_articles',
+  SEO_CONFIG: 'saikiweb_seo_config',
 } as const;
 
 // Type for the saikiweb_articles table
