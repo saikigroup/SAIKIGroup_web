@@ -8,6 +8,15 @@ export const metadata: Metadata = {
   },
   description: 'SAIKI Group | Consultancy, Branding & Technology',
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id'),
+  // Search engine verification - set these env vars after registering
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+    other: {
+      ...(process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION
+        ? { 'msvalidate.01': process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION }
+        : {}),
+    },
+  },
 };
 
 export default function RootLayout({
