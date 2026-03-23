@@ -1,0 +1,47 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#0f172a"/>
+
+  <!-- Gradient mesh decorations -->
+  <circle cx="900" cy="100" r="300" fill="#0d9488" opacity="0.15"/>
+  <circle cx="1100" cy="500" r="200" fill="#8b5cf6" opacity="0.1"/>
+  <circle cx="100" cy="550" r="250" fill="#0d9488" opacity="0.08"/>
+
+  <!-- Top accent line -->
+  <rect x="0" y="0" width="1200" height="4" fill="url(#gradient1)"/>
+
+  <!-- Logo mark -->
+  <rect x="80" y="200" width="64" height="64" rx="16" fill="#0d9488"/>
+  <text x="112" y="244" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="white" text-anchor="middle">S</text>
+
+  <!-- Main text -->
+  <text x="80" y="330" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="white" letter-spacing="-1">SAIKI Group</text>
+
+  <!-- Tagline -->
+  <text x="80" y="385" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94a3b8" letter-spacing="0.5">Consultancy · Branding · Technology</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="440" font-family="system-ui, -apple-system, sans-serif" font-size="22" fill="#5eead4" letter-spacing="0.3">Ekosistem terintegrasi untuk solusi karier, branding, dan teknologi.</text>
+
+  <!-- Bottom service pills -->
+  <rect x="80" y="500" width="180" height="40" rx="20" fill="#0d9488" opacity="0.2" stroke="#0d9488" stroke-width="1"/>
+  <text x="170" y="526" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#5eead4" text-anchor="middle">Consultancy</text>
+
+  <rect x="280" y="500" width="140" height="40" rx="20" fill="#8b5cf6" opacity="0.2" stroke="#8b5cf6" stroke-width="1"/>
+  <text x="350" y="526" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#a78bfa" text-anchor="middle">Imagery</text>
+
+  <rect x="440" y="500" width="170" height="40" rx="20" fill="#06b6d4" opacity="0.2" stroke="#06b6d4" stroke-width="1"/>
+  <text x="525" y="526" font-family="system-ui, -apple-system, sans-serif" font-size="16" fill="#67e8f9" text-anchor="middle">Technology</text>
+
+  <!-- Website URL -->
+  <text x="1120" y="580" font-family="system-ui, -apple-system, sans-serif" font-size="18" fill="#64748b" text-anchor="end">saiki.id</text>
+
+  <!-- Gradient definitions -->
+  <defs>
+    <linearGradient id="gradient1" x1="0" y1="0" x2="1200" y2="0">
+      <stop offset="0%" stop-color="#0d9488"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+</svg>
