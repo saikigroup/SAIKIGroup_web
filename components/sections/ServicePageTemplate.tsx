@@ -1,5 +1,7 @@
 'use client';
 
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { Eyebrow, CTAButton, IconCheck } from '@/components/shared';
@@ -12,6 +14,12 @@ interface ScopeItem {
   description: string;
 }
 
+interface OtherService {
+  key: ServiceKey;
+  title: string;
+  description: string;
+}
+
 interface ServicePageTemplateProps {
   serviceKey: ServiceKey;
   hero: { eyebrow: string; headline: string; body: string };
@@ -19,6 +27,8 @@ interface ServicePageTemplateProps {
   approach: { eyebrow: string; headline: string; body: string };
   useCases: { eyebrow: string; headline: string; items: string[] };
   cta: { headline: string; body: string; button: string };
+  otherServicesLabel: string;
+  otherServices: OtherService[];
   locale: Locale;
 }
 
@@ -29,6 +39,8 @@ export function ServicePageTemplate({
   approach,
   useCases,
   cta,
+  otherServicesLabel,
+  otherServices,
   locale,
 }: ServicePageTemplateProps) {
   const colors = serviceAccentColors[serviceKey];
@@ -200,12 +212,62 @@ export function ServicePageTemplate({
             <CTAButton
               href={getLocalizedPath('contact', locale)}
               variant="secondary"
-              className="bg-white border-white hover:brightness-95"
-              style={{ color: colors.hex }}
+              className="border-white hover:brightness-95"
+              style={{ color: '#ffffff', backgroundColor: colors.hex }}
             >
               {cta.button}
             </CTAButton>
           </FadeIn>
+        </div>
+      </section>
+
+      {/* Other Services */}
+      <section className="py-20 md:py-28 bg-white">
+        <div className="container-editorial">
+          <FadeIn>
+            <h2 className="heading-sans text-2xl md:text-3xl text-brand-black mb-10">
+              {otherServicesLabel}
+            </h2>
+          </FadeIn>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {otherServices.map((other) => {
+              const otherColors = serviceAccentColors[other.key];
+              return (
+                <FadeIn key={other.key}>
+                  <Link
+                    href={getLocalizedPath(other.key, locale)}
+                    className="group glass-strong rounded-2xl p-6 md:p-8 flex items-start gap-5 hover:shadow-lg transition-all duration-300 h-full"
+                  >
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: `${otherColors.hex}10` }}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={otherColors.logo}
+                        alt={other.title}
+                        className="h-7 w-auto object-contain"
+                      />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="heading-sans text-lg text-brand-black mb-1 group-hover:text-opacity-80 transition-colors">
+                        {other.title}
+                      </h3>
+                      <p className="text-sm text-text-secondary leading-relaxed">
+                        {other.description}
+                      </p>
+                    </div>
+                    <ArrowRight
+                      size={20}
+                      className="shrink-0 mt-1 transition-transform duration-300 group-hover:translate-x-1"
+                      style={{ color: otherColors.hex }}
+                    />
+                  </Link>
+                </FadeIn>
+              );
+            })}
+          </div>
         </div>
       </section>
     </>
