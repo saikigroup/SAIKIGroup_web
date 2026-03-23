@@ -17,22 +17,18 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
   const locale = l as Locale;
   const t = getProjects(locale);
 
-  const imageryCount = t.items.filter((i) => i.category === 'imagery').length;
-  const techCount = t.items.filter((i) => i.category === 'technology').length;
-  const consultancyCount = t.items.filter((i) => i.category === 'consultancy').length;
-
   const stats = locale === 'id'
     ? [
-        { value: t.items.length, label: 'Project Selesai' },
-        { value: imageryCount, label: 'Imagery' },
-        { value: techCount, label: 'Technology' },
-        { value: consultancyCount, label: 'Consultancy' },
+        { value: '12', suffix: '+', label: 'Project Delivered' },
+        { value: '8', suffix: '+', label: 'Industri Terlayani' },
+        { value: '100', suffix: '%', label: 'Repeat & Referral Client' },
+        { value: '3', suffix: '', label: 'Lini Solusi Terintegrasi' },
       ]
     : [
-        { value: t.items.length, label: 'Projects Delivered' },
-        { value: imageryCount, label: 'Imagery' },
-        { value: techCount, label: 'Technology' },
-        { value: consultancyCount, label: 'Consultancy' },
+        { value: '12', suffix: '+', label: 'Projects Delivered' },
+        { value: '8', suffix: '+', label: 'Industries Served' },
+        { value: '100', suffix: '%', label: 'Repeat & Referral Clients' },
+        { value: '3', suffix: '', label: 'Integrated Solution Lines' },
       ];
 
   return (
@@ -62,7 +58,7 @@ export default async function ProjectsPage({ params }: { params: Promise<{ local
               {stats.map((stat) => (
                 <div key={stat.label}>
                   <div className="heading-display text-3xl md:text-4xl text-brand-teal">
-                    <AnimatedCounter value={String(stat.value)} />+
+                    <AnimatedCounter value={stat.value} />{stat.suffix}
                   </div>
                   <p className="text-sm text-text-muted mt-1 font-medium">{stat.label}</p>
                 </div>
