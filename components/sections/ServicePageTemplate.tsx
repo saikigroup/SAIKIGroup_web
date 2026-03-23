@@ -200,7 +200,8 @@ export function ServicePageTemplate({
             <CTAButton
               href={getLocalizedPath('contact', locale)}
               variant="secondary"
-              className="border-white/30 text-white hover:bg-white hover:text-brand-black backdrop-blur-sm"
+              className="bg-white border-white hover:brightness-95"
+              style={{ color: colors.hex }}
             >
               {cta.button}
             </CTAButton>
