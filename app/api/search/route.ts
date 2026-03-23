@@ -39,6 +39,11 @@ const staticPages: Record<string, SearchResult[]> = {
   ],
 };
 
+// Sanitize input for Supabase ilike filter
+function sanitize(input: string): string {
+  return input.replace(/[%_\\]/g, '\\$&');
+}
+
 function searchStatic(query: string, locale: string): SearchResult[] {
   const pages = staticPages[locale] || staticPages.id;
   const q = query.toLowerCase();
@@ -69,7 +74,7 @@ export async function GET(request: NextRequest) {
         .select('saikiweb_slug, saikiweb_title, saikiweb_excerpt, saikiweb_category, saikiweb_locale')
         .eq('saikiweb_published', true)
         .eq('saikiweb_locale', locale)
-        .or(`saikiweb_title.ilike.%${q}%,saikiweb_excerpt.ilike.%${q}%`)
+        .or(`saikiweb_title.ilike.%${sanitize(q)}%,saikiweb_excerpt.ilike.%${sanitize(q)}%`)
         .limit(10);
 
       if (data) {
@@ -83,8 +88,8 @@ export async function GET(request: NextRequest) {
           });
         }
       }
-    } catch {
-      // DB not available — continue with static results only
+    } catch (err) {
+      console.error('Search DB error:', err);
     }
   }
 

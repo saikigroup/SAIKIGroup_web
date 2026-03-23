@@ -7,6 +7,17 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
 
+    // Input validation
+    if (!body.name?.trim() || typeof body.name !== 'string') {
+      return NextResponse.json({ success: false, error: 'Name is required' }, { status: 400 });
+    }
+    if (!body.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.email)) {
+      return NextResponse.json({ success: false, error: 'Valid email is required' }, { status: 400 });
+    }
+    if (!body.message?.trim() || typeof body.message !== 'string') {
+      return NextResponse.json({ success: false, error: 'Message is required' }, { status: 400 });
+    }
+
     const inquiry: SaikiwebInquiry = {
       saikiweb_name: body.name,
       saikiweb_email: body.email,
