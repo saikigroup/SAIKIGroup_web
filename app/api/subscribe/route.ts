@@ -13,30 +13,53 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+
     const supabase = getSupabase();
     if (!supabase) {
       console.warn('Supabase not configured. Subscription logged.');
-      console.log('Subscribe:', { email, name, locale });
+      console.log('Subscribe:', { email: normalizedEmail, name, locale });
       return NextResponse.json({ success: true });
     }
 
+    // Check if already exists
+    const { data: existing } = await supabase
+      .from(TABLES.SUBSCRIBERS)
+      .select('saikiweb_subscriber_id, saikiweb_status')
+      .eq('saikiweb_email', normalizedEmail)
+      .maybeSingle();
+
+    if (existing) {
+      // Re-activate if previously unsubscribed; keep existing token
+      if (existing.saikiweb_status === 'unsubscribed') {
+        await supabase
+          .from(TABLES.SUBSCRIBERS)
+          .update({
+            saikiweb_status: 'active',
+            saikiweb_name: name || undefined,
+            saikiweb_locale: locale || 'id',
+            saikiweb_subscribed_at: new Date().toISOString(),
+            saikiweb_unsubscribed_at: null,
+          })
+          .eq('saikiweb_subscriber_id', existing.saikiweb_subscriber_id);
+      }
+      // If already active, do nothing (idempotent)
+      return NextResponse.json({ success: true });
+    }
+
+    // New subscriber
     const token = crypto.randomBytes(32).toString('hex');
 
     const { error } = await supabase
       .from(TABLES.SUBSCRIBERS)
-      .upsert(
-        {
-          saikiweb_email: email.toLowerCase().trim(),
-          saikiweb_name: name || null,
-          saikiweb_locale: locale || 'id',
-          saikiweb_status: 'active',
-          saikiweb_unsubscribe_token: token,
-          saikiweb_source: 'contact_form',
-          saikiweb_subscribed_at: new Date().toISOString(),
-          saikiweb_unsubscribed_at: null,
-        },
-        { onConflict: 'saikiweb_email' }
-      );
+      .insert({
+        saikiweb_email: normalizedEmail,
+        saikiweb_name: name || null,
+        saikiweb_locale: locale || 'id',
+        saikiweb_status: 'active',
+        saikiweb_unsubscribe_token: token,
+        saikiweb_source: 'contact_form',
+      });
 
     if (error) {
       console.error('Subscribe error:', error);

@@ -5,17 +5,31 @@ export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get('token');
 
   if (!token) {
-    return NextResponse.json(
-      { success: false, error: 'Token is required' },
-      { status: 400 }
+    return NextResponse.redirect(
+      new URL('/id/unsubscribe?status=error', request.url)
     );
   }
 
   const supabase = getSupabase();
   if (!supabase) {
-    // Redirect to unsubscribe confirmation page even without DB
     return NextResponse.redirect(
       new URL('/id/unsubscribe?status=success', request.url)
+    );
+  }
+
+  // Fetch subscriber to get locale before updating
+  const { data: subscriber } = await supabase
+    .from(TABLES.SUBSCRIBERS)
+    .select('saikiweb_locale')
+    .eq('saikiweb_unsubscribe_token', token)
+    .maybeSingle();
+
+  const locale = subscriber?.saikiweb_locale || 'id';
+
+  if (!subscriber) {
+    // Token not found - invalid or already used
+    return NextResponse.redirect(
+      new URL(`/${locale}/unsubscribe?status=error`, request.url)
     );
   }
 
@@ -30,11 +44,11 @@ export async function GET(request: NextRequest) {
   if (error) {
     console.error('Unsubscribe error:', error);
     return NextResponse.redirect(
-      new URL('/id/unsubscribe?status=error', request.url)
+      new URL(`/${locale}/unsubscribe?status=error`, request.url)
     );
   }
 
   return NextResponse.redirect(
-    new URL('/id/unsubscribe?status=success', request.url)
+    new URL(`/${locale}/unsubscribe?status=success`, request.url)
   );
 }

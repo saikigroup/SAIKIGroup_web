@@ -14,6 +14,40 @@ CREATE TABLE IF NOT EXISTS saikiweb_subscribers (
   UNIQUE(saikiweb_email)
 );
 
+-- Enable Row Level Security
+ALTER TABLE saikiweb_subscribers ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Allow anonymous inserts (for the subscribe form)
+CREATE POLICY "Allow anonymous inserts" ON saikiweb_subscribers
+  FOR INSERT
+  TO anon
+  WITH CHECK (true);
+
+-- Policy: Allow anonymous selects (for checking existing + locale lookup on unsubscribe)
+CREATE POLICY "Allow anonymous selects" ON saikiweb_subscribers
+  FOR SELECT
+  TO anon
+  USING (true);
+
+-- Policy: Allow anonymous updates (for unsubscribe via token)
+CREATE POLICY "Allow anonymous unsubscribe" ON saikiweb_subscribers
+  FOR UPDATE
+  TO anon
+  USING (true)
+  WITH CHECK (true);
+
+-- Policy: Allow authenticated full access (for admin)
+CREATE POLICY "Allow authenticated reads" ON saikiweb_subscribers
+  FOR SELECT
+  TO authenticated
+  USING (true);
+
+CREATE POLICY "Allow authenticated updates" ON saikiweb_subscribers
+  FOR UPDATE
+  TO authenticated
+  USING (true)
+  WITH CHECK (true);
+
 -- Index for fast unsubscribe token lookup
 CREATE INDEX IF NOT EXISTS idx_subscribers_token
 ON saikiweb_subscribers (saikiweb_unsubscribe_token);
