@@ -35,3 +35,7 @@ export function getInsights(locale: Locale) {
 export function getProjects(locale: Locale) {
   return dictionaries[locale].projects;
 }
+
+export function getLegal(locale: Locale) {
+  return dictionaries[locale].legal;
+}

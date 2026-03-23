@@ -33,6 +33,8 @@ export const routeMap: Record<string, Record<Locale, string>> = {
   insights: { id: 'insights', en: 'insights' },
   projects: { id: 'proyek', en: 'projects' },
   contact: { id: 'kontak', en: 'contact' },
+  privacy: { id: 'privacy-policy', en: 'privacy-policy' },
+  terms: { id: 'terms', en: 'terms' },
 };
 
 export function getLocalizedPath(routeKey: string, locale: Locale): string {

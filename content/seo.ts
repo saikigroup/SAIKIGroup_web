@@ -111,6 +111,30 @@ export const seoData: SeoMap = {
       keywords: ['SAIKI portfolio', 'case studies', 'technology projects', 'branding projects', 'business consultancy'],
     },
   },
+  privacy: {
+    id: {
+      title: 'Kebijakan Privasi | SAIKI Group',
+      description: 'Kebijakan privasi SAIKI Group: bagaimana kami mengumpulkan, menggunakan, dan melindungi data Anda.',
+      keywords: ['kebijakan privasi', 'privasi data', 'SAIKI Group'],
+    },
+    en: {
+      title: 'Privacy Policy | SAIKI Group',
+      description: 'SAIKI Group privacy policy: how we collect, use, and protect your data.',
+      keywords: ['privacy policy', 'data privacy', 'SAIKI Group'],
+    },
+  },
+  terms: {
+    id: {
+      title: 'Syarat & Ketentuan | SAIKI Group',
+      description: 'Syarat dan ketentuan penggunaan situs web SAIKI Group.',
+      keywords: ['syarat ketentuan', 'terms of service', 'SAIKI Group'],
+    },
+    en: {
+      title: 'Terms & Conditions | SAIKI Group',
+      description: 'Terms and conditions for using the SAIKI Group website.',
+      keywords: ['terms conditions', 'terms of service', 'SAIKI Group'],
+    },
+  },
   contact: {
     id: {
       title: 'Kontak SAIKI | Hubungi Kami',
