@@ -76,7 +76,7 @@ export const home = {
     headline: 'Simple. Fast.\nNo Drama.',
     body: 'You tell us what you need, we analyze it together, then we execute. No convoluted processes, no confusing jargon. You always know what\'s happening.',
     stats: [
-      { value: '3', label: 'Business Lines' },
+      { value: '3', label: 'Solutions' },
       { value: '1', label: 'Ecosystem' },
       { value: '∞', label: 'Possibilities' },
     ],

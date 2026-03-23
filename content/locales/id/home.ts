@@ -76,7 +76,7 @@ export const home = {
     headline: 'Simpel. Cepat.\nTanpa Drama.',
     body: 'Kamu ceritakan kebutuhan, kami analisis bersama, lalu kami eksekusi. Tanpa proses yang berbelit, tanpa jargon yang membingungkan. kamu selalu tahu apa yang sedang terjadi.',
     stats: [
-      { value: '3', label: 'Lini Bisnis' },
+      { value: '3', label: 'Solusi' },
       { value: '1', label: 'Ekosistem' },
       { value: '∞', label: 'Kemungkinan' },
     ],
