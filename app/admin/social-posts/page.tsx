@@ -126,9 +126,9 @@ const aiModels = [
 type PromptType = 'caption' | 'visual' | 'infographic';
 
 const promptTypes: { value: PromptType; label: string; desc: string }[] = [
-  { value: 'caption', label: 'Caption / Copy', desc: 'Copywriting untuk postingan' },
-  { value: 'visual', label: 'Image / Visual Brief', desc: 'Brief untuk desainer atau AI image generator' },
-  { value: 'infographic', label: 'Infographic Image', desc: 'Prompt AI image generator untuk infographic' },
+  { value: 'caption', label: 'Caption / Copy', desc: 'Caption siap paste ke platform' },
+  { value: 'visual', label: 'Image Prompt', desc: 'Prompt siap paste ke AI image generator' },
+  { value: 'infographic', label: 'Infographic', desc: 'Konten slide + image prompt per slide' },
 ];
 
 function generateSocialPrompt(
@@ -144,219 +144,243 @@ function generateSocialPrompt(
   const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
   const platLabel = platforms.find(p => p.value === platform)?.label || platform;
 
-  const articleBlock = `ARTIKEL YANG AKAN DIBAGIKAN:
+  const articleBlock = `ARTIKEL REFERENSI:
 - Judul: "${article.title}"
 - Ringkasan: "${article.excerpt}"
-- Link artikel (baca dulu untuk konteks lengkap): ${articleFullUrl}
-- URL dengan UTM tracking (untuk di-share): ${utmUrl}`;
+- Baca artikel lengkap di: ${articleFullUrl}
+- Link untuk di-share (UTM tracking): ${utmUrl}`;
 
+  // ═══════════════════════════════════════════════════
+  // CAPTION — output: caption siap copas ke platform
+  // ═══════════════════════════════════════════════════
   if (type === 'caption') {
     const captionRules: Record<string, string> = {
-      instagram: `- Buka dengan hook yang bikin stop scrolling (1 kalimat pendek, bold)
-- Gunakan line breaks untuk readability
-- Pakai emoji secukupnya untuk visual cue, JANGAN berlebihan
-- ${postType === 'carousel' ? 'Buat outline 7-10 slide: Slide 1 = cover hook, Slide 2-8 = insight, Slide terakhir = CTA + link' : 'Tulis caption 150-300 kata'}
-- Akhiri dengan CTA: ajak comment, save, atau share
-- Sertakan link artikel di akhir caption
-- Tambahkan 15-20 hashtag (campuran populer + niche)
-- Tone: conversational, relatable`,
-      linkedin: `- Buka dengan hook 1-2 baris (personal story atau data mengejutkan)
-- Format pendek per paragraf (1-2 kalimat, banyak white space)
-- Sertakan personal insight atau pengalaman nyata
-- ${postType === 'carousel' ? 'Buat outline 8-12 slide PDF: judul + poin utama per slide' : 'Tulis post 200-400 kata'}
-- Akhiri dengan pertanyaan terbuka untuk diskusi
-- Sertakan link artikel
-- Tambahkan 3-5 hashtag profesional
-- Tone: professional tapi approachable, thought leadership`,
-      tiktok: `- Hook 3 detik pertama: "Kamu pasti belum tahu ini..." / "Stop!"
-- ${postType === 'reel' ? 'Tulis script video 30-60 detik: hook > masalah > insight > solusi > CTA' : 'Caption pendek 50-100 kata'}
-- Bahasa super casual, kayak ngomong ke teman
-- Angle: myth-busting, "things nobody tells you", listicle
-- CTA: "Follow untuk tips lainnya" / "Link di bio"
-- Tambahkan 5-8 hashtag trending + niche
-- Tone: energetic, fun, to the point`,
-      twitter: `- Tweet utama: max 280 karakter, hook yang bikin penasaran
-- Buat thread 5-8 tweet: Tweet 1 = hook, Tweet 2-6 = insight, Tweet terakhir = CTA + link
-- Setiap tweet harus bisa berdiri sendiri
-- Gunakan angka: "5 alasan...", "3 kesalahan..."
-- Sertakan link artikel di tweet terakhir
-- Tambahkan 2-3 hashtag
-- Tone: sharp, witty, concise`,
-      facebook: `- Buka dengan storytelling singkat atau pertanyaan relatable
-- ${postType === 'reel' ? 'Script video 30-60 detik' : 'Post 150-300 kata'}
-- Bahasa warm dan conversational
-- Sertakan link artikel
-- Pertanyaan di akhir untuk engagement
-- CTA: ajak share ke teman
-- Tambahkan 3-5 hashtag
-- Tone: friendly, community-oriented`,
+      instagram: postType === 'carousel'
+        ? `FORMAT OUTPUT:
+---CAPTION---
+[Caption lengkap siap paste. Buka dengan hook 1 kalimat. Lalu jelaskan apa yang akan dipelajari di carousel ini. Akhiri dengan CTA (ajak swipe, save, share). Sertakan link: ${utmUrl}]
+
+---SLIDE TEXT---
+Slide 1 (Cover): [Headline hook, max 8 kata]
+Slide 2: [Judul + 1-2 kalimat poin]
+Slide 3: [Judul + 1-2 kalimat poin]
+... (7-10 slide)
+Slide terakhir: [CTA + "Link di bio" + SAIKI Group]
+
+---HASHTAG---
+[15-20 hashtag, campuran populer + niche, pisahkan dengan spasi]`
+        : `FORMAT OUTPUT:
+---CAPTION---
+[Caption 150-300 kata siap paste. Hook di awal. Line breaks untuk readability. Emoji secukupnya. CTA di akhir. Sertakan link: ${utmUrl}]
+
+---HASHTAG---
+[15-20 hashtag]`,
+      linkedin: postType === 'carousel'
+        ? `FORMAT OUTPUT:
+---POST TEXT---
+[Post LinkedIn siap paste. Hook 1-2 baris. Lalu teaser isi carousel. Akhiri dengan pertanyaan terbuka. Sertakan link: ${utmUrl}]
+
+---SLIDE TEXT---
+Halaman 1 (Cover): [Judul + subtitle]
+Halaman 2: [Heading + poin utama]
+... (8-12 halaman)
+Halaman terakhir: [Key takeaways + CTA]
+
+---HASHTAG---
+[3-5 hashtag profesional]`
+        : `FORMAT OUTPUT:
+---POST---
+[Post LinkedIn 200-400 kata siap paste. Hook personal/data. Paragraf pendek. Personal insight. Pertanyaan terbuka di akhir. Link: ${utmUrl}]
+
+---HASHTAG---
+[3-5 hashtag]`,
+      tiktok: postType === 'reel'
+        ? `FORMAT OUTPUT:
+---SCRIPT VIDEO---
+[00:00-00:03] Hook: [kalimat hook]
+[00:03-00:15] Masalah: [narasi]
+[00:15-00:40] Insight: [poin-poin]
+[00:40-00:55] Solusi: [wrap up]
+[00:55-01:00] CTA: "Follow untuk tips lainnya!"
+
+---CAPTION---
+[Caption pendek 50-100 kata + link di bio]
+
+---HASHTAG---
+[5-8 hashtag trending + niche]`
+        : `FORMAT OUTPUT:
+---CAPTION---
+[Caption pendek 50-100 kata, super casual]
+
+---HASHTAG---
+[5-8 hashtag]`,
+      twitter: `FORMAT OUTPUT:
+---THREAD---
+Tweet 1: [Hook max 280 karakter, bikin penasaran]
+Tweet 2: [Insight 1]
+Tweet 3: [Insight 2]
+Tweet 4: [Insight 3]
+Tweet 5: [Insight 4]
+Tweet 6: [CTA + link: ${utmUrl}]
+
+---HASHTAG---
+[2-3 hashtag per tweet]`,
+      facebook: postType === 'reel'
+        ? `FORMAT OUTPUT:
+---SCRIPT VIDEO---
+[Scene-by-scene script 30-60 detik]
+
+---CAPTION---
+[Caption warm + link: ${utmUrl}]
+
+---HASHTAG---
+[3-5 hashtag]`
+        : `FORMAT OUTPUT:
+---POST---
+[Post 150-300 kata. Storytelling. Warm. Link: ${utmUrl}. Pertanyaan di akhir.]
+
+---HASHTAG---
+[3-5 hashtag]`,
     };
 
-    return `Kamu adalah social media copywriter untuk SAIKI Group, ekosistem terintegrasi untuk konsultansi karier, branding & marketing, dan teknologi.
-
-TUGAS: Buat caption/copy untuk ${platLabel} ${postType}.
+    return `Baca artikel ini dulu: ${articleFullUrl}
 
 ${articleBlock}
 
-PLATFORM: ${platLabel} ${postType}
-BAHASA: ${lang}
+Sekarang TULIS LANGSUNG caption/post untuk ${platLabel} ${postType} berdasarkan artikel di atas.
 
-STYLE RULES:
-${captionRules[platform] || captionRules.instagram}
+BAHASA: ${lang}
+TONE: ${platform === 'linkedin' ? 'Professional tapi approachable' : platform === 'tiktok' ? 'Super casual, kayak ngomong ke teman' : platform === 'twitter' ? 'Sharp, witty, concise' : 'Conversational, relatable'}
 
 ATURAN:
-- JANGAN copy-paste isi artikel. Buat orang PENASARAN untuk klik dan baca
+- JANGAN copy-paste isi artikel. Buat orang PENASARAN untuk klik
+- JANGAN tulis penjelasan, instruksi, atau komentar. LANGSUNG output yang siap pakai
 - JANGAN gunakan emdash (--)
-- Output HANYA caption yang siap dipakai, tanpa penjelasan
-- Sertakan hashtag terpisah di bawah caption`;
+- Emoji secukupnya sebagai visual cue
+
+${captionRules[platform] || captionRules.instagram}`;
   }
 
+  // ═══════════════════════════════════════════════════
+  // VISUAL — output: image prompt siap paste ke AI
+  // ═══════════════════════════════════════════════════
   if (type === 'visual') {
-    const visualRules: Record<string, string> = {
-      instagram: postType === 'carousel'
-        ? `Buat brief untuk carousel 7-10 slide:
-- Slide 1: Cover dengan headline yang eye-catching
-- Slide 2-8: Masing-masing 1 poin utama dengan visual pendukung
-- Slide terakhir: CTA + branding SAIKI Group
-- Style: modern, clean, warna brand SAIKI (teal #0d9488, violet #8b5cf6)
-- Aspect ratio: 1:1 (1080x1080px)`
-        : postType === 'reel'
-        ? `Buat brief untuk thumbnail reel:
-- Thumbnail yang bikin stop scrolling
-- Text overlay: headline pendek 3-5 kata
-- Style: bold, high contrast
-- Aspect ratio: 9:16 (1080x1920px)`
-        : `Buat brief untuk single image post:
-- Visual yang menarik perhatian di feed
-- Text overlay opsional: headline pendek
-- Style: editorial, premium feel
-- Aspect ratio: 1:1 (1080x1080px) atau 4:5 (1080x1350px)`,
-      linkedin: `Buat brief untuk image LinkedIn:
-- Professional, thought-provoking visual
-- ${postType === 'carousel' ? 'Document PDF 8-12 halaman: clean, data-driven, typography-focused' : 'Single image yang stop scrolling'}
-- Minimal text overlay, fokus pada insight utama
-- Style: corporate tapi modern
-- Aspect ratio: ${postType === 'carousel' ? '4:5 (PDF slides)' : '1.91:1 (1200x627px)'}`,
-      tiktok: `Buat brief untuk visual TikTok:
-- Bold, eye-catching, Gen-Z aesthetic
-- High contrast dengan text besar
-- Aspect ratio: 9:16 (1080x1920px)
-- ${postType === 'reel' ? 'Storyboard untuk video: 3-5 scene utama' : 'Cover/thumbnail yang mencolok'}`,
-      twitter: `Buat brief untuk image X/Twitter:
-- Clean, informative, shareable
-- Bisa infographic mini atau quote card
-- Aspect ratio: 16:9 (1200x675px)
-- Fokus pada 1 insight utama`,
-      facebook: `Buat brief untuk visual Facebook:
-- Warm, inviting, community-feel
-- ${postType === 'reel' ? 'Storyboard video 30-60 detik' : 'Single image atau mini collage'}
-- Aspect ratio: ${postType === 'reel' ? '9:16' : '1:1 atau 1.91:1'}`,
+    const aspectRatio: Record<string, string> = {
+      instagram: postType === 'reel' ? '9:16 (1080x1920px)' : '1:1 (1080x1080px)',
+      linkedin: postType === 'carousel' ? '4:5 (PDF)' : '1.91:1 (1200x627px)',
+      tiktok: '9:16 (1080x1920px)',
+      twitter: '16:9 (1200x675px)',
+      facebook: postType === 'reel' ? '9:16' : '1:1',
     };
 
-    return `Kamu adalah art director dan visual designer untuk SAIKI Group.
+    const aiTool = ai === 'chatgpt' ? 'DALL-E' : ai === 'gemini' ? 'Imagen/Gemini' : 'Midjourney/AI image generator';
 
-TUGAS: Buat visual/image brief untuk posting di ${platLabel}.
+    if (postType === 'carousel') {
+      return `Baca artikel ini dulu: ${articleFullUrl}
 
 ${articleBlock}
 
-BRIEF REQUIREMENTS:
-${visualRules[platform] || visualRules.instagram}
+Sekarang buat ${platform === 'linkedin' ? '8-12' : '7-10'} IMAGE PROMPTS siap paste ke ${aiTool} untuk carousel ${platLabel}.
 
-BRAND GUIDELINE SAIKI:
-- Primary: Teal (#0d9488), Violet (#8b5cf6)
-- Neutral: Brand Black (#1a1a2e), White
-- Font: Sans-serif modern (clean, professional)
-- Style: Editorial premium, clean whitespace, subtle gradients
-
-BAHASA: ${lang}
-
-OUTPUT:
-1. Konsep visual (1-2 kalimat)
-2. Layout description (posisi elemen, hierarchy)
-3. Color palette untuk post ini
-4. Text overlay (jika ada)
-5. ${postType === 'carousel' ? 'Konten per slide (judul + visual description)' : 'Mood/reference keywords untuk AI image generator'}
-${ai === 'chatgpt' ? '\n6. DALL-E prompt siap pakai untuk generate image' : ai === 'gemini' ? '\n6. Imagen prompt siap pakai' : '\n6. Deskripsi visual detail untuk designer'}`;
-  }
-
-  // infographic — now generates actual image prompts
-  const slideCount = platform === 'linkedin' ? '8-12' : platform === 'twitter' ? '1 (single image)' : postType === 'carousel' ? '7-10' : '5-7';
-
-  const infographicStyle: Record<string, string> = {
-    instagram: `STYLE: Modern, clean, mobile-first. Aspect ratio 1:1 (1080x1080px).
-- Bold sans-serif headlines (Montserrat/Inter style)
-- Ikon flat/line art untuk setiap poin
-- Banyak whitespace, max 30 kata per slide
-- Gradient background subtle (teal to dark teal)
-- Slide 1: Cover hook yang bikin swipe
-- Slide terakhir: CTA + logo SAIKI Group + link artikel`,
-    linkedin: `STYLE: Professional, data-driven. Aspect ratio 4:5 atau 1:1.
-- Clean layout dengan grid system
-- Chart/diagram sederhana jika ada data
-- Banyak whitespace, tipografi clean
-- Halaman 1: Cover judul + subtitle
-- Halaman terakhir: Key takeaways + CTA + link`,
-    tiktok: `STYLE: Bold, Gen-Z, high energy. Aspect ratio 9:16.
-- Typography besar dan tebal
-- Warna vibrant, high contrast
-- Visual dynamic, bukan corporate boring
-- Hook visual di slide pertama
-- CTA follow + save di akhir`,
-    twitter: `STYLE: Information-dense, shareable. Aspect ratio 16:9.
-- Single infographic yang merangkum semua insight
-- Data visualization jika relevan
-- Clean, minimal, high information density
-- Branding subtle di corner`,
-    facebook: `STYLE: Shareable, storytelling flow. Aspect ratio 1:1 atau 4:5.
-- Problem > insight > solution flow
-- Easy to read, relatable visual
-- Include branding subtle di footer
-- CTA di akhir`,
-  };
-
-  const aiImageInstructions: Record<string, string> = {
-    chatgpt: `\nUntuk setiap slide, berikan DALL-E prompt yang siap pakai. Format:
-"Generate an infographic slide with [layout description]. Background: [color]. Text: [exact text to show]. Visual elements: [icons/illustrations]. Style: flat design, modern, professional."
-
-PENTING: DALL-E prompt harus dalam bahasa Inggris. Teks yang ditampilkan di gambar tetap ${lang}.`,
-    gemini: `\nUntuk setiap slide, berikan Imagen/Gemini image generation prompt yang siap pakai. Format prompt detail dalam bahasa Inggris, tapi teks yang tampil di gambar tetap ${lang}.`,
-    claude: `\nBerikan deskripsi visual yang sangat detail untuk setiap slide sehingga desainer bisa langsung eksekusi. Sertakan: layout, posisi elemen, ukuran teks, warna hex, dan referensi visual.`,
-  };
-
-  return `Kamu adalah infographic designer profesional untuk SAIKI Group, ekosistem terintegrasi untuk konsultansi karier, branding & marketing, dan teknologi.
-
-TUGAS: Buat ${slideCount} slide infographic siap generate untuk ${platLabel}.
-
-PENTING: Baca artikel berikut untuk memahami konteks dan insight yang akan divisualisasikan:
-${articleBlock}
-
-PLATFORM: ${platLabel}
-JUMLAH SLIDE: ${slideCount}
+BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Dark BG (#0f172a), sans-serif modern
+ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
 BAHASA TEKS DI GAMBAR: ${lang}
 
-${infographicStyle[platform] || infographicStyle.instagram}
+FORMAT OUTPUT (langsung, tanpa penjelasan):
 
-BRAND GUIDELINE:
-- Primary: Teal (#0d9488), Violet (#8b5cf6)
-- Background: Dark (#0f172a) atau Light (#f0fdfa)
-- Accent: Cyan (#06b6d4)
-- Font style: Modern sans-serif (Montserrat/Inter)
-- Logo: "SAIKI Group" di slide terakhir
-${aiImageInstructions[ai] || aiImageInstructions.claude}
+---SLIDE 1 (Cover)---
+Text di gambar: [headline hook, max 8 kata]
+${aiTool} prompt: [prompt dalam bahasa Inggris, detail: layout, warna, tipografi, elemen visual. Include "text reads: [exact text]"]
 
-OUTPUT PER SLIDE:
-1. **Judul slide** (headline yang tampil di gambar)
-2. **Teks konten** (exact text yang akan muncul di gambar, ringkas & impactful)
-3. **Layout** (posisi elemen: judul atas/tengah, poin di bawah, ikon di kiri, dll)
-4. **Visual elements** (ikon, ilustrasi, chart yang perlu ada)
-5. **AI Image Prompt** (prompt siap paste ke ${ai === 'chatgpt' ? 'DALL-E/ChatGPT' : ai === 'gemini' ? 'Gemini' : 'image generator'})
+---SLIDE 2---
+Text di gambar: [judul + 1 poin singkat]
+${aiTool} prompt: [prompt]
+
+... (lanjutkan semua slide)
+
+---SLIDE TERAKHIR---
+Text di gambar: [CTA + "SAIKI Group" + link]
+${aiTool} prompt: [prompt]
 
 ATURAN:
-- JANGAN buat outline saja. Buat KONTEN FINAL yang siap ditampilkan di gambar
-- Setiap teks harus singkat dan impactful (max 30 kata per slide)
-- Ambil insight dan data langsung dari artikel
-- Pastikan ada visual hierarchy yang jelas
-- Slide terakhir WAJIB ada: CTA + link artikel + branding SAIKI Group`;
+- Setiap prompt harus LENGKAP dan BERDIRI SENDIRI (bisa langsung di-paste)
+- Konsisten style antar slide
+- JANGAN tulis penjelasan/brief. LANGSUNG image prompt yang siap pakai`;
+    }
+
+    return `Baca artikel ini dulu: ${articleFullUrl}
+
+${articleBlock}
+
+Buat 1 IMAGE PROMPT siap paste ke ${aiTool} untuk ${platLabel} ${postType}.
+
+BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Dark BG (#0f172a)
+ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
+BAHASA TEKS DI GAMBAR: ${lang}
+
+FORMAT OUTPUT (langsung, tanpa penjelasan):
+
+---IMAGE---
+Text di gambar: [text overlay yang akan tampil, max 10 kata]
+${aiTool} prompt: [prompt dalam bahasa Inggris. Detail: subject, composition, background, color palette (#0d9488 teal, #8b5cf6 violet), typography style, mood. Include "text overlay reads: [exact text]". Style: modern editorial, clean, professional.]
+
+ATURAN:
+- Prompt harus LENGKAP dan siap paste langsung
+- JANGAN tulis brief/konsep/penjelasan. LANGSUNG prompt-nya`;
+  }
+
+  // ═══════════════════════════════════════════════════
+  // INFOGRAPHIC — output: konten slide + image prompt
+  // ═══════════════════════════════════════════════════
+  const slideCount = platform === 'linkedin' ? '8-12' : platform === 'twitter' ? '1' : postType === 'carousel' ? '7-10' : '5-7';
+  const aspectRatio: Record<string, string> = {
+    instagram: '1:1 (1080x1080px)',
+    linkedin: '4:5',
+    tiktok: '9:16',
+    twitter: '16:9',
+    facebook: '1:1',
+  };
+  const aiTool = ai === 'chatgpt' ? 'DALL-E' : ai === 'gemini' ? 'Imagen/Gemini' : 'Midjourney/AI image generator';
+
+  return `Baca artikel ini dulu: ${articleFullUrl}
+
+${articleBlock}
+
+Buat ${slideCount} INFOGRAPHIC SLIDES siap generate untuk ${platLabel}. Output harus berupa konten final + image prompt per slide.
+
+BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Cyan (#06b6d4), Dark BG (#0f172a) atau Light (#f0fdfa)
+ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
+FONT: Modern sans-serif (Montserrat/Inter style)
+BAHASA TEKS DI GAMBAR: ${lang}
+
+FORMAT OUTPUT (langsung per slide, TANPA penjelasan/intro):
+
+---SLIDE 1 (Cover)---
+Headline: [max 8 kata, hook yang bikin swipe/klik]
+Subheadline: [1 kalimat pendek, opsional]
+${aiTool} prompt: [Prompt bahasa Inggris. Describe: infographic cover slide, exact text to display, layout (centered/left-aligned), background (gradient teal to dark), typography (bold sans-serif), decorative elements (geometric shapes/icons). Style: modern flat design infographic.]
+
+---SLIDE 2---
+Heading: [judul poin, max 5 kata]
+Body: [1-2 kalimat insight dari artikel, max 25 kata]
+Icon/Visual: [ikon atau ilustrasi sederhana]
+${aiTool} prompt: [Prompt lengkap]
+
+---SLIDE 3---
+...
+
+---SLIDE TERAKHIR (CTA)---
+Heading: [CTA text, contoh: "Baca Selengkapnya"]
+Body: [link artikel + "SAIKI Group"]
+${aiTool} prompt: [Prompt lengkap]
+
+ATURAN:
+- AMBIL insight dan data LANGSUNG dari artikel, jangan buat generik
+- Setiap slide max 30 kata teks yang tampil
+- Setiap image prompt LENGKAP dan BERDIRI SENDIRI (siap paste langsung)
+- Visual hierarchy jelas: heading besar > body kecil > ikon pendukung
+- JANGAN tulis outline/brief/penjelasan. LANGSUNG konten + prompt siap pakai
+- Konsisten style antar slide`;
 }
 
 // UTM URL builder for tracking article shares per platform
