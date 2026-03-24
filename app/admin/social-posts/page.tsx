@@ -1467,9 +1467,9 @@ function SocialPostsContent() {
 
   // List view
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen overflow-x-hidden">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 overflow-x-hidden">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
           <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 shrink-0">
@@ -1518,12 +1518,12 @@ function SocialPostsContent() {
         )}
 
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-          <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-6">
+          <div className="flex items-center gap-2 flex-1 min-w-0 overflow-x-auto">
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none shrink-0"
             >
               <option value="all">All Platforms</option>
               {platforms.map((p) => (
@@ -1533,7 +1533,7 @@ function SocialPostsContent() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none shrink-0"
             >
               <option value="all">All Status</option>
               {statusOptions.map((s) => (
@@ -1542,7 +1542,7 @@ function SocialPostsContent() {
             </select>
             <button
               onClick={fetchPosts}
-              className="px-3 py-2 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
+              className="px-3 py-2 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2 shrink-0"
             >
               <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -1552,7 +1552,7 @@ function SocialPostsContent() {
           </div>
           <button
             onClick={handleNew}
-            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center gap-2 shrink-0"
+            className="w-full sm:w-auto px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center justify-center gap-2 shrink-0"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
