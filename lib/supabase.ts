@@ -31,6 +31,7 @@ export const TABLES = {
   SEO_CONFIG: 'saikiweb_seo_config',
   SUBSCRIBERS: 'saikiweb_subscribers',
   SOCIAL_POSTS: 'saikiweb_social_posts',
+  SHORT_LINKS: 'saikiweb_short_links',
 } as const;
 
 // Type for the saikiweb_articles table
@@ -98,6 +99,19 @@ export interface SaikiwebSocialPost {
   saikiweb_notes?: string;
   saikiweb_created_at?: string;
   saikiweb_updated_at?: string;
+}
+
+// Type for the saikiweb_short_links table
+export interface SaikiwebShortLink {
+  saikiweb_short_link_id?: number;
+  saikiweb_long_url: string;
+  saikiweb_short_url: string;
+  saikiweb_dub_key?: string;
+  saikiweb_dub_domain?: string;
+  saikiweb_article_slug?: string;
+  saikiweb_platform?: string;
+  saikiweb_post_type?: string;
+  saikiweb_created_at?: string;
 }
 
 // Type for the saikiweb_subscribers table

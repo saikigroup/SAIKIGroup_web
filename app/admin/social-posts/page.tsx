@@ -137,9 +137,11 @@ function generateSocialPrompt(
   postType: string,
   article: { title: string; excerpt: string; slug: string; locale: string },
   ai: string,
-  siteUrl: string
+  siteUrl: string,
+  shortUrl?: string
 ): string {
-  const utmUrl = buildUtmUrl(siteUrl, article.locale, article.slug, platform, postType);
+  const longUtmUrl = buildUtmUrl(siteUrl, article.locale, article.slug, platform, postType);
+  const utmUrl = shortUrl || longUtmUrl;
   const articleFullUrl = `${siteUrl}/${article.locale}/insights/${article.slug}`;
   const lang = article.locale === 'id' ? 'Bahasa Indonesia (casual, gunakan "kamu" bukan "Anda")' : 'English';
   const platLabel = platforms.find(p => p.value === platform)?.label || platform;
@@ -544,6 +546,9 @@ function SocialPostsContent() {
   const [articleCtaLink, setArticleCtaLink] = useState('');
   const [selectedPromptType, setSelectedPromptType] = useState<PromptType>('caption');
   const [selectedAi, setSelectedAi] = useState('chatgpt');
+  const [shortenedUtmUrl, setShortenedUtmUrl] = useState('');
+  const [utmShortening, setUtmShortening] = useState(false);
+  const [utmShortenError, setUtmShortenError] = useState('');
 
   // Auth
   const handleLogin = async (e: React.FormEvent) => {
@@ -618,6 +623,30 @@ function SocialPostsContent() {
       setAuthenticated(true);
     }
   }, []);
+
+  // Auto-lookup cached short link when article/platform/postType changes
+  useEffect(() => {
+    if (!authenticated || !form.articleSlug) return;
+    const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
+    if (!linked) return;
+    const longUrl = buildUtmUrl('https://saiki.id', linked.saikiweb_locale, linked.saikiweb_slug, form.platform, form.postType);
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+
+    setShortenedUtmUrl('');
+    setUtmShortenError('');
+
+    fetch(`/api/admin/shorten?long_url=${encodeURIComponent(longUrl)}`, {
+      headers: { 'x-admin-password': pw },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setShortenedUtmUrl(res.data.saikiweb_short_url);
+        }
+      })
+      .catch(() => { /* silent */ });
+  }, [authenticated, form.articleSlug, form.platform, form.postType, articles]);
 
   // Auto-open editor when ?share= param is present
   useEffect(() => {
@@ -940,7 +969,8 @@ function SocialPostsContent() {
                           form.postType,
                           { title: linked.saikiweb_title, excerpt: linked.saikiweb_excerpt, slug: linked.saikiweb_slug, locale: linked.saikiweb_locale },
                           selectedAi,
-                          'https://saiki.id'
+                          'https://saiki.id',
+                          shortenedUtmUrl || undefined
                         );
                         setGeneratedPrompt(prompt);
                         setPromptCopied(false);
@@ -1107,6 +1137,7 @@ function SocialPostsContent() {
                       locale: article?.saikiweb_locale || f.locale,
                       categoryKey: article?.saikiweb_category_key || f.categoryKey,
                     }));
+                    // useEffect handles short link lookup on article change
                   }}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:border-teal-500 outline-none"
                 >
@@ -1141,21 +1172,73 @@ function SocialPostsContent() {
                 const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
                 if (!linked) return null;
                 const utmUrl = buildUtmUrl('https://saiki.id', linked.saikiweb_locale, linked.saikiweb_slug, form.platform, form.postType);
+                const displayUrl = shortenedUtmUrl || utmUrl;
+                const handleShortenUtm = async () => {
+                  setUtmShortening(true);
+                  setUtmShortenError('');
+                  try {
+                    const res = await fetch('/api/admin/shorten', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
+                      body: JSON.stringify({
+                        url: utmUrl,
+                        article_slug: linked.saikiweb_slug,
+                        platform: form.platform,
+                        post_type: form.postType,
+                      }),
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                      setShortenedUtmUrl(data.shortLink);
+                    } else {
+                      setUtmShortenError(data.error || 'Failed to shorten');
+                    }
+                  } catch {
+                    setUtmShortenError('Network error');
+                  }
+                  setUtmShortening(false);
+                };
                 return (
                   <div className="bg-amber-50 rounded-2xl border border-amber-200 p-6">
                     <h2 className="text-sm font-semibold text-amber-900 mb-2">UTM Tracked Link</h2>
                     <p className="text-xs text-amber-600 mb-2">Gunakan link ini di caption agar bisa di-track di analytics</p>
+
+                    {/* Short link (if available — auto-loaded or just shortened) */}
+                    {shortenedUtmUrl && (
+                      <div className="bg-green-50 rounded-lg p-3 border border-green-200 mb-2">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-medium text-green-700">Short link:</span>
+                          <code className="text-sm font-semibold text-green-800 break-all">{shortenedUtmUrl}</code>
+                          <span className="text-[10px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full">cached</span>
+                        </div>
+                        <p className="text-[10px] text-green-500 mt-1">Link ini sudah tersimpan dan akan muncul otomatis saat memilih artikel + platform + tipe yang sama.</p>
+                      </div>
+                    )}
+
+                    {/* Full UTM link */}
                     <div className="bg-white rounded-lg p-3 border border-amber-100">
                       <code className="text-xs text-gray-700 break-all leading-relaxed">{utmUrl}</code>
                     </div>
-                    <button
-                      onClick={async () => {
-                        await navigator.clipboard.writeText(utmUrl);
-                      }}
-                      className="mt-2 px-3 py-1.5 text-xs font-medium text-amber-700 bg-white border border-amber-200 rounded-lg hover:bg-amber-100 transition"
-                    >
-                      Copy UTM Link
-                    </button>
+
+                    <div className="flex gap-2 mt-2">
+                      <button
+                        onClick={async () => { await navigator.clipboard.writeText(displayUrl); }}
+                        className="px-3 py-1.5 text-xs font-medium text-amber-700 bg-white border border-amber-200 rounded-lg hover:bg-amber-100 transition"
+                      >
+                        Copy {shortenedUtmUrl ? 'Short' : 'UTM'} Link
+                      </button>
+                      {!shortenedUtmUrl && (
+                        <button
+                          onClick={handleShortenUtm}
+                          disabled={utmShortening}
+                          className="px-3 py-1.5 text-xs font-medium text-white bg-violet-600 rounded-lg hover:bg-violet-700 transition disabled:opacity-40"
+                        >
+                          {utmShortening ? 'Shortening...' : 'Shorten → s.saiki.id'}
+                        </button>
+                      )}
+                    </div>
+                    {utmShortenError && <p className="text-xs text-red-500 mt-1">{utmShortenError}</p>}
+
                     <div className="mt-3 text-xs text-amber-500 space-y-0.5">
                       <p>utm_source: <span className="font-mono text-amber-700">{form.platform}</span></p>
                       <p>utm_medium: <span className="font-mono text-amber-700">social</span></p>
