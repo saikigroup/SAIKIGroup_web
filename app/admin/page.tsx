@@ -295,7 +295,38 @@ export default function AdminPage() {
           ) : inquiries.length === 0 ? (
             <div className="p-16 text-center text-gray-500">No inquiries found.</div>
           ) : (
-            <div className="overflow-x-auto">
+            <>
+            {/* Mobile: Card layout */}
+            <div className="md:hidden divide-y divide-gray-100">
+              {inquiries.map((inq) => {
+                const cat = categoryLabels[inq.saikiweb_category] || { label: inq.saikiweb_category, color: 'bg-gray-100 text-gray-700' };
+                return (
+                  <button
+                    key={inq.saikiweb_inquiry_id}
+                    onClick={() => setSelectedInquiry(inq)}
+                    className="w-full text-left px-4 py-4 hover:bg-gray-50/50 transition"
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${cat.color}`}>
+                        {cat.label}
+                      </span>
+                      <span className="text-xs text-gray-400">{formatDate(inq.saikiweb_created_at)}</span>
+                    </div>
+                    <div className="text-sm font-semibold text-gray-900">{inq.saikiweb_name}</div>
+                    {inq.saikiweb_company && (
+                      <div className="text-xs text-gray-500">{inq.saikiweb_company}</div>
+                    )}
+                    <a href={`mailto:${inq.saikiweb_email}`} className="text-xs text-teal-600 hover:underline mt-0.5 block" onClick={(e) => e.stopPropagation()}>
+                      {inq.saikiweb_email}
+                    </a>
+                    <p className="text-xs text-gray-500 mt-2 line-clamp-2">{inq.saikiweb_message}</p>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Desktop: Table layout */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-200">
@@ -351,6 +382,7 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
+            </>
           )}
 
           {/* Pagination */}

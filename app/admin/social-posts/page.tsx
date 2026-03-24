@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { LinkShortener } from '@/components/admin/LinkShortener';
 
 interface Article {
   saikiweb_article_id: number;
@@ -374,6 +375,7 @@ function SocialPostsContent() {
   const [articles, setArticles] = useState<Article[]>([]);
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [promptCopied, setPromptCopied] = useState(false);
+  const [articleCtaLink, setArticleCtaLink] = useState('');
   const [selectedPromptType, setSelectedPromptType] = useState<PromptType>('caption');
   const [selectedAi, setSelectedAi] = useState('chatgpt');
 
@@ -997,6 +999,16 @@ function SocialPostsContent() {
                   </div>
                 );
               })()}
+
+              {/* Article CTA Link Shortener */}
+              <LinkShortener
+                value={articleCtaLink}
+                onChange={setArticleCtaLink}
+                password={password}
+                label="Article Link (untuk caption)"
+                placeholder="https://saiki.id/id/insights/artikel-slug"
+                helpText="Buat short link untuk ditempel di caption/bio. UTM tracking tetap jalan."
+              />
 
               {/* Post URL */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6">
