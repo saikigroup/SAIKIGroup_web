@@ -624,6 +624,30 @@ function SocialPostsContent() {
     }
   }, []);
 
+  // Auto-lookup cached short link when article/platform/postType changes
+  useEffect(() => {
+    if (!authenticated || !form.articleSlug) return;
+    const linked = articles.find((a) => a.saikiweb_slug === form.articleSlug);
+    if (!linked) return;
+    const longUrl = buildUtmUrl('https://saiki.id', linked.saikiweb_locale, linked.saikiweb_slug, form.platform, form.postType);
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+
+    setShortenedUtmUrl('');
+    setUtmShortenError('');
+
+    fetch(`/api/admin/shorten?long_url=${encodeURIComponent(longUrl)}`, {
+      headers: { 'x-admin-password': pw },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.success && res.data) {
+          setShortenedUtmUrl(res.data.saikiweb_short_url);
+        }
+      })
+      .catch(() => { /* silent */ });
+  }, [authenticated, form.articleSlug, form.platform, form.postType, articles]);
+
   // Auto-open editor when ?share= param is present
   useEffect(() => {
     if (shareSlug && authenticated && articles.length > 0 && !hasAutoOpened.current) {
@@ -847,7 +871,6 @@ function SocialPostsContent() {
                           platform: p.value,
                           postType: (postTypes[p.value]?.[0]?.value) || 'single',
                         }));
-                        setShortenedUtmUrl('');
                       }}
                       className={`px-3 py-2 text-sm font-medium rounded-xl border transition ${
                         form.platform === p.value
@@ -864,7 +887,7 @@ function SocialPostsContent() {
                   {getAvailablePostTypes(form.platform).map((t) => (
                     <button
                       key={t.value}
-                      onClick={() => { setForm((f) => ({ ...f, postType: t.value })); setShortenedUtmUrl(''); }}
+                      onClick={() => setForm((f) => ({ ...f, postType: t.value }))}
                       className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition ${
                         form.postType === t.value
                           ? 'bg-teal-50 text-teal-700 border-teal-200'
@@ -1114,8 +1137,7 @@ function SocialPostsContent() {
                       locale: article?.saikiweb_locale || f.locale,
                       categoryKey: article?.saikiweb_category_key || f.categoryKey,
                     }));
-                    setShortenedUtmUrl('');
-                    setUtmShortenError('');
+                    // useEffect handles short link lookup on article change
                   }}
                   className="w-full px-4 py-2.5 rounded-xl border border-gray-200 bg-gray-50 text-sm focus:border-teal-500 outline-none"
                 >
@@ -1158,7 +1180,12 @@ function SocialPostsContent() {
                     const res = await fetch('/api/admin/shorten', {
                       method: 'POST',
                       headers: { 'Content-Type': 'application/json', 'x-admin-password': password },
-                      body: JSON.stringify({ url: utmUrl }),
+                      body: JSON.stringify({
+                        url: utmUrl,
+                        article_slug: linked.saikiweb_slug,
+                        platform: form.platform,
+                        post_type: form.postType,
+                      }),
                     });
                     const data = await res.json();
                     if (data.success) {
@@ -1176,13 +1203,15 @@ function SocialPostsContent() {
                     <h2 className="text-sm font-semibold text-amber-900 mb-2">UTM Tracked Link</h2>
                     <p className="text-xs text-amber-600 mb-2">Gunakan link ini di caption agar bisa di-track di analytics</p>
 
-                    {/* Short link (if available) */}
+                    {/* Short link (if available — auto-loaded or just shortened) */}
                     {shortenedUtmUrl && (
                       <div className="bg-green-50 rounded-lg p-3 border border-green-200 mb-2">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs font-medium text-green-700">Short link:</span>
                           <code className="text-sm font-semibold text-green-800 break-all">{shortenedUtmUrl}</code>
+                          <span className="text-[10px] bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full">cached</span>
                         </div>
+                        <p className="text-[10px] text-green-500 mt-1">Link ini sudah tersimpan dan akan muncul otomatis saat memilih artikel + platform + tipe yang sama.</p>
                       </div>
                     )}
 
