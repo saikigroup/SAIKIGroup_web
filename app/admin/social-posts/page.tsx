@@ -262,7 +262,8 @@ ${captionRules[platform] || captionRules.instagram}`;
   }
 
   // ═══════════════════════════════════════════════════
-  // VISUAL — output: image prompt siap paste ke AI
+  // VISUAL — Gemini/ChatGPT: langsung generate gambar
+  //          Claude/lainnya: output prompt untuk tools lain
   // ═══════════════════════════════════════════════════
   if (type === 'visual') {
     const aspectRatio: Record<string, string> = {
@@ -272,114 +273,224 @@ ${captionRules[platform] || captionRules.instagram}`;
       twitter: '16:9 (1200x675px)',
       facebook: postType === 'reel' ? '9:16' : '1:1',
     };
+    const ratio = aspectRatio[platform] || '1:1';
+    const canGenerate = ai === 'gemini' || ai === 'chatgpt';
+    const slideCountVisual = platform === 'linkedin' ? '8-12' : '7-10';
 
-    const aiTool = ai === 'chatgpt' ? 'DALL-E' : ai === 'gemini' ? 'Imagen/Gemini' : 'Midjourney/AI image generator';
+    const brandBlock = `BRAND: SAIKI Group
+- Warna utama: Teal (#0d9488), Violet (#8b5cf6)
+- Background: Dark (#0f172a) atau gradient teal gelap
+- Accent: Cyan (#06b6d4)
+- Font style: Modern sans-serif (Montserrat/Inter), bold headlines
+- Logo text: "SAIKI Group" di slide terakhir`;
 
+    if (canGenerate) {
+      // Gemini & ChatGPT — langsung suruh generate gambar
+      if (postType === 'carousel') {
+        return `Baca artikel ini dulu: ${articleFullUrl}
+
+${articleBlock}
+
+Sekarang GENERATE ${slideCountVisual} gambar untuk carousel ${platLabel} berdasarkan artikel di atas.
+
+${brandBlock}
+ASPECT RATIO: ${ratio}
+BAHASA TEKS DI GAMBAR: ${lang}
+
+INSTRUKSI:
+Generate satu per satu, ${slideCountVisual} gambar dengan urutan:
+
+1. SLIDE COVER — Background gradient teal ke dark. Headline besar (max 8 kata) yang bikin stop scrolling. Subtitle kecil di bawah. Style: modern flat infographic.
+
+2-${slideCountVisual === '8-12' ? '11' : '9'}. SLIDE KONTEN — Masing-masing 1 poin insight dari artikel. Heading besar (max 5 kata) + body text singkat (max 25 kata) + ikon/ilustrasi flat. Background konsisten. Visual hierarchy jelas.
+
+${slideCountVisual === '8-12' ? '12' : '10'}. SLIDE CTA — Text: "Baca Selengkapnya" + link artikel + "SAIKI Group". Background brand teal.
+
+ATURAN:
+- LANGSUNG generate gambarnya, jangan tulis deskripsi/outline
+- Ambil insight dari artikel, jangan buat generik
+- Setiap slide harus readable di mobile (font besar, teks singkat)
+- Konsisten style, warna, dan layout antar slide
+- Teks di gambar dalam ${lang}`;
+      }
+
+      return `Baca artikel ini dulu: ${articleFullUrl}
+
+${articleBlock}
+
+Sekarang GENERATE 1 gambar untuk ${platLabel} ${postType} berdasarkan artikel di atas.
+
+${brandBlock}
+ASPECT RATIO: ${ratio}
+BAHASA TEKS DI GAMBAR: ${lang}
+
+INSTRUKSI:
+Generate gambar dengan:
+- Text overlay: headline singkat (max 10 kata) yang merangkum insight utama artikel
+- Background: gradient teal (#0d9488) ke dark (#0f172a)
+- Style: modern editorial, clean, professional
+- Elemen dekoratif: geometric shapes atau ikon relevan
+- "SAIKI Group" kecil di corner
+
+ATURAN:
+- LANGSUNG generate gambarnya, jangan tulis deskripsi/prompt
+- Teks di gambar dalam ${lang}`;
+    }
+
+    // Claude & lainnya — output prompt untuk Midjourney/DALL-E/dll
     if (postType === 'carousel') {
       return `Baca artikel ini dulu: ${articleFullUrl}
 
 ${articleBlock}
 
-Sekarang buat ${platform === 'linkedin' ? '8-12' : '7-10'} IMAGE PROMPTS siap paste ke ${aiTool} untuk carousel ${platLabel}.
+Buat ${slideCountVisual} IMAGE PROMPTS siap paste ke Midjourney/DALL-E untuk carousel ${platLabel}.
 
-BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Dark BG (#0f172a), sans-serif modern
-ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
+${brandBlock}
+ASPECT RATIO: ${ratio}
 BAHASA TEKS DI GAMBAR: ${lang}
 
 FORMAT OUTPUT (langsung, tanpa penjelasan):
 
 ---SLIDE 1 (Cover)---
 Text di gambar: [headline hook, max 8 kata]
-${aiTool} prompt: [prompt dalam bahasa Inggris, detail: layout, warna, tipografi, elemen visual. Include "text reads: [exact text]"]
+Image prompt: [prompt bahasa Inggris. Detail: layout, background (gradient teal #0d9488 to dark #0f172a), typography (bold sans-serif), decorative elements. Include "text reads: [exact text in ${article.locale === 'id' ? 'Indonesian' : 'English'}]". Style: modern flat design infographic, 1080x1080.]
 
 ---SLIDE 2---
 Text di gambar: [judul + 1 poin singkat]
-${aiTool} prompt: [prompt]
+Image prompt: [prompt lengkap]
 
 ... (lanjutkan semua slide)
 
----SLIDE TERAKHIR---
-Text di gambar: [CTA + "SAIKI Group" + link]
-${aiTool} prompt: [prompt]
+---SLIDE TERAKHIR (CTA)---
+Text di gambar: [CTA + "SAIKI Group"]
+Image prompt: [prompt lengkap]
 
 ATURAN:
-- Setiap prompt harus LENGKAP dan BERDIRI SENDIRI (bisa langsung di-paste)
+- Setiap prompt LENGKAP dan BERDIRI SENDIRI (siap paste)
 - Konsisten style antar slide
-- JANGAN tulis penjelasan/brief. LANGSUNG image prompt yang siap pakai`;
+- JANGAN tulis penjelasan. LANGSUNG prompt-nya`;
     }
 
     return `Baca artikel ini dulu: ${articleFullUrl}
 
 ${articleBlock}
 
-Buat 1 IMAGE PROMPT siap paste ke ${aiTool} untuk ${platLabel} ${postType}.
+Buat 1 IMAGE PROMPT siap paste ke Midjourney/DALL-E untuk ${platLabel} ${postType}.
 
-BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Dark BG (#0f172a)
-ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
+${brandBlock}
+ASPECT RATIO: ${ratio}
 BAHASA TEKS DI GAMBAR: ${lang}
 
-FORMAT OUTPUT (langsung, tanpa penjelasan):
+FORMAT OUTPUT (langsung):
 
 ---IMAGE---
-Text di gambar: [text overlay yang akan tampil, max 10 kata]
-${aiTool} prompt: [prompt dalam bahasa Inggris. Detail: subject, composition, background, color palette (#0d9488 teal, #8b5cf6 violet), typography style, mood. Include "text overlay reads: [exact text]". Style: modern editorial, clean, professional.]
+Text di gambar: [max 10 kata]
+Image prompt: [prompt bahasa Inggris. Detail: subject, composition, background (gradient teal #0d9488 to dark #0f172a), typography, mood. Include "text overlay reads: [exact text]". Style: modern editorial, clean, professional.]
 
 ATURAN:
-- Prompt harus LENGKAP dan siap paste langsung
-- JANGAN tulis brief/konsep/penjelasan. LANGSUNG prompt-nya`;
+- Prompt LENGKAP dan siap paste langsung
+- JANGAN tulis brief/penjelasan. LANGSUNG prompt-nya`;
   }
 
   // ═══════════════════════════════════════════════════
-  // INFOGRAPHIC — output: konten slide + image prompt
+  // INFOGRAPHIC — Gemini/ChatGPT: langsung generate
+  //               Claude/lainnya: konten + prompt
   // ═══════════════════════════════════════════════════
   const slideCount = platform === 'linkedin' ? '8-12' : platform === 'twitter' ? '1' : postType === 'carousel' ? '7-10' : '5-7';
-  const aspectRatio: Record<string, string> = {
+  const aspectRatioInfographic: Record<string, string> = {
     instagram: '1:1 (1080x1080px)',
     linkedin: '4:5',
     tiktok: '9:16',
     twitter: '16:9',
     facebook: '1:1',
   };
-  const aiTool = ai === 'chatgpt' ? 'DALL-E' : ai === 'gemini' ? 'Imagen/Gemini' : 'Midjourney/AI image generator';
+  const ratio = aspectRatioInfographic[platform] || '1:1';
+  const canGenerate = ai === 'gemini' || ai === 'chatgpt';
 
+  const brandBlock = `BRAND: SAIKI Group
+- Warna utama: Teal (#0d9488), Violet (#8b5cf6)
+- Background: Dark (#0f172a) atau Light (#f0fdfa), bisa gradient
+- Accent: Cyan (#06b6d4)
+- Font: Modern sans-serif (Montserrat/Inter), bold headlines
+- Logo: "SAIKI Group" di slide terakhir`;
+
+  if (canGenerate) {
+    return `Baca artikel ini dulu: ${articleFullUrl}
+
+${articleBlock}
+
+Sekarang GENERATE ${slideCount} gambar infographic untuk ${platLabel} berdasarkan artikel di atas.
+
+${brandBlock}
+ASPECT RATIO: ${ratio}
+BAHASA TEKS DI GAMBAR: ${lang}
+
+INSTRUKSI:
+Generate satu per satu:
+
+1. SLIDE COVER
+- Background: gradient teal ke dark
+- Headline besar (max 8 kata): hook yang bikin swipe
+- Subtitle kecil (opsional)
+- Style: modern flat design infographic
+
+2-${slideCount === '8-12' ? '11' : slideCount === '1' ? '1' : (parseInt(slideCount.split('-')[1] || slideCount) - 1).toString()}. SLIDE KONTEN
+- Masing-masing 1 poin/insight dari artikel
+- Heading besar (max 5 kata) + body singkat (max 25 kata)
+- Ikon atau ilustrasi flat yang relevan
+- Data/statistik dari artikel jika ada
+- Konsisten layout antar slide
+
+${slideCount !== '1' ? `${slideCount === '8-12' ? '12' : slideCount.split('-')[1] || slideCount}. SLIDE CTA
+- "Baca Selengkapnya" + link artikel
+- "SAIKI Group" branding
+- Background brand teal solid` : ''}
+
+ATURAN:
+- LANGSUNG generate gambarnya satu per satu, JANGAN tulis outline/deskripsi
+- AMBIL insight dan data langsung dari artikel
+- Setiap slide readable di mobile (font besar, teks singkat, max 30 kata)
+- Visual hierarchy: heading besar > body kecil > ikon pendukung
+- Konsisten style, warna, dan layout
+- Teks di gambar dalam ${lang}`;
+  }
+
+  // Claude & lainnya — konten + prompt per slide
   return `Baca artikel ini dulu: ${articleFullUrl}
 
 ${articleBlock}
 
-Buat ${slideCount} INFOGRAPHIC SLIDES siap generate untuk ${platLabel}. Output harus berupa konten final + image prompt per slide.
+Buat ${slideCount} INFOGRAPHIC SLIDES untuk ${platLabel}. Per slide: konten final + image prompt siap paste ke Midjourney/DALL-E.
 
-BRAND: SAIKI Group — Teal (#0d9488), Violet (#8b5cf6), Cyan (#06b6d4), Dark BG (#0f172a) atau Light (#f0fdfa)
-ASPECT RATIO: ${aspectRatio[platform] || '1:1'}
-FONT: Modern sans-serif (Montserrat/Inter style)
+${brandBlock}
+ASPECT RATIO: ${ratio}
 BAHASA TEKS DI GAMBAR: ${lang}
 
-FORMAT OUTPUT (langsung per slide, TANPA penjelasan/intro):
+FORMAT OUTPUT (langsung per slide, TANPA penjelasan):
 
 ---SLIDE 1 (Cover)---
-Headline: [max 8 kata, hook yang bikin swipe/klik]
-Subheadline: [1 kalimat pendek, opsional]
-${aiTool} prompt: [Prompt bahasa Inggris. Describe: infographic cover slide, exact text to display, layout (centered/left-aligned), background (gradient teal to dark), typography (bold sans-serif), decorative elements (geometric shapes/icons). Style: modern flat design infographic.]
+Headline: [max 8 kata, hook]
+Subheadline: [opsional]
+Image prompt: [Prompt bahasa Inggris. Describe: infographic cover, exact text, layout, background (gradient teal to dark), bold sans-serif typography, geometric decorations. Style: modern flat design infographic.]
 
 ---SLIDE 2---
-Heading: [judul poin, max 5 kata]
-Body: [1-2 kalimat insight dari artikel, max 25 kata]
-Icon/Visual: [ikon atau ilustrasi sederhana]
-${aiTool} prompt: [Prompt lengkap]
+Heading: [max 5 kata]
+Body: [1-2 kalimat, max 25 kata]
+Icon: [ikon relevan]
+Image prompt: [Prompt lengkap]
 
----SLIDE 3---
-...
+... (lanjutkan semua slide)
 
 ---SLIDE TERAKHIR (CTA)---
-Heading: [CTA text, contoh: "Baca Selengkapnya"]
+Heading: "Baca Selengkapnya"
 Body: [link artikel + "SAIKI Group"]
-${aiTool} prompt: [Prompt lengkap]
+Image prompt: [Prompt lengkap]
 
 ATURAN:
-- AMBIL insight dan data LANGSUNG dari artikel, jangan buat generik
-- Setiap slide max 30 kata teks yang tampil
-- Setiap image prompt LENGKAP dan BERDIRI SENDIRI (siap paste langsung)
-- Visual hierarchy jelas: heading besar > body kecil > ikon pendukung
-- JANGAN tulis outline/brief/penjelasan. LANGSUNG konten + prompt siap pakai
+- AMBIL insight langsung dari artikel
+- Setiap slide max 30 kata teks
+- Setiap image prompt LENGKAP dan BERDIRI SENDIRI
+- JANGAN tulis outline. LANGSUNG konten + prompt siap pakai
 - Konsisten style antar slide`;
 }
 
