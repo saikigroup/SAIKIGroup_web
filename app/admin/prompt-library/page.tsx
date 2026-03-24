@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { LinkShortener } from '@/components/admin/LinkShortener';
 
 const aiModels = [
   { value: 'chatgpt', label: 'ChatGPT (OpenAI)', icon: 'G' },
@@ -509,18 +510,15 @@ export default function PromptLibraryPage() {
                   </div>
                 </div>
 
-                {/* CTA Link */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Link CTA (di infographic)</label>
-                  <input
-                    type="url"
-                    value={ctaLink}
-                    onChange={(e) => setCtaLink(e.target.value)}
-                    placeholder="https://saiki.id/id/insights/artikel-slug?utm_source=instagram&utm_medium=infographic"
-                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition"
-                  />
-                  <p className="text-xs text-gray-400 mt-1">Link UTM artikel yang akan ditampilkan di slide terakhir. Gunakan link shortener jika terlalu panjang.</p>
-                </div>
+                {/* CTA Link with UTM Builder + Shortener */}
+                <LinkShortener
+                  value={ctaLink}
+                  onChange={setCtaLink}
+                  password={password}
+                  label="Link CTA (di infographic)"
+                  placeholder="https://saiki.id/id/insights/artikel-slug"
+                  helpText="Buat UTM link lalu shorten. Tracking tetap jalan via Dub.co."
+                />
               </>
             )}
 
