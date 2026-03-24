@@ -1304,46 +1304,46 @@ function SocialPostsContent() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">S</span>
               </div>
               <h1 className="text-lg font-bold text-gray-900">SAIKI Admin</h1>
             </div>
-            <nav className="flex items-center gap-1 overflow-x-auto max-w-full">
-              <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Inquiries
-              </a>
-              <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Articles
-              </a>
-              <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg">
-                Social Posts
-              </span>
-              <a href="/admin/seo" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                SEO
-              </a>
-              <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Prompt Library
-              </a>
-            </nav>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-500 hidden sm:inline">{posts.length} posts</span>
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('admin_pw');
+                  setAuthenticated(false);
+                  setPassword('');
+                }}
+                className="text-sm text-gray-500 hover:text-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500 hidden sm:inline">{posts.length} posts</span>
-            <button
-              onClick={() => {
-                sessionStorage.removeItem('admin_pw');
-                setAuthenticated(false);
-                setPassword('');
-              }}
-              className="text-sm text-gray-500 hover:text-red-600 transition"
-            >
-              Logout
-            </button>
-          </div>
+          <nav className="flex items-center gap-1 overflow-x-auto -mx-4 px-4 scrollbar-hide">
+            <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Inquiries
+            </a>
+            <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Articles
+            </a>
+            <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg whitespace-nowrap">
+              Social Posts
+            </span>
+            <a href="/admin/seo" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              SEO
+            </a>
+            <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Prompt Library
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -1353,12 +1353,12 @@ function SocialPostsContent() {
         )}
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2">
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
             >
               <option value="all">All Platforms</option>
               {platforms.map((p) => (
@@ -1368,7 +1368,7 @@ function SocialPostsContent() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
             >
               <option value="all">All Status</option>
               {statusOptions.map((s) => (
@@ -1377,7 +1377,7 @@ function SocialPostsContent() {
             </select>
             <button
               onClick={fetchPosts}
-              className="px-4 py-2.5 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
+              className="px-3 py-2 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
             >
               <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -1387,7 +1387,7 @@ function SocialPostsContent() {
           </div>
           <button
             onClick={handleNew}
-            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center gap-2"
+            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center gap-2 shrink-0"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
