@@ -1154,9 +1154,9 @@ export default function AdminArticlesPage() {
           ) : (
             <div className="divide-y divide-gray-100">
               {articles.map((article) => (
-                <div key={article.saikiweb_article_id} className="px-6 py-5 flex items-start gap-4 hover:bg-gray-50/50 transition">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
+                <div key={article.saikiweb_article_id} className="px-4 sm:px-6 py-4 sm:py-5 hover:bg-gray-50/50 transition">
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5 flex-wrap mb-1.5">
                       <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                         article.saikiweb_category_key === 'consultancy' ? 'bg-blue-100 text-blue-700' :
                         article.saikiweb_category_key === 'imagery' ? 'bg-purple-100 text-purple-700' :
@@ -1182,12 +1182,12 @@ export default function AdminArticlesPage() {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-sm font-semibold text-gray-900 truncate">{article.saikiweb_title}</h3>
-                    <p className="text-xs text-gray-500 mt-0.5 truncate">{article.saikiweb_excerpt}</p>
-                    <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+                    <h3 className="text-sm font-semibold text-gray-900 line-clamp-2">{article.saikiweb_title}</h3>
+                    <p className="text-xs text-gray-500 mt-0.5 line-clamp-1">{article.saikiweb_excerpt}</p>
+                    <div className="flex items-center gap-2 sm:gap-3 mt-2 text-xs text-gray-400 flex-wrap">
                       <span>{article.saikiweb_date}</span>
                       <span>{article.saikiweb_read_time}</span>
-                      <span>/{article.saikiweb_slug}</span>
+                      <span className="hidden sm:inline">/{article.saikiweb_slug}</span>
                       {article.saikiweb_updated_at && (
                         <span>Updated {formatDate(article.saikiweb_updated_at)}</span>
                       )}
@@ -1222,7 +1222,8 @@ export default function AdminArticlesPage() {
                       );
                     })()}
                   </div>
-                  <div className="flex items-center gap-2 shrink-0">
+                  {/* Actions — below content on mobile, right-aligned */}
+                  <div className="flex items-center gap-1 mt-3 pt-3 border-t border-gray-100 sm:border-0 sm:mt-0 sm:pt-0">
                     <a
                       href={`/admin/social-posts?share=${encodeURIComponent(article.saikiweb_slug)}`}
                       className="px-3 py-1.5 text-sm text-violet-600 hover:text-violet-800 font-medium hover:bg-violet-50 rounded-lg transition"

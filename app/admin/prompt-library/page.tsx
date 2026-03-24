@@ -34,6 +34,24 @@ const localeOptions = [
   { value: 'both', label: 'Keduanya (ID + EN)' },
 ];
 
+const promptTypeOptions = [
+  { value: 'article', label: 'Artikel', icon: '📝', desc: 'Generate artikel blog lengkap dengan SEO metadata' },
+  { value: 'infographic', label: 'Infographic', icon: '🎨', desc: 'Generate infographic siap posting dari artikel' },
+];
+
+const infographicStyleOptions = [
+  { value: 'carousel', label: 'Carousel (Multi-slide)', desc: 'Beberapa slide untuk Instagram/LinkedIn carousel' },
+  { value: 'single', label: 'Single Image', desc: 'Satu gambar infographic lengkap' },
+  { value: 'story', label: 'Story / Reels', desc: 'Format vertikal 9:16 untuk story/reels' },
+];
+
+const infographicPlatformOptions = [
+  { value: 'instagram', label: 'Instagram', ratio: '1:1 (1080x1080)' },
+  { value: 'linkedin', label: 'LinkedIn', ratio: '1:1 atau 4:5' },
+  { value: 'twitter', label: 'Twitter/X', ratio: '16:9 (1200x675)' },
+  { value: 'tiktok', label: 'TikTok/Reels', ratio: '9:16 (1080x1920)' },
+];
+
 function generatePrompt(config: {
   ai: string;
   topic: string;
@@ -124,12 +142,116 @@ The content should be adapted (not just translated) for each language's audience
   return basePrompt;
 }
 
+function generateInfographicPrompt(config: {
+  ai: string;
+  articleUrl: string;
+  topic: string;
+  infographicStyle: string;
+  platform: string;
+  locale: string;
+  keyPoints: string;
+  slideCount: string;
+  ctaLink: string;
+}): string {
+  const styleObj = infographicStyleOptions.find((s) => s.value === config.infographicStyle);
+  const platformObj = infographicPlatformOptions.find((p) => p.value === config.platform);
+  const localeName = config.locale === 'id' ? 'Bahasa Indonesia'
+    : config.locale === 'en' ? 'English'
+    : 'both Bahasa Indonesia AND English';
+
+  const keyPointsList = config.keyPoints
+    ? config.keyPoints.split('\n').filter(Boolean).map((p) => `- ${p.trim()}`).join('\n')
+    : '';
+
+  const articleInstruction = config.articleUrl
+    ? `
+
+SUMBER ARTIKEL:
+Baca dan analisis artikel berikut secara menyeluruh: ${config.articleUrl}
+Gunakan data, insight, dan poin-poin penting dari artikel tersebut sebagai sumber utama konten infographic.
+Jika ada informasi yang kurang lengkap atau perlu konteks tambahan, tambahkan dari pengetahuan kamu untuk membuat infographic lebih informatif dan bernilai.`
+    : '';
+
+  const slideInstruction = config.infographicStyle === 'carousel'
+    ? `
+JUMLAH SLIDE: ${config.slideCount || '5-7'} slide
+- Slide 1: Cover/hook yang menarik perhatian (judul + visual statement)
+- Slide 2 hingga ${parseInt(config.slideCount || '6') - 1}: Konten utama (1 poin per slide, jelas dan ringkas)
+- Slide terakhir: CTA + branding SAIKI Group`
+    : config.infographicStyle === 'story'
+    ? `
+FORMAT: Story/Reels vertikal (9:16)
+- Buat dalam format yang bisa dibaca cepat dalam 5-10 detik
+- Teks besar dan kontras tinggi
+- Maksimal 3-4 poin utama`
+    : `
+FORMAT: Single image infographic
+- Semua informasi dalam 1 gambar
+- Hierarki visual yang jelas (heading > subheading > body)
+- Gunakan ikon/ilustrasi untuk setiap poin`;
+
+  const ctaInstruction = config.ctaLink
+    ? `
+
+LINK CTA:
+Sertakan link berikut di slide terakhir/bagian bawah infographic: ${config.ctaLink}
+Tampilkan sebagai "Baca selengkapnya" atau "Read more" dengan URL yang terlihat jelas.`
+    : '';
+
+  return `Kamu adalah graphic designer profesional dan content strategist untuk SAIKI Group, sebuah ekosistem terintegrasi yang menyediakan layanan career consultancy, branding & marketing, dan technology development berbasis di Indonesia.
+${articleInstruction}
+
+TUGAS:
+Buat infographic ${styleObj?.label || config.infographicStyle} tentang: "${config.topic}"
+${slideInstruction}
+
+Platform target: ${platformObj?.label || config.platform} (${platformObj?.ratio || ''})
+Bahasa: ${localeName}
+
+INSTRUKSI DESAIN:
+1. WAJIB menghasilkan output berupa GAMBAR/IMAGE infographic yang siap posting, bukan hanya teks
+2. Gunakan brand colors SAIKI Group:
+   - Primary: Teal (#0d9488)
+   - Secondary: Violet (#8b5cf6)
+   - Accent: Coral (#f43f5e)
+   - Background: Clean white/light gray
+   - Text: Dark (#1a1a2e)
+3. Typography:
+   - Heading: Bold, sans-serif (seperti Inter, DM Sans, atau Poppins)
+   - Body: Clean, readable, minimal
+4. Visual style: Modern, clean, professional, minimalist
+5. Setiap poin harus disertai ikon atau ilustrasi sederhana yang relevan
+6. Sertakan logo/watermark "SAIKI Group" di setiap slide/image
+7. Pastikan teks cukup besar untuk dibaca di mobile (minimum 24pt untuk body text)
+
+KONTEN INFOGRAPHIC:
+- Ringkas poin-poin utama artikel menjadi format visual yang mudah dicerna
+- Gunakan angka, statistik, atau data jika ada di artikel
+- Setiap poin maksimal 1-2 kalimat pendek
+- Gunakan visual hierarchy: heading besar > subpoint lebih kecil
+- Jika informasi dari artikel kurang lengkap, tambahkan fakta/konteks yang relevan dan akurat${keyPointsList ? `\n\nPoin yang harus dimasukkan:\n${keyPointsList}` : ''}${ctaInstruction}
+
+JANGAN:
+- Menggunakan clip art murahan atau gambar stock generik
+- Menulis terlalu banyak teks per slide (max 30 kata per slide untuk carousel)
+- Menggunakan warna di luar brand palette tanpa alasan
+- Membuat desain yang ramai/cluttered
+- Menggunakan emdash (--)
+
+OUTPUT YANG DIHARAPKAN:
+1. Gambar infographic yang sudah jadi dan siap diposting (bukan hanya deskripsi/teks)
+2. Caption untuk posting (max 200 kata) dalam ${localeName}
+3. 5-10 hashtag yang relevan
+4. Alt text untuk aksesibilitas`;
+}
+
 export default function PromptLibraryPage() {
   const [password, setPassword] = useState('');
   const [authenticated, setAuthenticated] = useState(false);
   const [authError, setAuthError] = useState('');
   const [authLoading, setAuthLoading] = useState(false);
 
+  const [promptType, setPromptType] = useState<'article' | 'infographic'>('article');
   const [ai, setAi] = useState('chatgpt');
   const [topic, setTopic] = useState('');
   const [category, setCategory] = useState('consultancy');
@@ -140,6 +262,13 @@ export default function PromptLibraryPage() {
   const [keyPoints, setKeyPoints] = useState('');
   const [avoidTopics, setAvoidTopics] = useState('');
   const [cta, setCta] = useState('');
+
+  // Infographic-specific state
+  const [articleUrl, setArticleUrl] = useState('');
+  const [infographicStyle, setInfographicStyle] = useState('carousel');
+  const [platform, setPlatform] = useState('instagram');
+  const [slideCount, setSlideCount] = useState('6');
+  const [ctaLink, setCtaLink] = useState('');
 
   const [generatedPrompt, setGeneratedPrompt] = useState('');
   const [copied, setCopied] = useState(false);
@@ -177,7 +306,12 @@ export default function PromptLibraryPage() {
 
   const handleGenerate = () => {
     if (!topic.trim()) return;
-    const prompt = generatePrompt({ ai, topic, category, tone, length, locale, audience, keyPoints, avoidTopics, cta });
+    let prompt: string;
+    if (promptType === 'infographic') {
+      prompt = generateInfographicPrompt({ ai, articleUrl, topic, infographicStyle, platform, locale, keyPoints, slideCount, ctaLink });
+    } else {
+      prompt = generatePrompt({ ai, topic, category, tone, length, locale, audience, keyPoints, avoidTopics, cta });
+    }
     setGeneratedPrompt(prompt);
     setCopied(false);
   };
@@ -245,12 +379,36 @@ export default function PromptLibraryPage() {
         {/* Intro */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-gray-900">AI Prompt Generator</h2>
-          <p className="text-sm text-gray-500 mt-1">Buat prompt yang sudah dioptimalkan untuk generate artikel SAIKI. Hasil dari AI tinggal copy-paste ke article editor.</p>
+          <p className="text-sm text-gray-500 mt-1">Buat prompt yang sudah dioptimalkan untuk generate konten SAIKI.</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Config panel */}
           <div className="space-y-5">
+            {/* Prompt Type Selector */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">Tipe Prompt</label>
+              <div className="grid grid-cols-2 gap-3">
+                {promptTypeOptions.map((pt) => (
+                  <button
+                    key={pt.value}
+                    onClick={() => { setPromptType(pt.value as 'article' | 'infographic'); setGeneratedPrompt(''); }}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-left transition border ${
+                      promptType === pt.value
+                        ? 'border-teal-500 bg-teal-50 text-teal-700'
+                        : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-xl">{pt.icon}</span>
+                    <div>
+                      <div className="text-sm font-semibold">{pt.label}</div>
+                      <div className="text-xs text-gray-400 mt-0.5">{pt.desc}</div>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             {/* AI Model */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">AI Model</label>
@@ -273,16 +431,102 @@ export default function PromptLibraryPage() {
 
             {/* Topic */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Topik Artikel *</label>
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                {promptType === 'infographic' ? 'Topik Infographic *' : 'Topik Artikel *'}
+              </label>
               <input
                 type="text"
                 value={topic}
                 onChange={(e) => setTopic(e.target.value)}
-                placeholder="Contoh: Cara membangun personal brand di LinkedIn untuk fresh graduate"
+                placeholder={promptType === 'infographic'
+                  ? 'Contoh: 5 Langkah Membangun Personal Brand di LinkedIn'
+                  : 'Contoh: Cara membangun personal brand di LinkedIn untuk fresh graduate'
+                }
                 className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition"
               />
             </div>
 
+            {/* Infographic-specific fields */}
+            {promptType === 'infographic' && (
+              <>
+                {/* Article URL */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Link Artikel Sumber</label>
+                  <input
+                    type="url"
+                    value={articleUrl}
+                    onChange={(e) => setArticleUrl(e.target.value)}
+                    placeholder="https://saiki.id/id/insights/mengapa-personal-branding-penting"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">AI akan membaca artikel ini dan mengambil poin-poin penting untuk infographic. Opsional tapi sangat disarankan.</p>
+                </div>
+
+                {/* Style + Platform */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Format</label>
+                      <select value={infographicStyle} onChange={(e) => setInfographicStyle(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
+                        {infographicStyleOptions.map((s) => (
+                          <option key={s.value} value={s.value}>{s.label}</option>
+                        ))}
+                      </select>
+                      <p className="text-xs text-gray-400 mt-1">{infographicStyleOptions.find((s) => s.value === infographicStyle)?.desc}</p>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Platform</label>
+                      <select value={platform} onChange={(e) => setPlatform(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
+                        {infographicPlatformOptions.map((p) => (
+                          <option key={p.value} value={p.value}>{p.label} ({p.ratio})</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Slide count (carousel only) + Locale */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {infographicStyle === 'carousel' && (
+                      <div>
+                        <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Jumlah Slide</label>
+                        <select value={slideCount} onChange={(e) => setSlideCount(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
+                          {[4, 5, 6, 7, 8, 9, 10].map((n) => (
+                            <option key={n} value={String(n)}>{n} slide</option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Bahasa</label>
+                      <select value={locale} onChange={(e) => setLocale(e.target.value)} className="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none">
+                        {localeOptions.filter((l) => l.value !== 'both').map((l) => (
+                          <option key={l.value} value={l.value}>{l.label}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                {/* CTA Link */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Link CTA (di infographic)</label>
+                  <input
+                    type="url"
+                    value={ctaLink}
+                    onChange={(e) => setCtaLink(e.target.value)}
+                    placeholder="https://saiki.id/id/insights/artikel-slug?utm_source=instagram&utm_medium=infographic"
+                    className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Link UTM artikel yang akan ditampilkan di slide terakhir. Gunakan link shortener jika terlalu panjang.</p>
+                </div>
+              </>
+            )}
+
+            {/* Category + Locale (Article only) */}
+            {promptType === 'article' && (
+              <>
             {/* Category + Locale */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -328,7 +572,7 @@ export default function PromptLibraryPage() {
               </div>
             </div>
 
-            {/* Target Audience */}
+            {/* Target Audience (Article only) */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Target Audience</label>
               <input
@@ -341,20 +585,7 @@ export default function PromptLibraryPage() {
               <p className="text-xs text-gray-400 mt-1">Opsional. Default: Professionals and business owners in Indonesia</p>
             </div>
 
-            {/* Key Points */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Poin-poin yang Harus Dibahas</label>
-              <textarea
-                value={keyPoints}
-                onChange={(e) => setKeyPoints(e.target.value)}
-                placeholder={"Satu poin per baris. Contoh:\nPentingnya foto profil profesional\nCara menulis headline LinkedIn\nOptimasi keyword di About section"}
-                rows={4}
-                className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition resize-none"
-              />
-              <p className="text-xs text-gray-400 mt-1">Opsional. Satu poin per baris.</p>
-            </div>
-
-            {/* Avoid Topics */}
+            {/* Avoid Topics + CTA (Article only) */}
             <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
@@ -378,6 +609,26 @@ export default function PromptLibraryPage() {
                   />
                 </div>
               </div>
+            </div>
+              </>
+            )}
+
+            {/* Key Points (Shared) */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+              <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                {promptType === 'infographic' ? 'Poin yang Harus Ada di Infographic' : 'Poin-poin yang Harus Dibahas'}
+              </label>
+              <textarea
+                value={keyPoints}
+                onChange={(e) => setKeyPoints(e.target.value)}
+                placeholder={promptType === 'infographic'
+                  ? "Satu poin per baris. Contoh:\nStatistik 80% recruiter cek LinkedIn\n5 langkah optimasi profil\nBefore vs After comparison"
+                  : "Satu poin per baris. Contoh:\nPentingnya foto profil profesional\nCara menulis headline LinkedIn\nOptimasi keyword di About section"
+                }
+                rows={4}
+                className="w-full px-4 py-3 text-sm border border-gray-200 rounded-xl focus:border-teal-500 outline-none transition resize-none"
+              />
+              <p className="text-xs text-gray-400 mt-1">Opsional. Satu poin per baris.</p>
             </div>
 
             {/* Generate Button */}
@@ -437,28 +688,49 @@ export default function PromptLibraryPage() {
               {generatedPrompt && (
                 <div className="px-6 py-4 border-t border-gray-100 bg-gray-50">
                   <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Cara Pakai</h4>
-                  <ol className="text-xs text-gray-500 space-y-1.5">
-                    <li className="flex gap-2">
-                      <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">1</span>
-                      <span>Copy prompt di atas</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">2</span>
-                      <span>Paste ke {aiModels.find((m) => m.value === ai)?.label || 'AI'}</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">3</span>
-                      <span>Copy hasil HTML body dari AI</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">4</span>
-                      <span>Paste ke <a href="/admin/articles" className="text-teal-600 hover:underline font-medium">Article Editor</a> (tab Visual Editor atau HTML Code)</span>
-                    </li>
-                    <li className="flex gap-2">
-                      <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">5</span>
-                      <span>Isi metadata (title, slug, SEO) dari output AI ke sidebar fields</span>
-                    </li>
-                  </ol>
+                  {promptType === 'infographic' ? (
+                    <ol className="text-xs text-gray-500 space-y-1.5">
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">1</span>
+                        <span>Copy prompt di atas</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">2</span>
+                        <span>Paste ke {aiModels.find((m) => m.value === ai)?.label || 'AI'} (pastikan model mendukung image generation)</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">3</span>
+                        <span>Download gambar infographic yang dihasilkan</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">4</span>
+                        <span>Copy caption + hashtag untuk posting di <a href="/admin/social-posts" className="text-teal-600 hover:underline font-medium">Social Posts</a></span>
+                      </li>
+                    </ol>
+                  ) : (
+                    <ol className="text-xs text-gray-500 space-y-1.5">
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">1</span>
+                        <span>Copy prompt di atas</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">2</span>
+                        <span>Paste ke {aiModels.find((m) => m.value === ai)?.label || 'AI'}</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">3</span>
+                        <span>Copy hasil HTML body dari AI</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">4</span>
+                        <span>Paste ke <a href="/admin/articles" className="text-teal-600 hover:underline font-medium">Article Editor</a> (tab Visual Editor atau HTML Code)</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="w-5 h-5 bg-teal-100 text-teal-700 rounded-md flex items-center justify-center font-bold shrink-0">5</span>
+                        <span>Isi metadata (title, slug, SEO) dari output AI ke sidebar fields</span>
+                      </li>
+                    </ol>
+                  )}
                 </div>
               )}
             </div>
