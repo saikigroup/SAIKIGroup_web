@@ -250,64 +250,54 @@ export default function AdminSeoPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">S</span>
               </div>
               <h1 className="text-lg font-bold text-gray-900">SAIKI Admin</h1>
             </div>
-            <nav className="flex items-center gap-1 overflow-x-auto max-w-full">
-              <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
-                Inquiries
-              </a>
-              <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
-                Articles
-              </a>
-              <a href="/admin/social-posts" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
-                Social Posts
-              </a>
-              <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg">
-                SEO
-              </span>
-              <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Prompt Library
-              </a>
-            </nav>
+            <div className="flex items-center gap-3 flex-wrap justify-end">
+              {lastUpdated && (
+                <span className="text-xs text-gray-400 hidden sm:inline">
+                  Last saved: {lastUpdated}
+                </span>
+              )}
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-5 py-2.5 bg-teal-600 text-white font-medium rounded-xl hover:bg-teal-700 transition text-sm disabled:opacity-50 flex items-center gap-2"
+              >
+                {saving ? (
+                  <>
+                    <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                    Saving...
+                  </>
+                ) : 'Save All'}
+              </button>
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('admin_pw');
+                  setAuthenticated(false);
+                }}
+                className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-3">
-            {lastUpdated && (
-              <span className="text-xs text-gray-400 hidden sm:inline">
-                Last saved: {lastUpdated}
-              </span>
-            )}
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-5 py-2.5 bg-teal-600 text-white font-medium rounded-xl hover:bg-teal-700 transition text-sm disabled:opacity-50 flex items-center gap-2"
-            >
-              {saving ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-                  </svg>
-                  Saving...
-                </>
-              ) : 'Save All'}
-            </button>
-            <button
-              onClick={() => {
-                sessionStorage.removeItem('admin_pw');
-                setAuthenticated(false);
-              }}
-              className="px-4 py-2.5 text-sm text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-xl transition"
-            >
-              Logout
-            </button>
-          </div>
+          <nav className="flex items-center gap-1 overflow-x-auto -mx-4 px-4 scrollbar-hide">
+            <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Inquiries</a>
+            <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Articles</a>
+            <a href="/admin/social-posts" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Social Posts</a>
+            <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg whitespace-nowrap">SEO</span>
+            <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Prompt Library</a>
+          </nav>
         </div>
       </header>
 

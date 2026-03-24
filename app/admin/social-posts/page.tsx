@@ -550,6 +550,17 @@ function SocialPostsContent() {
   const [utmShortening, setUtmShortening] = useState(false);
   const [utmShortenError, setUtmShortenError] = useState('');
 
+  // Media upload
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Lightbox
+  const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+
+  // Post detail modal
+  const [detailPost, setDetailPost] = useState<SocialPost | null>(null);
+
   // Auth
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -762,6 +773,57 @@ function SocialPostsContent() {
     }
     setDeleteConfirm(null);
   };
+
+  // Media upload handler
+  const handleFileUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    setUploading(true);
+    setUploadError('');
+    const pw = sessionStorage.getItem('admin_pw');
+
+    const newUrls: string[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const fd = new FormData();
+      fd.append('file', file);
+      try {
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'x-admin-password': pw || '' },
+          body: fd,
+        });
+        const data = await res.json();
+        if (data.success) {
+          newUrls.push(data.url);
+        } else {
+          setUploadError(data.error || 'Upload failed');
+        }
+      } catch {
+        setUploadError('Upload failed');
+      }
+    }
+
+    if (newUrls.length > 0) {
+      setForm((f) => ({
+        ...f,
+        mediaUrls: f.mediaUrls
+          ? f.mediaUrls + '\n' + newUrls.join('\n')
+          : newUrls.join('\n'),
+      }));
+    }
+    setUploading(false);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removeMediaUrl = (index: number) => {
+    const urls = form.mediaUrls.split('\n').filter(Boolean);
+    urls.splice(index, 1);
+    setForm((f) => ({ ...f, mediaUrls: urls.join('\n') }));
+  };
+
+  const isImageUrl = (url: string) => /\.(jpg|jpeg|png|gif|webp|svg)(\?.*)?$/i.test(url);
+  const isVideoUrl = (url: string) => /\.(mp4|mov|webm)(\?.*)?$/i.test(url);
+  const isPdfUrl = (url: string) => /\.pdf(\?.*)?$/i.test(url);
 
   // Helpers
   const formatDate = (dateStr: string | null) => {
@@ -1029,17 +1091,120 @@ function SocialPostsContent() {
                 )}
               </div>
 
-              {/* Media URLs */}
+              {/* Media */}
               <div className="bg-white rounded-2xl border border-gray-200 p-6">
-                <h2 className="text-sm font-semibold text-gray-900 mb-1">Media URLs</h2>
-                <p className="text-xs text-gray-400 mb-3">One URL per line (images, videos, or cloud storage links)</p>
-                <textarea
-                  value={form.mediaUrls}
-                  onChange={(e) => setForm((f) => ({ ...f, mediaUrls: e.target.value }))}
-                  rows={3}
-                  placeholder={"https://drive.google.com/...\nhttps://example.com/image.jpg"}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition text-sm font-mono resize-y"
-                />
+                <div className="flex items-center justify-between mb-3">
+                  <div>
+                    <h2 className="text-sm font-semibold text-gray-900">Media</h2>
+                    <p className="text-xs text-gray-400 mt-0.5">Upload images, videos, or documents</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                    className="px-4 py-2 bg-teal-50 text-teal-700 text-sm font-medium rounded-xl hover:bg-teal-100 transition disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {uploading ? (
+                      <>
+                        <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                        Uploading...
+                      </>
+                    ) : (
+                      <>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                        Upload
+                      </>
+                    )}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx"
+                    className="hidden"
+                    onChange={(e) => handleFileUpload(e.target.files)}
+                  />
+                </div>
+
+                {uploadError && (
+                  <div className="mb-3 px-3 py-2 bg-red-50 text-red-600 text-xs rounded-lg border border-red-200">{uploadError}</div>
+                )}
+
+                {/* Media grid preview */}
+                {form.mediaUrls && form.mediaUrls.trim() && (
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-4">
+                    {form.mediaUrls.split('\n').filter(Boolean).map((url, i) => (
+                      <div key={i} className="relative group rounded-xl overflow-hidden border border-gray-200 bg-gray-50">
+                        {isImageUrl(url) ? (
+                          <button
+                            type="button"
+                            onClick={() => setLightboxUrl(url)}
+                            className="block w-full aspect-square cursor-pointer"
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt={`Media ${i + 1}`} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" />
+                          </button>
+                        ) : isVideoUrl(url) ? (
+                          <button
+                            type="button"
+                            onClick={() => setLightboxUrl(url)}
+                            className="block w-full aspect-square cursor-pointer relative bg-gray-900"
+                          >
+                            <video src={url} className="w-full h-full object-cover" muted />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-12 h-12 bg-white/90 rounded-full flex items-center justify-center">
+                                <svg className="w-5 h-5 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                              </div>
+                            </div>
+                          </button>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => window.open(url, '_blank')}
+                            className="block w-full aspect-square cursor-pointer flex items-center justify-center"
+                          >
+                            <div className="text-center p-3">
+                              <svg className="w-8 h-8 text-gray-400 mx-auto mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                              <span className="text-xs text-gray-500 break-all line-clamp-2">{url.split('/').pop()}</span>
+                            </div>
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => removeMediaUrl(i)}
+                          className="absolute top-1.5 right-1.5 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition text-xs font-bold hover:bg-red-600"
+                        >
+                          &times;
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Drop zone */}
+                <div
+                  className="border-2 border-dashed border-gray-200 rounded-xl p-4 text-center hover:border-teal-400 hover:bg-teal-50/30 transition cursor-pointer"
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('border-teal-400', 'bg-teal-50/30'); }}
+                  onDragLeave={(e) => { e.currentTarget.classList.remove('border-teal-400', 'bg-teal-50/30'); }}
+                  onDrop={(e) => { e.preventDefault(); e.currentTarget.classList.remove('border-teal-400', 'bg-teal-50/30'); handleFileUpload(e.dataTransfer.files); }}
+                >
+                  <svg className="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                  <p className="text-sm text-gray-400">Drag & drop files or click to upload</p>
+                  <p className="text-xs text-gray-300 mt-1">Images, video, PDF, docs (max 20MB)</p>
+                </div>
+
+                {/* Manual URL input */}
+                <details className="mt-3">
+                  <summary className="text-xs text-gray-400 cursor-pointer hover:text-gray-600">Or add URL manually</summary>
+                  <textarea
+                    value={form.mediaUrls}
+                    onChange={(e) => setForm((f) => ({ ...f, mediaUrls: e.target.value }))}
+                    rows={2}
+                    placeholder={"https://example.com/image.jpg"}
+                    className="w-full mt-2 px-3 py-2 rounded-lg border border-gray-200 bg-gray-50 focus:border-teal-500 outline-none transition text-xs font-mono resize-y"
+                  />
+                </details>
               </div>
 
               {/* Notes */}
@@ -1304,46 +1469,46 @@ function SocialPostsContent() {
   return (
     <div className="min-h-screen">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-4 sm:gap-6 w-full sm:w-auto">
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-30 overflow-x-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+          <div className="flex items-center justify-between gap-3 mb-3">
             <div className="flex items-center gap-3 shrink-0">
               <div className="w-8 h-8 bg-teal-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">S</span>
               </div>
               <h1 className="text-lg font-bold text-gray-900">SAIKI Admin</h1>
             </div>
-            <nav className="flex items-center gap-1 overflow-x-auto max-w-full">
-              <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Inquiries
-              </a>
-              <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Articles
-              </a>
-              <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg">
-                Social Posts
-              </span>
-              <a href="/admin/seo" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                SEO
-              </a>
-              <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
-                Prompt Library
-              </a>
-            </nav>
+            <div className="flex items-center gap-4">
+              <span className="text-sm text-gray-500 hidden sm:inline">{posts.length} posts</span>
+              <button
+                onClick={() => {
+                  sessionStorage.removeItem('admin_pw');
+                  setAuthenticated(false);
+                  setPassword('');
+                }}
+                className="text-sm text-gray-500 hover:text-red-600 transition"
+              >
+                Logout
+              </button>
+            </div>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-500 hidden sm:inline">{posts.length} posts</span>
-            <button
-              onClick={() => {
-                sessionStorage.removeItem('admin_pw');
-                setAuthenticated(false);
-                setPassword('');
-              }}
-              className="text-sm text-gray-500 hover:text-red-600 transition"
-            >
-              Logout
-            </button>
-          </div>
+          <nav className="flex items-center gap-1 overflow-x-auto -mx-4 px-4 scrollbar-hide">
+            <a href="/admin" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Inquiries
+            </a>
+            <a href="/admin/articles" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Articles
+            </a>
+            <span className="px-3 py-1.5 text-sm font-medium text-teal-700 bg-teal-50 rounded-lg whitespace-nowrap">
+              Social Posts
+            </span>
+            <a href="/admin/seo" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              SEO
+            </a>
+            <a href="/admin/prompt-library" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">
+              Prompt Library
+            </a>
+          </nav>
         </div>
       </header>
 
@@ -1353,12 +1518,12 @@ function SocialPostsContent() {
         )}
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+          <div className="flex flex-wrap items-center gap-2">
             <select
               value={platformFilter}
               onChange={(e) => setPlatformFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
             >
               <option value="all">All Platforms</option>
               {platforms.map((p) => (
@@ -1368,7 +1533,7 @@ function SocialPostsContent() {
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="px-4 py-2.5 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none"
+              className="px-3 py-2 rounded-xl border border-gray-200 bg-white text-sm focus:border-teal-500 outline-none min-w-0"
             >
               <option value="all">All Status</option>
               {statusOptions.map((s) => (
@@ -1377,7 +1542,7 @@ function SocialPostsContent() {
             </select>
             <button
               onClick={fetchPosts}
-              className="px-4 py-2.5 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
+              className="px-3 py-2 bg-white border border-gray-200 text-sm font-medium rounded-xl hover:bg-gray-50 transition flex items-center gap-2"
             >
               <svg className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -1387,7 +1552,7 @@ function SocialPostsContent() {
           </div>
           <button
             onClick={handleNew}
-            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center gap-2"
+            className="px-5 py-2.5 bg-teal-600 text-white text-sm font-semibold rounded-xl hover:bg-teal-700 transition flex items-center gap-2 shrink-0"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -1413,8 +1578,33 @@ function SocialPostsContent() {
               return (
                 <div
                   key={post.saikiweb_post_id}
-                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition group"
+                  className="bg-white rounded-2xl border border-gray-200 overflow-hidden hover:shadow-md transition group cursor-pointer"
+                  onClick={() => setDetailPost(post)}
                 >
+                  {/* Media thumbnail */}
+                  {post.saikiweb_media_urls && post.saikiweb_media_urls.length > 0 && (
+                    <div className="relative">
+                      {isImageUrl(post.saikiweb_media_urls[0]) ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={post.saikiweb_media_urls[0]} alt="" className="w-full h-40 object-cover" />
+                      ) : isVideoUrl(post.saikiweb_media_urls[0]) ? (
+                        <div className="relative w-full h-40 bg-gray-900">
+                          <video src={post.saikiweb_media_urls[0]} className="w-full h-full object-cover" muted />
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center">
+                              <svg className="w-4 h-4 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                            </div>
+                          </div>
+                        </div>
+                      ) : null}
+                      {post.saikiweb_media_urls.length > 1 && (
+                        <span className="absolute top-2 right-2 px-2 py-0.5 bg-black/60 text-white text-xs rounded-full">
+                          +{post.saikiweb_media_urls.length - 1}
+                        </span>
+                      )}
+                    </div>
+                  )}
+
                   {/* Card header */}
                   <div className="px-5 pt-4 pb-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -1462,7 +1652,7 @@ function SocialPostsContent() {
                   </div>
 
                   {/* Actions */}
-                  <div className="px-5 py-3 border-t border-gray-100 flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition">
+                  <div className="px-5 py-3 border-t border-gray-100 flex items-center gap-2 md:opacity-0 md:group-hover:opacity-100 transition" onClick={(e) => e.stopPropagation()}>
                     <button
                       onClick={() => handleEdit(post)}
                       className="px-3 py-1.5 text-xs font-medium text-teal-700 bg-teal-50 rounded-lg hover:bg-teal-100 transition"
@@ -1510,6 +1700,183 @@ function SocialPostsContent() {
           </div>
         )}
       </main>
+
+      {/* Lightbox Modal */}
+      {lightboxUrl && (
+        <div
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          onClick={() => setLightboxUrl(null)}
+        >
+          <button
+            className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 text-white rounded-full flex items-center justify-center text-xl transition"
+            onClick={() => setLightboxUrl(null)}
+          >
+            &times;
+          </button>
+          <div className="max-w-5xl max-h-[90vh] w-full" onClick={(e) => e.stopPropagation()}>
+            {isVideoUrl(lightboxUrl) ? (
+              <video src={lightboxUrl} controls autoPlay className="w-full max-h-[90vh] rounded-lg" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={lightboxUrl} alt="Media preview" className="w-full max-h-[90vh] object-contain rounded-lg" />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Post Detail Modal */}
+      {detailPost && (() => {
+        const plat = getPlatformInfo(detailPost.saikiweb_platform);
+        const stat = getStatusInfo(detailPost.saikiweb_status);
+        return (
+          <div
+            className="fixed inset-0 z-50 bg-black/50 flex items-start justify-center p-4 pt-[10vh] overflow-y-auto"
+            onClick={() => setDetailPost(null)}
+          >
+            <div
+              className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Detail header */}
+              <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span className={`px-2.5 py-1 text-xs font-medium rounded-lg border ${plat.color}`}>
+                    {plat.icon} {plat.label}
+                  </span>
+                  <span className="text-xs text-gray-400 capitalize">{detailPost.saikiweb_post_type}</span>
+                  <span className={`px-2.5 py-1 text-xs font-medium rounded-lg ${stat.color}`}>
+                    {stat.label}
+                  </span>
+                </div>
+                <button
+                  onClick={() => setDetailPost(null)}
+                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+
+              {/* Detail media */}
+              {detailPost.saikiweb_media_urls && detailPost.saikiweb_media_urls.length > 0 && (
+                <div className="px-6 pt-4">
+                  <div className={`grid gap-2 ${detailPost.saikiweb_media_urls.length === 1 ? 'grid-cols-1' : 'grid-cols-2 sm:grid-cols-3'}`}>
+                    {detailPost.saikiweb_media_urls.map((url, i) => (
+                      <div key={i} className="rounded-xl overflow-hidden border border-gray-100">
+                        {isImageUrl(url) ? (
+                          <button type="button" onClick={() => setLightboxUrl(url)} className="block w-full">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src={url} alt={`Media ${i + 1}`} className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-300 cursor-pointer" />
+                          </button>
+                        ) : isVideoUrl(url) ? (
+                          <button type="button" onClick={() => setLightboxUrl(url)} className="block w-full relative bg-gray-900">
+                            <video src={url} className="w-full aspect-square object-cover" muted />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-10 h-10 bg-white/80 rounded-full flex items-center justify-center">
+                                <svg className="w-4 h-4 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
+                              </div>
+                            </div>
+                          </button>
+                        ) : (
+                          <a href={url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 p-3 hover:bg-gray-50 transition">
+                            <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                            <span className="text-xs text-blue-600 truncate">{url.split('/').pop()}</span>
+                          </a>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Detail caption */}
+              <div className="px-6 py-4">
+                <p className="text-sm text-gray-800 leading-relaxed whitespace-pre-wrap">{detailPost.saikiweb_caption}</p>
+                {detailPost.saikiweb_hashtags && detailPost.saikiweb_hashtags.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-3">
+                    {detailPost.saikiweb_hashtags.map((h, i) => (
+                      <span key={i} className="px-2 py-0.5 bg-teal-50 text-teal-700 text-xs rounded-md">#{h}</span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Detail meta */}
+              <div className="px-6 py-3 border-t border-gray-100 grid grid-cols-2 gap-3 text-xs text-gray-500">
+                <div>
+                  <span className="text-gray-400 block">Locale</span>
+                  <span className="uppercase font-medium">{detailPost.saikiweb_locale}</span>
+                </div>
+                <div>
+                  <span className="text-gray-400 block">Category</span>
+                  <span className="capitalize font-medium">{detailPost.saikiweb_category_key || '-'}</span>
+                </div>
+                {detailPost.saikiweb_article_slug && (
+                  <div>
+                    <span className="text-gray-400 block">Linked Article</span>
+                    <span className="text-teal-600 font-medium">{detailPost.saikiweb_article_slug}</span>
+                  </div>
+                )}
+                {detailPost.saikiweb_post_url && (
+                  <div>
+                    <span className="text-gray-400 block">Post URL</span>
+                    <a href={detailPost.saikiweb_post_url} target="_blank" rel="noopener noreferrer" className="text-blue-600 truncate block">{detailPost.saikiweb_post_url}</a>
+                  </div>
+                )}
+                {detailPost.saikiweb_scheduled_at && (
+                  <div>
+                    <span className="text-gray-400 block">Scheduled</span>
+                    <span>{formatDate(detailPost.saikiweb_scheduled_at)}</span>
+                  </div>
+                )}
+                {detailPost.saikiweb_published_at && (
+                  <div>
+                    <span className="text-gray-400 block">Published</span>
+                    <span>{formatDate(detailPost.saikiweb_published_at)}</span>
+                  </div>
+                )}
+                <div>
+                  <span className="text-gray-400 block">Created</span>
+                  <span>{formatDate(detailPost.saikiweb_created_at)}</span>
+                </div>
+              </div>
+
+              {/* Detail notes */}
+              {detailPost.saikiweb_notes && (
+                <div className="px-6 py-3 border-t border-gray-100">
+                  <span className="text-xs text-gray-400 block mb-1">Notes</span>
+                  <p className="text-sm text-gray-600 whitespace-pre-wrap">{detailPost.saikiweb_notes}</p>
+                </div>
+              )}
+
+              {/* Detail actions */}
+              <div className="px-6 py-4 border-t border-gray-100 flex items-center gap-2">
+                <button
+                  onClick={() => { handleEdit(detailPost); setDetailPost(null); }}
+                  className="px-4 py-2 text-sm font-medium text-teal-700 bg-teal-50 rounded-xl hover:bg-teal-100 transition"
+                >
+                  Edit
+                </button>
+                {detailPost.saikiweb_post_url && (
+                  <a
+                    href={detailPost.saikiweb_post_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="px-4 py-2 text-sm font-medium text-blue-700 bg-blue-50 rounded-xl hover:bg-blue-100 transition"
+                  >
+                    View Live
+                  </a>
+                )}
+                <button
+                  onClick={() => setDetailPost(null)}
+                  className="px-4 py-2 text-sm text-gray-500 hover:text-gray-700 transition ml-auto"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
     </div>
   );
 }
