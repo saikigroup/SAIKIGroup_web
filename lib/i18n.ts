@@ -48,6 +48,10 @@ export const articleSlugMap: Array<{ id: string; en: string }> = [
   { id: 'mengapa-personal-branding-penting', en: 'why-personal-branding-matters' },
   { id: 'brand-identity-bukan-logo', en: 'brand-identity-is-not-a-logo' },
   { id: 'custom-vs-off-the-shelf', en: 'custom-vs-off-the-shelf' },
+  { id: 'konsistensi-visual-multi-platform', en: 'visual-consistency-multi-platform' },
+  { id: 'data-driven-bukan-cuma-dashboard', en: 'data-driven-beyond-dashboards' },
+  { id: 'skill-gap-analysis-untuk-profesional', en: 'skill-gap-analysis-for-professionals' },
+  { id: 'psikologi-warna-dalam-branding', en: 'color-psychology-in-branding' },
 ];
 
 export function switchLocale(currentPath: string, targetLocale: Locale): string {
