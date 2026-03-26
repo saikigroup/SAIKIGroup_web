@@ -15,6 +15,7 @@ export interface ArticleData {
   date: string;
   readTime: string;
   featured: boolean;
+  translationSlug?: string;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
@@ -67,6 +68,7 @@ export async function getArticles(locale: Locale): Promise<ArticleData[]> {
       date: row.saikiweb_date,
       readTime: row.saikiweb_read_time,
       featured: row.saikiweb_featured,
+      translationSlug: row.saikiweb_translation_slug || undefined,
       seo: {
         metaTitle: row.saikiweb_meta_title || undefined,
         metaDescription: row.saikiweb_meta_description || undefined,
@@ -115,6 +117,7 @@ export async function getArticle(slug: string, locale: Locale): Promise<ArticleD
           date: data.saikiweb_date,
           readTime: data.saikiweb_read_time,
           featured: data.saikiweb_featured,
+          translationSlug: data.saikiweb_translation_slug || undefined,
           seo: {
             metaTitle: data.saikiweb_meta_title || undefined,
             metaDescription: data.saikiweb_meta_description || undefined,
@@ -145,4 +148,35 @@ export async function getArticle(slug: string, locale: Locale): Promise<ArticleD
     featured: found.featured,
     seo: found.seo,
   };
+}
+
+/**
+ * Find an article by its translation_slug in a given locale.
+ * Used when language switching with a slug from the other locale.
+ * Returns the correct slug for the target locale, or null.
+ */
+export async function findArticleByTranslationSlug(
+  translationSlug: string,
+  locale: Locale
+): Promise<string | null> {
+  const supabase = getSupabaseAdmin();
+  if (!supabase) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from(TABLES.ARTICLES)
+      .select('saikiweb_slug')
+      .eq('saikiweb_translation_slug', translationSlug)
+      .eq('saikiweb_locale', locale)
+      .eq('saikiweb_published', true)
+      .single();
+
+    if (!error && data) {
+      return data.saikiweb_slug;
+    }
+  } catch {
+    // Fall through
+  }
+
+  return null;
 }

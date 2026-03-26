@@ -2,7 +2,7 @@ import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { type Locale, isValidLocale } from '@/lib/i18n';
 import { getInsights } from '@/lib/content';
-import { getArticle, getArticles } from '@/lib/articles';
+import { getArticle, getArticles, findArticleByTranslationSlug } from '@/lib/articles';
 import { FadeIn } from '@/components/motion';
 import { StaggerGroup, StaggerItem } from '@/components/motion/StaggerGroup';
 import { Eyebrow, ServiceTag, JournalCard } from '@/components/shared';
@@ -104,9 +104,15 @@ export default async function InsightArticlePage({
   const t = getInsights(locale);
 
   if (!article) {
-    // Article not found in this locale — likely a language switch with mismatched slug.
-    // Redirect to insights listing instead of showing 404.
     const validLocale = isValidLocale(locale) ? locale : 'id';
+
+    // Try to find the article via translation_slug (the slug belongs to the other locale)
+    const correctSlug = await findArticleByTranslationSlug(slug, validLocale);
+    if (correctSlug) {
+      redirect(`/${validLocale}/insights/${correctSlug}`);
+    }
+
+    // No translation found — redirect to insights listing
     redirect(`/${validLocale}/insights`);
   }
 
