@@ -352,6 +352,35 @@ export default function AdminArticlesPage() {
         }
       }
 
+      // Sync translation_slug on the paired article (bidirectional link)
+      if (editingId && form.translationSlug) {
+        const otherLocale = form.locale === 'id' ? 'en' : 'id';
+        const pair = articles.find(
+          (a) => a.saikiweb_slug === form.translationSlug && a.saikiweb_locale === otherLocale
+        );
+        if (pair && pair.saikiweb_translation_slug !== form.slug) {
+          await saveArticle(pw, {
+            id: pair.saikiweb_article_id,
+            slug: pair.saikiweb_slug,
+            locale: pair.saikiweb_locale,
+            title: pair.saikiweb_title,
+            excerpt: pair.saikiweb_excerpt,
+            body: pair.saikiweb_body,
+            category: pair.saikiweb_category,
+            categoryKey: pair.saikiweb_category_key,
+            date: pair.saikiweb_date,
+            readTime: pair.saikiweb_read_time,
+            layout: pair.saikiweb_layout,
+            featured: pair.saikiweb_featured,
+            published: pair.saikiweb_published,
+            metaTitle: pair.saikiweb_meta_title,
+            metaDescription: pair.saikiweb_meta_description,
+            keywords: pair.saikiweb_keywords,
+            translationSlug: form.slug,
+          }, 'PUT');
+        }
+      }
+
       setSaveSuccess(dualLocale && !editingId ? 'Both ID & EN articles created!' : editingId ? 'Article updated!' : 'Article created!');
       setEditing(false);
       setEditingId(null);
@@ -392,6 +421,19 @@ export default function AdminArticlesPage() {
   };
 
   const handleEdit = (article: Article) => {
+    // Auto-detect translation slug if not set:
+    // Look for an article in the other locale that points back to this slug
+    let translationSlug = article.saikiweb_translation_slug || '';
+    if (!translationSlug) {
+      const otherLocale = article.saikiweb_locale === 'id' ? 'en' : 'id';
+      const pair = articles.find(
+        (a) => a.saikiweb_locale === otherLocale && a.saikiweb_translation_slug === article.saikiweb_slug
+      );
+      if (pair) {
+        translationSlug = pair.saikiweb_slug;
+      }
+    }
+
     setForm({
       slug: article.saikiweb_slug,
       locale: article.saikiweb_locale,
@@ -408,7 +450,7 @@ export default function AdminArticlesPage() {
       metaTitle: article.saikiweb_meta_title || '',
       metaDescription: article.saikiweb_meta_description || '',
       keywords: (article.saikiweb_keywords || []).join(', '),
-      translationSlug: article.saikiweb_translation_slug || '',
+      translationSlug,
     });
     setEditingId(article.saikiweb_article_id);
     setEditing(true);
