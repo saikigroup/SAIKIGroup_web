@@ -81,11 +81,14 @@ export function switchLocale(currentPath: string, targetLocale: Locale): string 
   if (currentSubPath.startsWith('insights/')) {
     const currentSlug = currentSubPath.replace('insights/', '');
     const fromLocale = currentLocale as Locale;
+    // Check static slug map first
     const mapping = articleSlugMap.find((m) => m[fromLocale] === currentSlug);
     if (mapping) {
       return `/${targetLocale}/insights/${mapping[targetLocale]}`;
     }
-    // For Supabase articles with same slug in both locales, just swap locale
+    // For dynamic (Supabase) articles, keep the slug — the server will
+    // look up the correct slug via translation_slug and redirect
+    return `/${targetLocale}/insights/${currentSlug}`;
   }
 
   // Fallback: just swap locale prefix

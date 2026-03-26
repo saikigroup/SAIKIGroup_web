@@ -31,6 +31,7 @@ interface Article {
   saikiweb_meta_title: string | null;
   saikiweb_meta_description: string | null;
   saikiweb_keywords: string[] | null;
+  saikiweb_translation_slug: string | null;
   saikiweb_created_at: string;
   saikiweb_updated_at: string;
 }
@@ -62,6 +63,7 @@ interface ArticleForm {
   metaTitle: string;
   metaDescription: string;
   keywords: string;
+  translationSlug: string;
 }
 
 const emptyLocaleFields: LocaleFields = {
@@ -97,6 +99,7 @@ const emptyForm: ArticleForm = {
   metaTitle: '',
   metaDescription: '',
   keywords: '',
+  translationSlug: '',
 };
 
 const categoryOptions = [
@@ -305,6 +308,8 @@ export default function AdminArticlesPage() {
         readTime: formatReadTime(form.readTime, saveLocale),
         category: catOpt?.labelId || form.category,
         keywords: form.keywords ? form.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
+        // Link to EN slug for language switching
+        translationSlug: (dualLocale && !editingId) ? enSlug : (form.translationSlug || null),
         ...(editingId ? { id: editingId } : {}),
       };
 
@@ -334,6 +339,8 @@ export default function AdminArticlesPage() {
           metaTitle: enFields.metaTitle || null,
           metaDescription: enFields.metaDescription || null,
           keywords: enFields.keywords ? enFields.keywords.split(',').map((k) => k.trim()).filter(Boolean) : null,
+          // Link back to ID slug for language switching
+          translationSlug: form.slug,
         };
 
         const enResult = await saveArticle(pw, enPayload, 'POST');
@@ -401,6 +408,7 @@ export default function AdminArticlesPage() {
       metaTitle: article.saikiweb_meta_title || '',
       metaDescription: article.saikiweb_meta_description || '',
       keywords: (article.saikiweb_keywords || []).join(', '),
+      translationSlug: article.saikiweb_translation_slug || '',
     });
     setEditingId(article.saikiweb_article_id);
     setEditing(true);
@@ -991,6 +999,21 @@ export default function AdminArticlesPage() {
                     className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
                   />
                   <p className="text-xs text-gray-400 mt-1">Comma separated</p>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
+                    Translation Slug
+                    <Tip>Slug artikel versi bahasa lain. Misal: artikel ID slug &quot;tips-karier&quot; isi dengan slug EN-nya &quot;career-tips&quot;, dan sebaliknya. Digunakan saat user ganti bahasa.</Tip>
+                  </label>
+                  <input
+                    type="text"
+                    value={form.translationSlug}
+                    onChange={(e) => setForm({ ...form, translationSlug: e.target.value })}
+                    placeholder={form.locale === 'id' ? 'slug-versi-english' : 'slug-versi-indonesia'}
+                    className="w-full px-3 py-2 text-sm border border-gray-200 rounded-lg focus:border-teal-500 outline-none transition"
+                  />
+                  <p className="text-xs text-gray-400 mt-1">Slug artikel di locale lain (untuk language switching)</p>
                 </div>
 
                 {/* SEO Preview */}

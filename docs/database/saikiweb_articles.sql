@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS saikiweb_articles (
   saikiweb_meta_title TEXT,
   saikiweb_meta_description TEXT,
   saikiweb_keywords TEXT[],
+  saikiweb_translation_slug TEXT,
   saikiweb_created_at TIMESTAMPTZ DEFAULT NOW(),
   saikiweb_updated_at TIMESTAMPTZ DEFAULT NOW(),
 

@@ -84,6 +84,7 @@ export async function POST(request: NextRequest) {
       saikiweb_meta_title: body.metaTitle || null,
       saikiweb_meta_description: body.metaDescription || null,
       saikiweb_keywords: body.keywords || null,
+      saikiweb_translation_slug: body.translationSlug || null,
     })
     .select()
     .single();
@@ -130,6 +131,7 @@ export async function PUT(request: NextRequest) {
       saikiweb_meta_title: body.metaTitle || null,
       saikiweb_meta_description: body.metaDescription || null,
       saikiweb_keywords: body.keywords || null,
+      saikiweb_translation_slug: body.translationSlug || null,
     })
     .eq('saikiweb_article_id', id)
     .select()
