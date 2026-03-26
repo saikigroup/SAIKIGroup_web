@@ -85,7 +85,8 @@ export function switchLocale(currentPath: string, targetLocale: Locale): string 
     if (mapping) {
       return `/${targetLocale}/insights/${mapping[targetLocale]}`;
     }
-    // For Supabase articles with same slug in both locales, just swap locale
+    // No mapping found — redirect to insights listing to avoid 404
+    return `/${targetLocale}/insights`;
   }
 
   // Fallback: just swap locale prefix

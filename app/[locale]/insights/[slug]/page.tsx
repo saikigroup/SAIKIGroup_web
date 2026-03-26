@@ -1,6 +1,6 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
-import { type Locale } from '@/lib/i18n';
+import { type Locale, isValidLocale } from '@/lib/i18n';
 import { getInsights } from '@/lib/content';
 import { getArticle, getArticles } from '@/lib/articles';
 import { FadeIn } from '@/components/motion';
@@ -104,7 +104,10 @@ export default async function InsightArticlePage({
   const t = getInsights(locale);
 
   if (!article) {
-    notFound();
+    // Article not found in this locale — likely a language switch with mismatched slug.
+    // Redirect to insights listing instead of showing 404.
+    const validLocale = isValidLocale(locale) ? locale : 'id';
+    redirect(`/${validLocale}/insights`);
   }
 
   // Get related articles (all articles except current)
