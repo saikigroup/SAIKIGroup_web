@@ -92,18 +92,18 @@ export default function InvoiceDocument({
       {/* ===== HEADER SECTION ===== */}
       <div className="relative z-10 flex">
         {/* Main header - colored */}
-        <div className="flex-1 pl-8 pr-10 py-7" style={{ backgroundColor: brand.color }}>
+        <div className="flex-1 pl-8 pr-10 py-8" style={{ backgroundColor: brand.color }}>
           <div className="flex items-start justify-between">
-            <div className="flex items-center gap-3">
-              <SaikiLogoMarkWhite size={30} />
+            <div className="flex items-center gap-4">
+              <SaikiLogoMarkWhite size={42} />
               <div>
-                <p className="text-white text-[13px] font-bold tracking-wider">{brand.label.split(' ')[0]}<span className="font-normal opacity-60 ml-1">{brand.label.split(' ').slice(1).join(' ')}</span></p>
-                <p className="text-white/30 text-[8px] tracking-[0.3em] uppercase">Beyond Your Needs</p>
+                <p className="text-white text-[16px] font-bold tracking-wider">{brand.label.split(' ')[0]}<span className="font-normal opacity-60 ml-1.5">{brand.label.split(' ').slice(1).join(' ')}</span></p>
+                <p className="text-white/40 text-[9px] tracking-[0.25em] uppercase mt-0.5">Beyond Your Needs</p>
               </div>
             </div>
             <div className="text-right">
-              <h1 className="text-white font-bold tracking-[0.1em]" style={{ fontFamily: "'Georgia', serif", fontSize: '28px', lineHeight: 1 }}>INVOICE</h1>
-              <p className="text-white/50 text-[10px] mt-1.5">No: <span className="text-white/80 font-medium">{invoiceNumber}</span></p>
+              <h1 className="text-white font-bold tracking-[0.12em]" style={{ fontFamily: "'Georgia', serif", fontSize: '34px', lineHeight: 1 }}>INVOICE</h1>
+              <p className="text-white/50 text-[11px] mt-2">No: <span className="text-white/80 font-medium">{invoiceNumber}</span></p>
               <p className="text-white/50 text-[10px]">Issued: <span className="text-white/80 font-medium">{formatDate(issuedDate)}</span></p>
             </div>
           </div>
@@ -237,7 +237,14 @@ export default function InvoiceDocument({
         </div>
       </div>
 
-      {/* Bottom accent */}
+      {/* ===== FOOTER BAR ===== */}
+      <div className="relative z-10 px-8 py-3 flex items-center justify-between" style={{ backgroundColor: `${brand.color}0A`, borderTop: `1px solid ${brand.color}15` }}>
+        <div className="flex items-center gap-2">
+          <SaikiLogoMark size={12} />
+          <span className="text-[8px] text-gray-400 tracking-wide">SAIKI Group | saiki.id | info@saiki.id</span>
+        </div>
+        <span className="text-[7px] text-gray-300">Consultancy | Technology | Imagery</span>
+      </div>
       <div className="relative z-10 h-[3px]" style={{ background: `linear-gradient(to right, ${brand.color}, ${brand.color}60, ${brand.color}10)` }} />
     </div>
   );
