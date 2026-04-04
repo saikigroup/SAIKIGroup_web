@@ -9,9 +9,10 @@ interface ReceiptDetailModalProps {
   receipt: SaikiwebReceipt;
   onClose: () => void;
   onEdit: () => void;
+  onSendEmail: () => void;
 }
 
-export default function ReceiptDetailModal({ receipt, onClose, onEdit }: ReceiptDetailModalProps) {
+export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEmail }: ReceiptDetailModalProps) {
   const [showPreview, setShowPreview] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -109,8 +110,15 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit }: Receipt
             </div>
           )}
 
-          <div className="grid grid-cols-3 gap-2 pt-2">
+          {receipt.saikiweb_sent_at && (
+            <div className="bg-green-50 rounded-xl p-3">
+              <p className="text-xs text-green-600 font-medium">Email sent on {formatDate(receipt.saikiweb_sent_at)}</p>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2">
             <button onClick={() => setShowPreview(true)} className="py-2.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-200 transition">Preview</button>
+            <button onClick={onSendEmail} className="py-2.5 bg-amber-600 text-white text-sm font-medium rounded-xl hover:bg-amber-700 transition">Send Email</button>
             <button onClick={onEdit} className="py-2.5 bg-teal-600 text-white text-sm font-medium rounded-xl hover:bg-teal-700 transition">Edit</button>
             <button onClick={onClose} className="py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition">Close</button>
           </div>

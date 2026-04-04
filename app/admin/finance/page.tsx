@@ -10,6 +10,7 @@ import PaymentFormModal from '@/components/finance/PaymentFormModal';
 import ReceiptList from '@/components/finance/ReceiptList';
 import ReceiptFormModal from '@/components/finance/ReceiptFormModal';
 import ReceiptDetailModal from '@/components/finance/ReceiptDetailModal';
+import SendEmailModal from '@/components/finance/SendEmailModal';
 
 type Tab = 'invoices' | 'payments' | 'receipts';
 type ModalState =
@@ -18,7 +19,8 @@ type ModalState =
   | { type: 'invoice-detail'; invoice: SaikiwebInvoice }
   | { type: 'payment-form'; invoiceId?: number }
   | { type: 'receipt-form'; receipt?: SaikiwebReceipt; prefill?: { invoiceId?: number; clientName?: string; clientAddress?: string; amount?: number; serviceBrand?: 'consultancy' | 'technology' | 'imagery' } }
-  | { type: 'receipt-detail'; receipt: SaikiwebReceipt };
+  | { type: 'receipt-detail'; receipt: SaikiwebReceipt }
+  | { type: 'send-email'; invoice?: SaikiwebInvoice | null; receipt?: SaikiwebReceipt | null };
 
 export default function FinancePage() {
   const [password, setPassword] = useState('');
@@ -185,6 +187,7 @@ export default function FinancePage() {
               serviceBrand: modal.invoice.saikiweb_service_brand,
             },
           })}
+          onSendEmail={() => setModal({ type: 'send-email', invoice: modal.invoice, receipt: null })}
         />
       )}
 
@@ -210,6 +213,16 @@ export default function FinancePage() {
           receipt={modal.receipt}
           onClose={() => setModal({ type: 'none' })}
           onEdit={() => setModal({ type: 'receipt-form', receipt: modal.receipt })}
+          onSendEmail={() => setModal({ type: 'send-email', invoice: null, receipt: modal.receipt })}
+        />
+      )}
+
+      {modal.type === 'send-email' && (
+        <SendEmailModal
+          invoice={modal.invoice}
+          receipt={modal.receipt}
+          onClose={() => setModal({ type: 'none' })}
+          onSent={() => { setModal({ type: 'none' }); refresh(); }}
         />
       )}
     </div>
