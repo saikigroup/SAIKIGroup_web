@@ -2,6 +2,7 @@
 
 import { SERVICE_BRANDS, formatCurrency } from '@/lib/finance';
 import type { ServiceBrand } from '@/lib/supabase';
+import QRCode from './QRCode';
 
 interface ReceiptDocumentProps {
   receiptNumber: string;
@@ -17,6 +18,7 @@ interface ReceiptDocumentProps {
   paymentMethod: string;
   receiptDate: string;
   customFields?: Record<string, string>;
+  verificationToken?: string;
 }
 
 export default function ReceiptDocument({
@@ -33,6 +35,7 @@ export default function ReceiptDocument({
   paymentMethod,
   receiptDate,
   customFields,
+  verificationToken,
 }: ReceiptDocumentProps) {
   const brand = SERVICE_BRANDS[serviceBrand];
 
@@ -90,9 +93,12 @@ export default function ReceiptDocument({
             </div>
           </div>
 
-          {/* Signature */}
+          {/* Signature & QR Code */}
           <div className="px-8 pb-8">
-            <div className="flex justify-end">
+            <div className="flex items-end justify-between">
+              {verificationToken && (
+                <QRCode value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify/receipt?token=${verificationToken}`} size={64} />
+              )}
               <div className="text-right">
                 <p className="text-sm text-gray-600 mb-2">Received By:</p>
                 <div className="w-40 h-16 border-b border-gray-300" />

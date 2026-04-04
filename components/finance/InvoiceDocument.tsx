@@ -2,6 +2,7 @@
 
 import { SERVICE_BRANDS, formatCurrency } from '@/lib/finance';
 import type { ServiceBrand } from '@/lib/supabase';
+import QRCode from './QRCode';
 
 interface InvoiceItem {
   description: string;
@@ -24,6 +25,7 @@ interface InvoiceDocumentProps {
   paymentRecipient?: string;
   notes?: string;
   customFields?: Record<string, string>;
+  verificationToken?: string;
 }
 
 export default function InvoiceDocument({
@@ -39,6 +41,7 @@ export default function InvoiceDocument({
   paymentAccount,
   paymentRecipient,
   customFields,
+  verificationToken,
 }: InvoiceDocumentProps) {
   const brand = SERVICE_BRANDS[serviceBrand];
 
@@ -173,19 +176,22 @@ export default function InvoiceDocument({
           </div>
         )}
 
-        {/* Bottom decorative elements */}
-        <div className="relative h-16 mx-4">
-          <div className="absolute bottom-0 left-0">
-            <div className="flex gap-0.5">
-              {[0.8, 0.6, 0.4].map((opacity, i) => (
-                <div
-                  key={i}
-                  className="w-6 h-12 rounded-t"
-                  style={{ backgroundColor: brand.color, opacity }}
-                />
-              ))}
-            </div>
+        {/* Bottom decorative elements + QR Code */}
+        <div className="relative h-20 mx-4 flex items-end justify-between px-8 pb-4">
+          <div className="flex gap-0.5">
+            {[0.8, 0.6, 0.4].map((opacity, i) => (
+              <div
+                key={i}
+                className="w-6 h-12 rounded-t"
+                style={{ backgroundColor: brand.color, opacity }}
+              />
+            ))}
           </div>
+          {verificationToken && (
+            <div className="flex items-center gap-2">
+              <QRCode value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify/invoice?token=${verificationToken}`} size={64} />
+            </div>
+          )}
         </div>
       </div>
     </div>

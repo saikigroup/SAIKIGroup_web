@@ -87,6 +87,7 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
             paymentAccount={invoice.saikiweb_payment_account}
             paymentRecipient={invoice.saikiweb_payment_recipient}
             customFields={invoice.saikiweb_custom_fields || undefined}
+            verificationToken={invoice.saikiweb_verification_token || undefined}
           />
         </div>
       </div>

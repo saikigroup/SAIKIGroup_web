@@ -54,6 +54,7 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit }: Receipt
             paymentMethod={receipt.saikiweb_payment_method}
             receiptDate={receipt.saikiweb_receipt_date}
             customFields={receipt.saikiweb_custom_fields || undefined}
+            verificationToken={receipt.saikiweb_verification_token || undefined}
           />
         </div>
       </div>
