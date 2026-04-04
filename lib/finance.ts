@@ -10,7 +10,7 @@ export const SERVICE_BRANDS: Record<ServiceBrand, {
 }> = {
   consultancy: {
     label: 'SAIKI CONSULTANCY',
-    logo: '/brand/SAIKI CONSULTANCY.svg',
+    logo: '/brand/SAIKI-CONSULTANCY.svg',
     logoWhite: '/brand/saiki-consultancy-white-01.svg',
     color: '#6B1D3A',
     bgColor: '#f5f0f2',
@@ -26,7 +26,7 @@ export const SERVICE_BRANDS: Record<ServiceBrand, {
   },
   imagery: {
     label: 'SAIKI IMAGERY',
-    logo: '/brand/SAIKI IMAGERY.svg',
+    logo: '/brand/SAIKI-IMAGERY.svg',
     logoWhite: '/brand/SAIKI-IMAGERY-WHITE-01.svg',
     color: '#1a1a2e',
     bgColor: '#f0f0f5',

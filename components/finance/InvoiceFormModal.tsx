@@ -42,6 +42,9 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
     saikiweb_payment_account: invoice?.saikiweb_payment_account || '',
     saikiweb_payment_recipient: invoice?.saikiweb_payment_recipient || '',
     saikiweb_signer_name: invoice?.saikiweb_signer_name || '',
+    saikiweb_is_legacy: invoice?.saikiweb_is_legacy || false,
+    saikiweb_legacy_notes: invoice?.saikiweb_legacy_notes || '',
+    saikiweb_related_invoice_id: invoice?.saikiweb_related_invoice_id || '',
   });
 
   const [items, setItems] = useState<LineItem[]>([{ description: '', quantity: 1, unit_price: 0 }]);
@@ -107,6 +110,8 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
     const payload = {
       ...form,
       saikiweb_custom_fields: Object.keys(cfObj).length > 0 ? cfObj : null,
+      saikiweb_related_invoice_id: form.saikiweb_related_invoice_id || null,
+      saikiweb_legacy_notes: form.saikiweb_legacy_notes || null,
       items: items.filter((it) => it.description.trim()),
       ...(isEdit ? { saikiweb_invoice_id: invoice?.saikiweb_invoice_id } : {}),
     };
@@ -170,6 +175,46 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
                 <option value="cancelled">Cancelled</option>
               </select>
             </div>
+          </div>
+
+          {/* Legacy / Historical Data Toggle */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 space-y-3">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.saikiweb_is_legacy}
+                onChange={(e) => setForm((f) => ({ ...f, saikiweb_is_legacy: e.target.checked }))}
+                className="w-4 h-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+              />
+              <div>
+                <span className="text-sm font-semibold text-amber-800">Historical / Legacy Data</span>
+                <p className="text-xs text-amber-600">Centang jika invoice ini dibuat sebelum sistem ini (misal: tahun 2025)</p>
+              </div>
+            </label>
+            {form.saikiweb_is_legacy && (
+              <div className="space-y-3 pt-2">
+                <div>
+                  <label className={labelCls}>Catatan Legacy</label>
+                  <textarea
+                    value={form.saikiweb_legacy_notes}
+                    onChange={(e) => setForm((f) => ({ ...f, saikiweb_legacy_notes: e.target.value }))}
+                    className={inputCls}
+                    rows={2}
+                    placeholder="Contoh: Invoice asli dikirim manual via email pada 30 Des 2025"
+                  />
+                </div>
+                <div>
+                  <label className={labelCls}>Related Invoice ID (jika ini pelunasan dari invoice sebelumnya)</label>
+                  <input
+                    type="number"
+                    value={form.saikiweb_related_invoice_id}
+                    onChange={(e) => setForm((f) => ({ ...f, saikiweb_related_invoice_id: parseInt(e.target.value) || '' }))}
+                    className={inputCls}
+                    placeholder="ID invoice DP/sebelumnya"
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Client Info */}

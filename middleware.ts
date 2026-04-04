@@ -9,6 +9,7 @@ export function middleware(request: NextRequest) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
     pathname.startsWith('/admin') ||
+    pathname.startsWith('/verify') ||
     pathname.startsWith('/images') ||
     pathname.startsWith('/icons') ||
     pathname.includes('.') // static files
@@ -31,5 +32,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|images|icons|docs|admin).*)'],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|images|icons|docs|admin|verify).*)'],
 };
