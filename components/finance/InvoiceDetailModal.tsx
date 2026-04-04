@@ -77,22 +77,25 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
         <div className="relative my-8 w-full max-w-[210mm]">
           <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
             <button
-              onClick={async () => {
-                if (!previewRef.current) return;
+              onClick={async (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (!previewRef.current) { console.error('previewRef not attached'); return; }
                 setDownloading(true);
                 try {
                   await downloadElementAsPDF(previewRef.current, `${invoice.saikiweb_invoice_number}.pdf`);
-                } catch { /* ignore */ }
+                } catch (err) { console.error('PDF download failed:', err); alert('Failed to generate PDF. Please try again.'); }
                 setDownloading(false);
               }}
               disabled={downloading}
-              className="bg-teal-600 text-white rounded-full p-2 shadow-lg hover:bg-teal-700 disabled:opacity-50"
+              className="bg-teal-600 text-white rounded-full p-2.5 shadow-lg hover:bg-teal-700 disabled:opacity-50 cursor-pointer"
               title="Download PDF"
+              type="button"
             >
               {downloading ? (
                 <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
               ) : (
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
               )}
             </button>
             <button onClick={() => setShowPreview(false)} className="bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700">
