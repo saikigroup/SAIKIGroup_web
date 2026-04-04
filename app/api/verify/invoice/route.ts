@@ -14,13 +14,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'Service unavailable' }, { status: 500 });
   }
 
+  // Select only core columns first, then try with reference_docs
   const { data: invoice, error } = await supabase
     .from(TABLES.INVOICES)
-    .select('saikiweb_invoice_number, saikiweb_service_brand, saikiweb_status, saikiweb_client_name, saikiweb_issued_date, saikiweb_grand_total, saikiweb_currency, saikiweb_reference_docs')
+    .select('*')
     .eq('saikiweb_verification_token', token)
     .single();
 
   if (error || !invoice) {
+    console.error('Invoice verification error:', error?.message);
     return NextResponse.json({ success: false, error: 'Invoice not found' }, { status: 404 });
   }
 

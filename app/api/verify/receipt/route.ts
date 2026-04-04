@@ -16,11 +16,12 @@ export async function GET(request: NextRequest) {
 
   const { data: receipt, error } = await supabase
     .from(TABLES.RECEIPTS)
-    .select('saikiweb_receipt_number, saikiweb_service_brand, saikiweb_client_name, saikiweb_amount, saikiweb_currency, saikiweb_receipt_date, saikiweb_payment_for, saikiweb_reference_docs')
+    .select('*')
     .eq('saikiweb_verification_token', token)
     .single();
 
   if (error || !receipt) {
+    console.error('Receipt verification error:', error?.message);
     return NextResponse.json({ success: false, error: 'Receipt not found' }, { status: 404 });
   }
 

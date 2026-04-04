@@ -90,7 +90,8 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEma
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
         <div className="absolute inset-0 bg-black/60" onClick={() => setShowPreview(false)} />
         <div className="relative my-8 w-full max-w-[794px]">
-          <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
+          {/* Toolbar above document */}
+          <div className="flex items-center justify-end gap-2 mb-3">
             {/* If stamped PDF exists, download that instead */}
             {isStamped && stampedFileUrl ? (
               <a
@@ -126,7 +127,7 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEma
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
               )}
             </button>
-            <button onClick={() => setShowPreview(false)} className="bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700">
+            <button onClick={() => setShowPreview(false)} className="bg-white text-gray-500 hover:text-gray-700 rounded-full p-2.5 shadow-lg cursor-pointer" type="button">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
           </div>
