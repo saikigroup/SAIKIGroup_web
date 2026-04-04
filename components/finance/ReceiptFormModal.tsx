@@ -39,6 +39,7 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
     saikiweb_reference: receipt?.saikiweb_reference || '',
     saikiweb_payment_method: receipt?.saikiweb_payment_method || 'Bank transfer',
     saikiweb_receipt_date: receipt?.saikiweb_receipt_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
+    saikiweb_signer_name: receipt?.saikiweb_signer_name || '',
   });
 
   const [customFields, setCustomFields] = useState<CustomField[]>(
@@ -190,6 +191,17 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
                 <option value="Credit card">Credit Card</option>
                 <option value="Other">Other</option>
               </select>
+            </div>
+          </div>
+
+          {/* Signer */}
+          <div>
+            <label className={labelCls}>Signer Name (for signature)</label>
+            <div className="flex items-center gap-3">
+              <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={`${inputCls} flex-1`} placeholder="e.g. Dimas Budi Ramadhan" />
+              {form.saikiweb_signer_name && (
+                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{form.saikiweb_signer_name}</span>
+              )}
             </div>
           </div>
 

@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { formatCurrency } from '@/lib/finance';
+import { downloadElementAsPDF } from '@/lib/pdf';
 import type { SaikiwebInvoice, SaikiwebInvoiceItem, ServiceBrand } from '@/lib/supabase';
 import InvoiceDocument from './InvoiceDocument';
 
@@ -20,6 +21,8 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
   const [showPreview, setShowPreview] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+  const previewRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const pw = sessionStorage.getItem('admin_pw');
@@ -72,9 +75,31 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
         <div className="absolute inset-0 bg-black/60" onClick={() => setShowPreview(false)} />
         <div className="relative my-8 w-full max-w-[210mm]">
-          <button onClick={() => setShowPreview(false)} className="absolute -top-2 -right-2 z-10 bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700">
-            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-          </button>
+          <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
+            <button
+              onClick={async () => {
+                if (!previewRef.current) return;
+                setDownloading(true);
+                try {
+                  await downloadElementAsPDF(previewRef.current, `${invoice.saikiweb_invoice_number}.pdf`);
+                } catch { /* ignore */ }
+                setDownloading(false);
+              }}
+              disabled={downloading}
+              className="bg-teal-600 text-white rounded-full p-2 shadow-lg hover:bg-teal-700 disabled:opacity-50"
+              title="Download PDF"
+            >
+              {downloading ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+              ) : (
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+              )}
+            </button>
+            <button onClick={() => setShowPreview(false)} className="bg-white rounded-full p-2 shadow-lg text-gray-500 hover:text-gray-700">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+          <div ref={previewRef}>
           <InvoiceDocument
             invoiceNumber={invoice.saikiweb_invoice_number}
             serviceBrand={invoice.saikiweb_service_brand}
@@ -89,7 +114,9 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
             paymentRecipient={invoice.saikiweb_payment_recipient}
             customFields={invoice.saikiweb_custom_fields || undefined}
             verificationToken={invoice.saikiweb_verification_token || undefined}
+            signerName={invoice.saikiweb_signer_name || undefined}
           />
+          </div>
         </div>
       </div>
     );

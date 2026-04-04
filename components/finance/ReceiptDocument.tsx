@@ -19,6 +19,7 @@ interface ReceiptDocumentProps {
   receiptDate: string;
   customFields?: Record<string, string>;
   verificationToken?: string;
+  signerName?: string;
 }
 
 export default function ReceiptDocument({
@@ -36,6 +37,7 @@ export default function ReceiptDocument({
   receiptDate,
   customFields,
   verificationToken,
+  signerName,
 }: ReceiptDocumentProps) {
   const brand = SERVICE_BRANDS[serviceBrand];
 
@@ -101,7 +103,13 @@ export default function ReceiptDocument({
               )}
               <div className="text-right">
                 <p className="text-sm text-gray-600 mb-2">Received By:</p>
-                <div className="w-40 h-16 border-b border-gray-300" />
+                {signerName ? (
+                  <div>
+                    <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '28px', color: '#1a1a2e' }}>{signerName}</span>
+                  </div>
+                ) : (
+                  <div className="w-40 h-16 border-b border-gray-300" />
+                )}
               </div>
             </div>
           </div>

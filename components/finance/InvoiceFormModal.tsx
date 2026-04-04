@@ -41,6 +41,7 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
     saikiweb_payment_bank: invoice?.saikiweb_payment_bank || 'Bank Central Asia',
     saikiweb_payment_account: invoice?.saikiweb_payment_account || '',
     saikiweb_payment_recipient: invoice?.saikiweb_payment_recipient || '',
+    saikiweb_signer_name: invoice?.saikiweb_signer_name || '',
   });
 
   const [items, setItems] = useState<LineItem[]>([{ description: '', quantity: 1, unit_price: 0 }]);
@@ -282,6 +283,17 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
                 <label className={labelCls}>Recipient Name</label>
                 <input type="text" value={form.saikiweb_payment_recipient} onChange={(e) => setForm((f) => ({ ...f, saikiweb_payment_recipient: e.target.value }))} className={inputCls} />
               </div>
+            </div>
+          </div>
+
+          {/* Signer */}
+          <div>
+            <label className={labelCls}>Signer Name (for signature)</label>
+            <div className="flex items-center gap-3">
+              <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={`${inputCls} flex-1`} placeholder="e.g. Dimas Budi Ramadhan" />
+              {form.saikiweb_signer_name && (
+                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{form.saikiweb_signer_name}</span>
+              )}
             </div>
           </div>
 

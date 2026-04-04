@@ -35,6 +35,24 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields: to, subject, emailBody' }, { status: 400 });
     }
 
+    // Fetch stamped file URLs for attachments
+    const attachments: { filename: string; path?: string; href?: string }[] = [];
+
+    if (receiptId) {
+      const { data: receipt } = await supabase
+        .from(TABLES.RECEIPTS)
+        .select('saikiweb_receipt_number, saikiweb_stamp_status, saikiweb_stamped_file_url')
+        .eq('saikiweb_receipt_id', receiptId)
+        .single();
+
+      if (receipt?.saikiweb_stamped_file_url && receipt.saikiweb_stamp_status === 'stamped') {
+        attachments.push({
+          filename: `${receipt.saikiweb_receipt_number}_stamped.pdf`,
+          href: receipt.saikiweb_stamped_file_url,
+        });
+      }
+    }
+
     const emailData: FinanceEmailData = {
       to,
       subject,
@@ -45,6 +63,9 @@ export async function POST(request: NextRequest) {
       paymentReferences,
       amounts,
       attachedDocsList,
+      attachments: attachments.length > 0
+        ? attachments.map((a) => ({ filename: a.filename, href: a.href }))
+        : undefined,
     };
 
     await sendFinanceEmail(emailData);

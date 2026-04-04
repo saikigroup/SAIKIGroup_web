@@ -66,6 +66,15 @@ export async function POST(request: NextRequest) {
 
     body.saikiweb_verification_token = generateVerificationToken();
 
+    // Auto-set stamp status: receipts >= 5,000,000 IDR need e-meterai
+    const amount = body.saikiweb_amount || 0;
+    const currency = body.saikiweb_currency || 'IDR';
+    if (currency === 'IDR' && amount >= 5000000) {
+      body.saikiweb_stamp_status = 'needs_stamp';
+    } else {
+      body.saikiweb_stamp_status = 'not_required';
+    }
+
     const { data, error } = await supabase
       .from(TABLES.RECEIPTS)
       .insert(body)

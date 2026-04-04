@@ -26,6 +26,7 @@ interface InvoiceDocumentProps {
   notes?: string;
   customFields?: Record<string, string>;
   verificationToken?: string;
+  signerName?: string;
 }
 
 export default function InvoiceDocument({
@@ -42,6 +43,7 @@ export default function InvoiceDocument({
   paymentRecipient,
   customFields,
   verificationToken,
+  signerName,
 }: InvoiceDocumentProps) {
   const brand = SERVICE_BRANDS[serviceBrand];
 
@@ -158,7 +160,13 @@ export default function InvoiceDocument({
           <div className="text-right">
             <img src="/brand/saiki main logo-01.svg" alt="SAIKI Group" className="h-6 ml-auto mb-1" />
             <p className="text-xs text-gray-500">SAIKI GROUP</p>
-            <div className="w-32 h-12 border-b border-gray-300 mt-2" />
+            {signerName ? (
+              <div className="mt-2">
+                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '28px', color: '#1a1a2e' }}>{signerName}</span>
+              </div>
+            ) : (
+              <div className="w-32 h-12 border-b border-gray-300 mt-2" />
+            )}
           </div>
         </div>
 
