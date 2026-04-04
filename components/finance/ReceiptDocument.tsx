@@ -4,6 +4,7 @@ import { SERVICE_BRANDS } from '@/lib/finance';
 import type { ServiceBrand } from '@/lib/supabase';
 import QRCode from './QRCode';
 import { SaikiLogoMark } from './SaikiLogo';
+import AutoFitSignature from './AutoFitSignature';
 
 interface ReceiptDocumentProps {
   receiptNumber: string;
@@ -146,8 +147,8 @@ export default function ReceiptDocument({
                 <p className="text-[10px] font-semibold tracking-wider" style={{ color: brand.color }}>SAIKI GROUP</p>
                 {signerName ? (
                   <div className="mt-2">
-                    <div className="pb-1 border-b" style={{ borderColor: `${brand.color}30` }}>
-                      <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{signerName}</span>
+                    <div className="pb-1 border-b flex justify-end" style={{ borderColor: `${brand.color}30` }}>
+                      <AutoFitSignature name={signerName} maxWidth={170} />
                     </div>
                     <p className="text-[10px] text-gray-600 font-medium mt-1">{signerName}</p>
                     {signerTitle && <p className="text-[9px] text-gray-400">{signerTitle}</p>}
