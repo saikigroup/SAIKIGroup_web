@@ -32,6 +32,10 @@ export const TABLES = {
   SUBSCRIBERS: 'saikiweb_subscribers',
   SOCIAL_POSTS: 'saikiweb_social_posts',
   SHORT_LINKS: 'saikiweb_short_links',
+  INVOICES: 'saikiweb_invoices',
+  INVOICE_ITEMS: 'saikiweb_invoice_items',
+  PAYMENTS: 'saikiweb_payments',
+  RECEIPTS: 'saikiweb_receipts',
 } as const;
 
 // Type for the saikiweb_articles table
@@ -125,4 +129,85 @@ export interface SaikiwebSubscriber {
   saikiweb_source?: string;
   saikiweb_subscribed_at?: string;
   saikiweb_unsubscribed_at?: string;
+}
+
+// Type for saikiweb_invoices table
+export type ServiceBrand = 'consultancy' | 'technology' | 'imagery';
+export type InvoiceStatus = 'draft' | 'sent' | 'paid' | 'partial' | 'overdue' | 'cancelled';
+
+export interface SaikiwebInvoice {
+  saikiweb_invoice_id?: number;
+  saikiweb_invoice_number: string;
+  saikiweb_service_brand: ServiceBrand;
+  saikiweb_status: InvoiceStatus;
+  saikiweb_client_name: string;
+  saikiweb_client_address: string;
+  saikiweb_client_email?: string;
+  saikiweb_client_phone?: string;
+  saikiweb_issued_date: string;
+  saikiweb_due_date?: string;
+  saikiweb_subtotal: number;
+  saikiweb_tax_percent?: number;
+  saikiweb_tax_amount?: number;
+  saikiweb_discount_amount?: number;
+  saikiweb_grand_total: number;
+  saikiweb_currency: string;
+  saikiweb_notes?: string;
+  saikiweb_payment_bank?: string;
+  saikiweb_payment_account?: string;
+  saikiweb_payment_recipient?: string;
+  saikiweb_verification_token?: string;
+  saikiweb_sent_at?: string;
+  saikiweb_custom_fields?: Record<string, string>;
+  saikiweb_created_at?: string;
+  saikiweb_updated_at?: string;
+}
+
+// Type for saikiweb_invoice_items table
+export interface SaikiwebInvoiceItem {
+  saikiweb_item_id?: number;
+  saikiweb_invoice_id: number;
+  saikiweb_description: string;
+  saikiweb_quantity: number;
+  saikiweb_unit_price: number;
+  saikiweb_subtotal: number;
+  saikiweb_sort_order?: number;
+}
+
+// Type for saikiweb_payments table
+export type PaymentStatus = 'pending' | 'confirmed' | 'failed';
+
+export interface SaikiwebPayment {
+  saikiweb_payment_id?: number;
+  saikiweb_invoice_id: number;
+  saikiweb_amount: number;
+  saikiweb_payment_date: string;
+  saikiweb_payment_method: string;
+  saikiweb_status: PaymentStatus;
+  saikiweb_reference?: string;
+  saikiweb_notes?: string;
+  saikiweb_created_at?: string;
+}
+
+// Type for saikiweb_receipts table
+export interface SaikiwebReceipt {
+  saikiweb_receipt_id?: number;
+  saikiweb_receipt_number: string;
+  saikiweb_invoice_id?: number;
+  saikiweb_payment_id?: number;
+  saikiweb_service_brand: ServiceBrand;
+  saikiweb_client_name: string;
+  saikiweb_client_address: string;
+  saikiweb_amount: number;
+  saikiweb_amount_words: string;
+  saikiweb_currency: string;
+  saikiweb_payment_for: string;
+  saikiweb_package_value?: number;
+  saikiweb_reference?: string;
+  saikiweb_payment_method: string;
+  saikiweb_receipt_date: string;
+  saikiweb_verification_token?: string;
+  saikiweb_sent_at?: string;
+  saikiweb_custom_fields?: Record<string, string>;
+  saikiweb_created_at?: string;
 }
