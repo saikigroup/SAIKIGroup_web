@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import type Mail from 'nodemailer/lib/mailer';
 import { normalizePhoneToWA } from '@/lib/phone';
 
 const smtpHost = process.env.SMTP_HOST || 'smtp.gmail.com';
@@ -227,5 +228,123 @@ export async function sendAdminNotification(data: {
     to: adminEmail,
     subject,
     html,
+  });
+}
+
+// --- Finance email functions ---
+
+const brandColors: Record<string, { primary: string; accent: string; label: string }> = {
+  consultancy: { primary: '#6B1D3A', accent: '#8B2D4A', label: 'SAIKI Consultancy' },
+  technology: { primary: '#0D4F4F', accent: '#0d9488', label: 'SAIKI Technology' },
+  imagery: { primary: '#1a1a2e', accent: '#2d2d44', label: 'SAIKI Imagery' },
+};
+
+export interface FinanceEmailData {
+  to: string;
+  subject: string;
+  clientName: string;
+  serviceBrand: string;
+  emailBody: string;
+  paymentReferences?: { label: string; badgeColor: string; value: string }[];
+  amounts?: { label: string; value: string }[];
+  attachedDocsList?: string;
+  closingMessage?: string;
+  attachments?: Mail.Attachment[];
+}
+
+export async function sendFinanceEmail(data: FinanceEmailData) {
+  const transporter = getTransporter();
+  if (!transporter) {
+    throw new Error('SMTP not configured');
+  }
+
+  const brand = brandColors[data.serviceBrand] || brandColors.consultancy;
+
+  const referencesHtml = data.paymentReferences && data.paymentReferences.length > 0
+    ? `
+      <div style="margin: 24px 0; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+        <p style="margin: 0 0 12px; color: #94a3b8; font-size: 13px;">Payment References</p>
+        ${data.paymentReferences.map(ref => `
+          <div style="margin-bottom: 8px;">
+            <span style="display: inline-block; background: ${ref.badgeColor}; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 8px;">${ref.label}</span>
+            <span style="color: #1a1a2e; font-size: 14px;">${ref.value}</span>
+          </div>
+        `).join('')}
+        ${data.amounts && data.amounts.length > 0 ? `
+          <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+            ${data.amounts.map(a => `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="color: #64748b; font-size: 14px;">${a.label}</span>
+                <span style="color: #1a1a2e; font-size: 14px; font-weight: 600;">${a.value}</span>
+              </div>
+            `).join('')}
+          </div>
+        ` : ''}
+        ${data.attachedDocsList ? `
+          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+            <p style="margin: 0; color: #94a3b8; font-size: 12px;">${data.attachedDocsList}</p>
+          </div>
+        ` : ''}
+      </div>
+    `
+    : '';
+
+  const html = `
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background: #f8fafc;">
+      <!-- Color bar -->
+      <div style="height: 6px; background: linear-gradient(to right, ${brand.primary} 50%, ${brand.accent} 50%);"></div>
+
+      <!-- Main content -->
+      <div style="background: #ffffff; padding: 32px;">
+        <!-- Header with logo and brand -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
+          <div>
+            <h2 style="margin: 0; font-size: 22px; color: #1a1a2e; font-weight: 700;">SAIKI<span style="color: #94a3b8; font-weight: 400;">GROUP</span></h2>
+            <p style="margin: 2px 0 0; color: #94a3b8; font-size: 11px; letter-spacing: 0.5px;">Beyond Your Needs</p>
+          </div>
+          <div style="text-align: right;">
+            <p style="margin: 0; font-size: 13px; color: #1a1a2e;"><strong>SAIKI</strong> Group</p>
+            <p style="margin: 2px 0 0; font-size: 13px;">
+              <span style="background: ${brand.primary}; color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600;">SAIKI</span>
+              <span style="color: #1a1a2e; margin-left: 4px;">${brand.label.replace('SAIKI ', '')}</span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Email body -->
+        <div style="color: #1a1a2e; font-size: 15px; line-height: 1.7;">
+          ${data.emailBody}
+        </div>
+
+        ${referencesHtml}
+
+        ${data.closingMessage ? `
+          <div style="color: #1a1a2e; font-size: 15px; line-height: 1.7; margin-top: 20px;">
+            ${data.closingMessage}
+          </div>
+        ` : ''}
+
+        <!-- Signature -->
+        <div style="margin-top: 28px; color: #1a1a2e; font-size: 15px;">
+          <p style="margin: 0;">Sincerely,</p>
+          <p style="margin: 4px 0 0;"><strong style="color: ${brand.primary};">SAIKI</strong> <strong>Group</strong></p>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="padding: 16px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
+        <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.6;">
+          This email is intended for ${data.clientName}. If you received this in error, please notify the sender.
+        </p>
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"${fromName}" <${fromEmail}>`,
+    to: data.to,
+    subject: data.subject,
+    html,
+    attachments: data.attachments,
   });
 }
