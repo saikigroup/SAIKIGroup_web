@@ -14,6 +14,7 @@ interface VerifiedInvoice {
   issued_date: string;
   grand_total: number;
   currency: string;
+  reference_docs: { name: string; url: string }[];
 }
 
 function InvoiceVerificationContent() {
@@ -132,6 +133,32 @@ function InvoiceVerificationContent() {
               <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${st.bg} ${st.color}`}>{st.label}</span>
             </div>
           </div>
+
+          {/* Reference Documents */}
+          {invoice.reference_docs && invoice.reference_docs.length > 0 && (
+            <div className="mt-6 pt-5 border-t border-gray-100">
+              <p className="text-xs text-gray-400 font-semibold uppercase tracking-wider mb-3">Reference Documents</p>
+              <div className="space-y-2">
+                {invoice.reference_docs.map((doc: { name: string; url: string }, idx: number) => (
+                  <a
+                    key={idx}
+                    href={doc.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition"
+                  >
+                    <svg className="w-5 h-5 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    <span className="text-sm text-gray-700 flex-1 truncate">{doc.name}</span>
+                    <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Footer */}

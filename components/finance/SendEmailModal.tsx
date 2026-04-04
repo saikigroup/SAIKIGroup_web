@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { formatCurrency } from '@/lib/finance';
 import type { SaikiwebInvoice, SaikiwebReceipt } from '@/lib/supabase';
 
@@ -133,6 +133,32 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const [linkedReceipts, setLinkedReceipts] = useState<{ id: number; number: string; amount: number }[]>([]);
+  const [selectedReceiptId, setSelectedReceiptId] = useState<number | null>(receipt?.saikiweb_receipt_id || null);
+
+  // Fetch linked receipts when opened from invoice context (to allow bundling)
+  useEffect(() => {
+    if (!invoice?.saikiweb_invoice_id || receipt) return;
+    const pw = sessionStorage.getItem('admin_pw');
+    if (!pw) return;
+    fetch(`/api/admin/receipts?search=${encodeURIComponent(invoice.saikiweb_client_name)}`, {
+      headers: { 'x-admin-password': pw },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success && data.data) {
+          const linked = data.data
+            .filter((r: Record<string, unknown>) => r.saikiweb_invoice_id === invoice.saikiweb_invoice_id)
+            .map((r: Record<string, unknown>) => ({
+              id: r.saikiweb_receipt_id as number,
+              number: r.saikiweb_receipt_number as string,
+              amount: r.saikiweb_amount as number,
+            }));
+          setLinkedReceipts(linked);
+        }
+      })
+      .catch(() => {});
+  }, [invoice, receipt]);
 
   const addRef = () => setRefs((prev) => [...prev, { label: '', badgeColor: brandInfo.primary, value: '' }]);
   const removeRef = (idx: number) => setRefs((prev) => prev.filter((_, i) => i !== idx));
@@ -166,7 +192,7 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
           amounts: amounts.filter((a) => a.label && a.value),
           attachedDocsList: form.attachedDocsList,
           invoiceId: invoice?.saikiweb_invoice_id,
-          receiptId: receipt?.saikiweb_receipt_id,
+          receiptId: receipt?.saikiweb_receipt_id || selectedReceiptId,
         }),
       });
       const data = await res.json();
@@ -248,7 +274,7 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
       <!-- Footer -->
       <div style="background: #f8fafc; padding: 16px 32px; text-align: center; border-top: 1px solid #f0f0f0;">
         <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">This email is intended for <strong>${clientName}</strong>. If you received this in error, please notify the sender immediately.</p>
-        <p style="color: #cbd5e1; font-size: 10px; margin: 6px 0 0;">&copy; ${new Date().getFullYear()} SAIKI Group — Consultancy • Technology • Imagery</p>
+        <p style="color: #cbd5e1; font-size: 10px; margin: 6px 0 0;">&copy; ${new Date().getFullYear()} SAIKI Group | Consultancy, Technology, Imagery</p>
       </div>
     </div>
   `;
@@ -312,6 +338,33 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
             </div>
           </div>
 
+          {/* Include receipt selector (when opened from invoice) */}
+          {invoice && !receipt && linkedReceipts.length > 0 && (
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <label className="flex items-center gap-2 mb-2">
+                <input
+                  type="checkbox"
+                  checked={!!selectedReceiptId}
+                  onChange={(e) => setSelectedReceiptId(e.target.checked ? linkedReceipts[0]?.id : null)}
+                  className="w-4 h-4 rounded border-green-300 text-green-600 focus:ring-green-500"
+                />
+                <span className="text-sm font-semibold text-green-800">Include Receipt in this email</span>
+              </label>
+              {selectedReceiptId && (
+                <select
+                  value={selectedReceiptId}
+                  onChange={(e) => setSelectedReceiptId(parseInt(e.target.value))}
+                  className={inputCls}
+                >
+                  {linkedReceipts.map((r) => (
+                    <option key={r.id} value={r.id}>{r.number} (Rp{r.amount.toLocaleString('id-ID')})</option>
+                  ))}
+                </select>
+              )}
+              <p className="text-xs text-green-600 mt-1">Invoice PDF + Receipt stamped PDF will both be attached.</p>
+            </div>
+          )}
+
           {/* Email Body */}
           <div>
             <label className={labelCls}>Email Body (HTML)</label>
@@ -325,13 +378,15 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
               <button type="button" onClick={addRef} className="text-xs text-teal-600 hover:text-teal-700 font-medium">+ Add Reference</button>
             </div>
             {refs.map((ref, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <input type="text" placeholder="Label (e.g. Receipt)" value={ref.label} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, label: e.target.value } : r))} className={`${inputCls} w-24 shrink-0`} />
-                <input type="color" value={ref.badgeColor} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, badgeColor: e.target.value } : r))} className="w-8 h-8 rounded cursor-pointer border border-gray-200 shrink-0" />
-                <input type="text" placeholder="Value" value={ref.value} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, value: e.target.value } : r))} className={`${inputCls} flex-1`} />
-                <button type="button" onClick={() => removeRef(idx)} className="text-red-400 hover:text-red-600 shrink-0">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="text" placeholder="Label (e.g. Receipt, Invoice, SPK)" value={ref.label} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, label: e.target.value } : r))} className={`${inputCls} flex-1`} />
+                  <input type="color" value={ref.badgeColor} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, badgeColor: e.target.value } : r))} className="w-8 h-8 rounded cursor-pointer border border-gray-200 shrink-0" title="Badge color" />
+                  <button type="button" onClick={() => removeRef(idx)} className="text-red-400 hover:text-red-600 shrink-0" title="Remove">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+                <input type="text" placeholder="Value (e.g. INV215-SC.ITDEV-2025 (30 Dec 2025))" value={ref.value} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, value: e.target.value } : r))} className={inputCls} />
               </div>
             ))}
 

@@ -1,32 +1,44 @@
 import html2canvas from 'html2canvas-pro';
 import { jsPDF } from 'jspdf';
 
+// A4 dimensions in pixels at 96 DPI
+const A4_WIDTH_PX = 794;
+const A4_HEIGHT_PX = 1123;
+
 export async function downloadElementAsPDF(element: HTMLElement, filename: string) {
-  // Force exact A4 height before capture
-  const origMinHeight = element.style.minHeight;
-  const origHeight = element.style.height;
+  // Save original styles
+  const origStyle = {
+    width: element.style.width,
+    height: element.style.height,
+    minHeight: element.style.minHeight,
+    overflow: element.style.overflow,
+  };
+
+  // Force exact pixel dimensions for consistent capture
+  element.style.width = `${A4_WIDTH_PX}px`;
+  element.style.height = `${A4_HEIGHT_PX}px`;
   element.style.minHeight = 'unset';
-  element.style.height = '297mm';
   element.style.overflow = 'hidden';
 
-  const canvas = await html2canvas(element, {
-    scale: 1.5, // Good quality without huge file size
-    useCORS: true,
-    logging: false,
-    backgroundColor: '#ffffff',
-    width: element.scrollWidth,
-    height: element.scrollHeight,
-    windowWidth: element.scrollWidth,
-    windowHeight: element.scrollHeight,
-  });
+  try {
+    const canvas = await html2canvas(element, {
+      scale: 1.5,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      width: A4_WIDTH_PX,
+      height: A4_HEIGHT_PX,
+    });
 
-  // Restore original styles
-  element.style.minHeight = origMinHeight;
-  element.style.height = origHeight;
-  element.style.overflow = '';
-
-  const imgData = canvas.toDataURL('image/jpeg', 0.92); // JPEG instead of PNG = much smaller
-  const pdf = new jsPDF('p', 'mm', 'a4');
-  pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297); // Exact A4 single page
-  pdf.save(filename);
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+    pdf.save(filename);
+  } finally {
+    // Always restore original styles
+    element.style.width = origStyle.width;
+    element.style.height = origStyle.height;
+    element.style.minHeight = origStyle.minHeight;
+    element.style.overflow = origStyle.overflow;
+  }
 }

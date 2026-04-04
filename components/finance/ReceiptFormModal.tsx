@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { SERVICE_BRANDS, generateReceiptNumber, numberToWords } from '@/lib/finance';
 import type { SaikiwebReceipt, ServiceBrand } from '@/lib/supabase';
+import ReferenceDocUpload from './ReferenceDocUpload';
 
 interface CustomField {
   key: string;
@@ -50,6 +51,9 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
       ? Object.entries(receipt.saikiweb_custom_fields).map(([key, value]) => ({ key, value }))
       : []
   );
+  const [referenceDocs, setReferenceDocs] = useState<{ name: string; url: string }[]>(
+    receipt?.saikiweb_reference_docs || []
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -75,6 +79,7 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
       saikiweb_invoice_id: form.saikiweb_invoice_id || null,
       saikiweb_package_value: form.saikiweb_package_value || null,
       saikiweb_custom_fields: Object.keys(cfObj).length > 0 ? cfObj : null,
+      saikiweb_reference_docs: referenceDocs.length > 0 ? referenceDocs : null,
       saikiweb_legacy_notes: form.saikiweb_legacy_notes || null,
       ...(isEdit ? { saikiweb_receipt_id: receipt?.saikiweb_receipt_id } : {}),
     };
@@ -239,6 +244,11 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
                 <input type="text" value={form.saikiweb_signer_title} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_title: e.target.value }))} className={inputCls} placeholder="e.g. Managing Director" />
               </div>
             </div>
+          </div>
+
+          {/* Reference Documents */}
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <ReferenceDocUpload docs={referenceDocs} onChange={setReferenceDocs} />
           </div>
 
           {/* Custom Fields */}

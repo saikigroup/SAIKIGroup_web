@@ -22,7 +22,10 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
   const [deleting, setDeleting] = useState(false);
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [signedFileUrl, setSignedFileUrl] = useState(invoice.saikiweb_signed_file_url || '');
   const previewRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const pw = sessionStorage.getItem('admin_pw');
@@ -74,7 +77,7 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
     return (
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
         <div className="absolute inset-0 bg-black/60" onClick={() => setShowPreview(false)} />
-        <div className="relative my-8 w-full max-w-[210mm]">
+        <div className="relative my-8 w-full max-w-[794px]">
           <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
             <button
               onClick={async (e) => {
@@ -229,6 +232,83 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
               </div>
             </div>
           )}
+
+          {/* Invoice PDF upload for email attachment */}
+          <div className={`rounded-xl p-4 ${signedFileUrl ? 'bg-green-50 border border-green-200' : 'bg-blue-50 border border-blue-200'}`}>
+            <div className="flex items-center gap-3 mb-2">
+              {signedFileUrl ? (
+                <div className="w-7 h-7 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                </div>
+              ) : (
+                <div className="w-7 h-7 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
+                  <svg className="w-3.5 h-3.5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                </div>
+              )}
+              <div className="flex-1">
+                <p className={`text-sm font-semibold ${signedFileUrl ? 'text-green-800' : 'text-blue-800'}`}>
+                  {signedFileUrl ? 'Invoice PDF Ready' : 'Upload Invoice PDF'}
+                </p>
+                <p className={`text-xs ${signedFileUrl ? 'text-green-600' : 'text-blue-600'}`}>
+                  {signedFileUrl ? 'File will be attached when sending email.' : 'Download from preview, sign if needed, then upload the final PDF to attach in email.'}
+                </p>
+              </div>
+            </div>
+            {signedFileUrl ? (
+              <div className="flex items-center gap-2 mt-2">
+                <a href={signedFileUrl} target="_blank" rel="noopener noreferrer" className="text-xs text-green-700 bg-green-100 px-3 py-1.5 rounded-lg hover:bg-green-200 transition font-medium">View PDF</a>
+                <button onClick={() => fileInputRef.current?.click()} className="text-xs text-gray-600 bg-gray-100 px-3 py-1.5 rounded-lg hover:bg-gray-200 transition font-medium">Replace</button>
+              </div>
+            ) : (
+              <button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="mt-2 w-full py-2 border-2 border-dashed border-blue-300 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-100 transition disabled:opacity-50 flex items-center justify-center gap-2"
+              >
+                {uploading ? (
+                  <><div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin" />Uploading...</>
+                ) : (
+                  <><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>Upload Final Invoice PDF</>
+                )}
+              </button>
+            )}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="application/pdf"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (!file || file.type !== 'application/pdf') { alert('Only PDF files allowed'); return; }
+                const pw = sessionStorage.getItem('admin_pw');
+                if (!pw) return;
+                setUploading(true);
+                try {
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  formData.append('receipt_id', String(invoice.saikiweb_invoice_id));
+                  formData.append('document_type', 'invoice');
+                  const res = await fetch('/api/admin/receipts/upload-stamp', {
+                    method: 'POST',
+                    headers: { 'x-admin-password': pw },
+                    body: formData,
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    setSignedFileUrl(data.url);
+                    // Also update invoice record
+                    await fetch('/api/admin/invoices', {
+                      method: 'PUT',
+                      headers: { 'Content-Type': 'application/json', 'x-admin-password': pw },
+                      body: JSON.stringify({ saikiweb_invoice_id: invoice.saikiweb_invoice_id, saikiweb_signed_file_url: data.url }),
+                    });
+                  } else { alert(data.error || 'Upload failed'); }
+                } catch { alert('Upload failed'); }
+                setUploading(false);
+                if (fileInputRef.current) fileInputRef.current.value = '';
+              }}
+              className="hidden"
+            />
+          </div>
 
           {/* Sent status */}
           {invoice.saikiweb_sent_at && (
