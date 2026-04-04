@@ -134,6 +134,7 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEma
             customFields={receipt.saikiweb_custom_fields || undefined}
             verificationToken={receipt.saikiweb_verification_token || undefined}
             signerName={receipt.saikiweb_signer_name || undefined}
+            signerTitle={receipt.saikiweb_signer_title || undefined}
           />
           </div>
         </div>

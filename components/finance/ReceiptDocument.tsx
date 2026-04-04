@@ -3,6 +3,7 @@
 import { SERVICE_BRANDS } from '@/lib/finance';
 import type { ServiceBrand } from '@/lib/supabase';
 import QRCode from './QRCode';
+import { SaikiLogoMark } from './SaikiLogo';
 
 interface ReceiptDocumentProps {
   receiptNumber: string;
@@ -20,6 +21,29 @@ interface ReceiptDocumentProps {
   customFields?: Record<string, string>;
   verificationToken?: string;
   signerName?: string;
+  signerTitle?: string;
+}
+
+/** Abstract pattern for receipt (inside white card) */
+function ReceiptPattern({ color }: { color: string }) {
+  return (
+    <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" viewBox="0 0 800 1100">
+      {Array.from({ length: 20 }).map((_, i) => (
+        <line key={`d${i}`} x1={-100 + i * 80} y1={0} x2={-100 + i * 80 + 400} y2={1100} stroke={color} strokeOpacity={0.02} strokeWidth="0.5" />
+      ))}
+      {[100, 160, 220, 280].map((r, i) => (
+        <circle key={`c${i}`} cx={800} cy={0} r={r} fill="none" stroke={color} strokeOpacity={0.025} strokeWidth="0.5" />
+      ))}
+      {[80, 140, 200].map((r, i) => (
+        <circle key={`b${i}`} cx={0} cy={1100} r={r} fill="none" stroke={color} strokeOpacity={0.025} strokeWidth="0.5" />
+      ))}
+      {Array.from({ length: 3 }).map((_, i) => (
+        <text key={`w${i}`} x={150 + i * 250} y={350 + i * 300} fontFamily="Arial" fontSize="10" fill={color} fillOpacity={0.02} textAnchor="middle" transform={`rotate(-40 ${150 + i * 250} ${350 + i * 300})`}>
+          SAIKI GROUP OFFICIAL DOCUMENT
+        </text>
+      ))}
+    </svg>
+  );
 }
 
 export default function ReceiptDocument({
@@ -38,9 +62,9 @@ export default function ReceiptDocument({
   customFields,
   verificationToken,
   signerName,
+  signerTitle,
 }: ReceiptDocumentProps) {
   const brand = SERVICE_BRANDS[serviceBrand];
-  const docId = `DOC-${receiptNumber.replace(/[^A-Za-z0-9]/g, '')}`;
 
   const formatDate = (dateStr: string) => {
     const d = new Date(dateStr);
@@ -61,143 +85,106 @@ export default function ReceiptDocument({
     ...(customFields ? Object.entries(customFields).map(([key, value]) => ({ label: key, value })) : []),
   ];
 
-  const patternSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><text x='150' y='150' font-family='Arial' font-size='9' fill='%23ffffff' fill-opacity='0.02' text-anchor='middle' dominant-baseline='middle' transform='rotate(-40 150 150)'>SAIKI GROUP OFFICIAL DOCUMENT</text></svg>`;
-
   return (
     <div
-      className="mx-auto shadow-lg flex flex-col relative overflow-hidden"
+      className="mx-auto shadow-lg flex flex-col"
       style={{
         fontFamily: "'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif",
         width: '210mm',
-        minHeight: '297mm',
+        height: '297mm',
         backgroundColor: brand.color,
-        backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(patternSvg)}")`,
-        backgroundSize: '300px 300px',
       }}
     >
-      {/* Outer colored frame with inner white card */}
-      <div className="flex-1 flex flex-col m-5">
+      {/* Outer frame with inner white card */}
+      <div className="flex-1 flex flex-col m-4">
         <div className="bg-white rounded-md flex-1 flex flex-col relative overflow-hidden">
+          <ReceiptPattern color={brand.color} />
 
-          {/* Inner watermark */}
-          {(() => {
-            const innerPattern = `<svg xmlns='http://www.w3.org/2000/svg' width='300' height='300'><text x='150' y='150' font-family='Arial' font-size='9' fill='${brand.color}' fill-opacity='0.02' text-anchor='middle' dominant-baseline='middle' transform='rotate(-40 150 150)'>SAIKI GROUP OFFICIAL DOCUMENT</text></svg>`;
-            return (
-              <div
-                className="absolute inset-0 pointer-events-none z-0"
-                style={{ backgroundImage: `url("data:image/svg+xml,${encodeURIComponent(innerPattern)}")`, backgroundSize: '300px 300px' }}
-              />
-            );
-          })()}
-
-          {/* ===== HEADER ===== */}
-          <div className="relative z-10">
-            {/* Top color band */}
-            <div className="h-[4px] flex">
-              <div className="flex-1" style={{ backgroundColor: brand.color, opacity: 0.6 }} />
-              <div className="w-[40%]" style={{ backgroundColor: brand.color }} />
-            </div>
-
-            {/* Logo row */}
-            <div className="px-10 pt-8 pb-2 flex items-start justify-between">
-              <div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={brand.logo} alt={brand.label} className="h-7" />
-              </div>
-              <span className="text-[9px] text-gray-300 font-mono">{docId}</span>
-            </div>
-
-            {/* Title + SAIKI Group sub-header */}
-            <div className="px-10 pb-6">
-              <h1
-                className="text-gray-900 font-bold tracking-[0.18em] mb-2"
-                style={{ fontFamily: "'Georgia', 'Times New Roman', serif", fontSize: '28px', lineHeight: 1 }}
-              >
-                PAYMENT &nbsp; RECEIPT
-              </h1>
-              <div className="flex items-center gap-3">
-                <div className="h-[2px] w-[60px]" style={{ backgroundColor: brand.color }} />
-                <div className="flex items-center gap-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src="/brand/saiki-main-logo-01.svg" alt="SAIKI Group" className="h-5" />
-                  <span className="text-[9px] text-gray-400 tracking-[0.15em] uppercase font-medium">SAIKI Group</span>
-                </div>
-              </div>
-            </div>
+          {/* Top accent bar */}
+          <div className="relative z-10 h-[3px] flex">
+            <div className="flex-1" style={{ backgroundColor: brand.color, opacity: 0.5 }} />
+            <div className="w-[35%]" style={{ backgroundColor: brand.color }} />
           </div>
 
-          {/* ===== FIELDS ===== */}
-          <div className="relative z-10 px-10 pb-4 flex-1">
-            <div className="space-y-[14px]">
+          {/* Header */}
+          <div className="relative z-10 px-10 pt-8 pb-4">
+            <div className="flex items-start justify-between mb-6">
+              <div className="flex items-center gap-2.5">
+                <SaikiLogoMark size={18} />
+                <div className="h-4 w-[1px]" style={{ backgroundColor: `${brand.color}25` }} />
+                <span className="text-[10px] font-bold tracking-[0.15em]" style={{ color: brand.color }}>{brand.label}</span>
+              </div>
+            </div>
+
+            <h1 className="text-gray-900 font-bold tracking-[0.15em]" style={{ fontFamily: "'Georgia', serif", fontSize: '26px', lineHeight: 1 }}>
+              PAYMENT &nbsp; RECEIPT
+            </h1>
+            <div className="mt-2 h-[2px] w-[80px]" style={{ backgroundColor: brand.color }} />
+          </div>
+
+          {/* Fields */}
+          <div className="relative z-10 px-10 pb-2 flex-1">
+            <div className="space-y-[12px]">
               {fields.map((field, idx) => (
                 <div key={idx} className="flex">
-                  <span className="text-gray-400 text-[12px] font-medium min-w-[140px] shrink-0 pt-[1px]">
-                    {field.label}
-                  </span>
-                  <span className="text-gray-900 text-[13px] font-medium leading-snug">
-                    {field.value}
-                  </span>
+                  <span className="text-gray-400 text-[11px] font-medium min-w-[130px] shrink-0">{field.label}</span>
+                  <span className="text-gray-900 text-[12px] font-medium leading-snug">{field.value}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* ===== FOOTER (always at bottom of card) ===== */}
+          {/* Footer */}
           <div className="relative z-10 px-10 pb-8 mt-auto">
-            {/* Separator */}
-            <div className="h-[2px] mb-8" style={{ background: `linear-gradient(to right, ${brand.color}, ${brand.color}30, transparent)` }} />
+            <div className="h-[1px] mb-6" style={{ background: `linear-gradient(to right, ${brand.color}30, transparent)` }} />
 
             {/* Signature */}
-            <div className="flex items-start justify-between gap-8 mb-8">
-              {/* Stamp area placeholder */}
-              <div className="w-20 h-20" />
-
-              {/* Signature */}
-              <div className="text-right min-w-[200px]">
-                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-1">Received By</p>
-                <p className="text-[11px] font-semibold tracking-wider" style={{ color: brand.color }}>SAIKI GROUP</p>
+            <div className="flex items-start justify-between gap-6 mb-6">
+              <div />
+              <div className="text-right min-w-[170px]">
+                <p className="text-[9px] text-gray-400 font-bold uppercase tracking-[0.2em] mb-0.5">Received By</p>
+                <p className="text-[10px] font-semibold tracking-wider" style={{ color: brand.color }}>SAIKI GROUP</p>
                 {signerName ? (
-                  <div className="mt-3 pb-1 border-b" style={{ borderColor: `${brand.color}30` }}>
-                    <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '24px', color: '#1a1a2e' }}>{signerName}</span>
+                  <div className="mt-2">
+                    <div className="pb-1 border-b" style={{ borderColor: `${brand.color}30` }}>
+                      <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{signerName}</span>
+                    </div>
+                    <p className="text-[10px] text-gray-600 font-medium mt-1">{signerName}</p>
+                    {signerTitle && <p className="text-[9px] text-gray-400">{signerTitle}</p>}
                   </div>
                 ) : (
-                  <div className="w-48 h-14 border-b mt-3" style={{ borderColor: `${brand.color}30` }} />
+                  <div className="w-40 h-12 border-b mt-2" style={{ borderColor: `${brand.color}30` }} />
                 )}
               </div>
             </div>
 
-            {/* QR + Legal */}
-            <div className="flex items-end justify-between gap-6">
+            {/* QR + accent */}
+            <div className="flex items-end justify-between gap-4">
               {verificationToken && (
-                <div className="flex items-end gap-4">
+                <div className="flex items-end gap-3">
                   <QRCode
                     value={`${typeof window !== 'undefined' ? window.location.origin : ''}/verify/receipt?token=${verificationToken}`}
-                    size={80}
+                    size={68}
                   />
-                  <div className="pb-1">
-                    <p className="text-[8px] text-gray-400 font-medium uppercase tracking-wider mb-1">Scan to verify</p>
-                    <p className="text-[8px] text-gray-300 font-mono max-w-[140px] break-all leading-snug">{verificationToken.slice(0, 16)}...</p>
+                  <div className="pb-0.5">
+                    <p className="text-[7px] text-gray-400 font-semibold uppercase tracking-wider mb-0.5">Scan to verify</p>
+                    <p className="text-[7px] text-gray-300 font-mono leading-snug max-w-[120px] break-all">{verificationToken.slice(0, 16)}...</p>
                   </div>
                 </div>
               )}
-
-              {/* Accent bars */}
               <div className="flex items-end gap-[2px]">
-                {[0.2, 0.35, 0.5, 0.7, 0.9].map((opacity, i) => (
-                  <div
-                    key={i}
-                    style={{ width: '3px', height: `${10 + i * 6}px`, backgroundColor: brand.color, opacity, borderRadius: '1.5px 1.5px 0 0' }}
-                  />
+                {[0.15, 0.25, 0.4, 0.6, 0.8].map((op, i) => (
+                  <div key={i} style={{ width: '3px', height: `${8 + i * 5}px`, backgroundColor: brand.color, opacity: op, borderRadius: '1.5px 1.5px 0 0' }} />
                 ))}
               </div>
             </div>
 
             {/* Legal text */}
-            <div className="mt-5 pt-3 border-t border-gray-100">
-              <p className="text-[8px] text-gray-400 leading-relaxed max-w-[85%]">
+            <div className="mt-4 pt-3 border-t border-gray-100">
+              <p className="text-[7px] text-gray-400 leading-relaxed">
                 This document is electronically generated by SAIKI Group&apos;s authorized billing system and is valid without a wet ink signature.
-                To verify the authenticity of this document, scan the QR code above or visit the verification URL.
-                Unauthorized reproduction or alteration of this document is strictly prohibited and may be subject to legal action.
+                To verify the authenticity of this document, scan the QR code or visit the verification URL.
+                Unauthorized reproduction or alteration of this document is strictly prohibited and may be subject to legal action under applicable Indonesian law.
               </p>
             </div>
           </div>

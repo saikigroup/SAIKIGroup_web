@@ -233,10 +233,10 @@ export async function sendAdminNotification(data: {
 
 // --- Finance email functions ---
 
-const brandColors: Record<string, { primary: string; accent: string; label: string }> = {
-  consultancy: { primary: '#6B1D3A', accent: '#8B2D4A', label: 'SAIKI Consultancy' },
-  technology: { primary: '#0D4F4F', accent: '#0d9488', label: 'SAIKI Technology' },
-  imagery: { primary: '#1a1a2e', accent: '#2d2d44', label: 'SAIKI Imagery' },
+const brandColors: Record<string, { primary: string; accent: string; label: string; sublabel: string }> = {
+  consultancy: { primary: '#6B1D3A', accent: '#8B2D4A', label: 'SAIKI Consultancy', sublabel: 'Consultancy' },
+  technology: { primary: '#0D4F4F', accent: '#0d9488', label: 'SAIKI Technology', sublabel: 'Technology' },
+  imagery: { primary: '#1a1a2e', accent: '#2d2d44', label: 'SAIKI Imagery', sublabel: 'Imagery' },
 };
 
 export interface FinanceEmailData {
@@ -259,85 +259,156 @@ export async function sendFinanceEmail(data: FinanceEmailData) {
   }
 
   const brand = brandColors[data.serviceBrand] || brandColors.consultancy;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://saiki.id';
+  const logoUrl = `${siteUrl}/brand/saiki-main-logo-01.svg`;
+  const serviceLogo = data.serviceBrand === 'consultancy'
+    ? `${siteUrl}/brand/SAIKI-CONSULTANCY.svg`
+    : data.serviceBrand === 'technology'
+    ? `${siteUrl}/brand/saiki-technology-white-01.svg`
+    : `${siteUrl}/brand/SAIKI-IMAGERY.svg`;
 
   const referencesHtml = data.paymentReferences && data.paymentReferences.length > 0
     ? `
-      <div style="margin: 24px 0; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-        <p style="margin: 0 0 12px; color: #94a3b8; font-size: 13px;">Payment References</p>
-        ${data.paymentReferences.map(ref => `
-          <div style="margin-bottom: 8px;">
-            <span style="display: inline-block; background: ${ref.badgeColor}; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 8px;">${ref.label}</span>
-            <span style="color: #1a1a2e; font-size: 14px;">${ref.value}</span>
-          </div>
-        `).join('')}
-        ${data.amounts && data.amounts.length > 0 ? `
-          <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
-            ${data.amounts.map(a => `
-              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                <span style="color: #64748b; font-size: 14px;">${a.label}</span>
-                <span style="color: #1a1a2e; font-size: 14px; font-weight: 600;">${a.value}</span>
-              </div>
-            `).join('')}
-          </div>
-        ` : ''}
-        ${data.attachedDocsList ? `
-          <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
-            <p style="margin: 0; color: #94a3b8; font-size: 12px;">${data.attachedDocsList}</p>
-          </div>
-        ` : ''}
+      <div style="margin: 28px 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+        <!-- References header -->
+        <div style="background: ${brand.primary}08; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
+          <p style="margin: 0; color: ${brand.primary}; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">Document References</p>
+        </div>
+        <div style="padding: 16px 20px;">
+          ${data.paymentReferences.map(ref => `
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-bottom: 10px;">
+              <tr>
+                <td width="80" valign="top">
+                  <span style="display: inline-block; background: ${ref.badgeColor}; color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px;">${ref.label}</span>
+                </td>
+                <td style="padding-left: 12px; color: #334155; font-size: 14px; line-height: 1.5;">${ref.value}</td>
+              </tr>
+            </table>
+          `).join('')}
+          ${data.amounts && data.amounts.length > 0 ? `
+            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+              <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                ${data.amounts.map(a => `
+                  <tr>
+                    <td style="color: #64748b; font-size: 14px; padding: 4px 0;">${a.label}</td>
+                    <td style="color: ${brand.primary}; font-size: 14px; font-weight: 700; text-align: right; padding: 4px 0;">${a.value}</td>
+                  </tr>
+                `).join('')}
+              </table>
+            </div>
+          ` : ''}
+          ${data.attachedDocsList ? `
+            <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+              <p style="margin: 0; color: #94a3b8; font-size: 12px; font-style: italic;">${data.attachedDocsList}</p>
+            </div>
+          ` : ''}
+        </div>
       </div>
     `
     : '';
 
   const html = `
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background: #f8fafc;">
-      <!-- Color bar -->
-      <div style="height: 6px; background: linear-gradient(to right, ${brand.primary} 50%, ${brand.accent} 50%);"></div>
+    <!DOCTYPE html>
+    <html>
+    <head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
+    <body style="margin: 0; padding: 0; background: #f1f5f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+      <table cellpadding="0" cellspacing="0" border="0" width="100%" style="background: #f1f5f9;">
+        <tr><td align="center" style="padding: 32px 16px;">
+          <table cellpadding="0" cellspacing="0" border="0" width="640" style="max-width: 640px; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08);">
 
-      <!-- Main content -->
-      <div style="background: #ffffff; padding: 32px;">
-        <!-- Header with logo and brand -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
-          <div>
-            <h2 style="margin: 0; font-size: 22px; color: #1a1a2e; font-weight: 700;">SAIKI<span style="color: #94a3b8; font-weight: 400;">GROUP</span></h2>
-            <p style="margin: 2px 0 0; color: #94a3b8; font-size: 11px; letter-spacing: 0.5px;">Beyond Your Needs</p>
-          </div>
-          <div style="text-align: right;">
-            <p style="margin: 0; font-size: 13px; color: #1a1a2e;"><strong>SAIKI</strong> Group</p>
-            <p style="margin: 2px 0 0; font-size: 13px;">
-              <span style="background: ${brand.primary}; color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600;">SAIKI</span>
-              <span style="color: #1a1a2e; margin-left: 4px;">${brand.label.replace('SAIKI ', '')}</span>
-            </p>
-          </div>
-        </div>
+            <!-- Top colored header band -->
+            <tr>
+              <td style="background: ${brand.primary}; padding: 28px 36px;">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tr>
+                    <td valign="middle">
+                      <img src="${serviceLogo}" alt="${brand.label}" height="24" style="height: 24px; display: block; filter: brightness(0) invert(1);" />
+                    </td>
+                    <td align="right" valign="middle">
+                      <span style="color: rgba(255,255,255,0.6); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;">Official Correspondence</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        <!-- Email body -->
-        <div style="color: #1a1a2e; font-size: 15px; line-height: 1.7;">
-          ${data.emailBody}
-        </div>
+            <!-- SAIKI Group sub-header -->
+            <tr>
+              <td style="padding: 16px 36px; border-bottom: 1px solid #f0f0f0; background: #fafbfc;">
+                <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                  <tr>
+                    <td valign="middle">
+                      <img src="${logoUrl}" alt="SAIKI Group" height="22" style="height: 22px; display: inline-block; vertical-align: middle;" />
+                      <span style="display: inline-block; width: 1px; height: 16px; background: #e2e8f0; margin: 0 12px; vertical-align: middle;"></span>
+                      <span style="color: #94a3b8; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; vertical-align: middle; font-weight: 600;">SAIKI Group</span>
+                    </td>
+                    <td align="right" valign="middle">
+                      <span style="color: #cbd5e1; font-size: 10px; letter-spacing: 0.5px;">${brand.label}</span>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
 
-        ${referencesHtml}
+            <!-- Main content -->
+            <tr>
+              <td style="padding: 36px 36px 20px;">
+                <div style="color: #1e293b; font-size: 15px; line-height: 1.75;">
+                  ${data.emailBody}
+                </div>
 
-        ${data.closingMessage ? `
-          <div style="color: #1a1a2e; font-size: 15px; line-height: 1.7; margin-top: 20px;">
-            ${data.closingMessage}
-          </div>
-        ` : ''}
+                ${referencesHtml}
 
-        <!-- Signature -->
-        <div style="margin-top: 28px; color: #1a1a2e; font-size: 15px;">
-          <p style="margin: 0;">Sincerely,</p>
-          <p style="margin: 4px 0 0;"><strong style="color: ${brand.primary};">SAIKI</strong> <strong>Group</strong></p>
-        </div>
-      </div>
+                ${data.closingMessage ? `
+                  <div style="color: #1e293b; font-size: 15px; line-height: 1.75; margin-top: 24px;">
+                    ${data.closingMessage}
+                  </div>
+                ` : ''}
+              </td>
+            </tr>
 
-      <!-- Footer -->
-      <div style="padding: 16px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-        <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.6;">
-          This email is intended for ${data.clientName}. If you received this in error, please notify the sender.
-        </p>
-      </div>
-    </div>
+            <!-- Signature -->
+            <tr>
+              <td style="padding: 0 36px 36px;">
+                <div style="border-top: 1px solid #f0f0f0; padding-top: 24px;">
+                  <p style="margin: 0; color: #64748b; font-size: 14px;">Sincerely,</p>
+                  <p style="margin: 6px 0 0;">
+                    <strong style="color: ${brand.primary}; font-size: 15px;">SAIKI</strong>
+                    <strong style="color: #1e293b; font-size: 15px;"> Group</strong>
+                  </p>
+                  <p style="margin: 4px 0 0; color: #94a3b8; font-size: 11px; letter-spacing: 0.5px;">Beyond Your Needs</p>
+                  <table cellpadding="0" cellspacing="0" border="0" style="margin-top: 12px;">
+                    <tr>
+                      <td style="padding-right: 16px;">
+                        <a href="https://saiki.id" style="color: ${brand.primary}; font-size: 12px; text-decoration: none;">saiki.id</a>
+                      </td>
+                      <td style="border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                        <a href="mailto:info@saiki.id" style="color: ${brand.primary}; font-size: 12px; text-decoration: none;">info@saiki.id</a>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background: #f8fafc; padding: 20px 36px; border-top: 1px solid #f0f0f0;">
+                <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.6; text-align: center;">
+                  This email is intended for <strong>${data.clientName}</strong>. If you received this in error, please notify the sender immediately.
+                  <br/>Unauthorized use, disclosure, or distribution is prohibited.
+                </p>
+                <p style="color: #cbd5e1; font-size: 10px; margin: 8px 0 0; text-align: center;">
+                  &copy; ${new Date().getFullYear()} SAIKI Group &mdash; Consultancy &bull; Technology &bull; Imagery
+                </p>
+              </td>
+            </tr>
+
+          </table>
+        </td></tr>
+      </table>
+    </body>
+    </html>
   `;
 
   await transporter.sendMail({

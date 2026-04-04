@@ -42,6 +42,7 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
     saikiweb_payment_account: invoice?.saikiweb_payment_account || '',
     saikiweb_payment_recipient: invoice?.saikiweb_payment_recipient || '',
     saikiweb_signer_name: invoice?.saikiweb_signer_name || '',
+    saikiweb_signer_title: invoice?.saikiweb_signer_title || '',
     saikiweb_is_legacy: invoice?.saikiweb_is_legacy || false,
     saikiweb_legacy_notes: invoice?.saikiweb_legacy_notes || '',
     saikiweb_related_invoice_id: invoice?.saikiweb_related_invoice_id || '',
@@ -332,14 +333,24 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
           </div>
 
           {/* Signer */}
-          <div>
-            <label className={labelCls}>Signer Name (for signature)</label>
-            <div className="flex items-center gap-3">
-              <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={`${inputCls} flex-1`} placeholder="e.g. Dimas Budi Ramadhan" />
-              {form.saikiweb_signer_name && (
-                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{form.saikiweb_signer_name}</span>
-              )}
+          <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+            <h3 className="text-sm font-semibold text-gray-700">Signature</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Signer Name</label>
+                <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={inputCls} placeholder="e.g. Dimas Budi Ramadhan" />
+              </div>
+              <div>
+                <label className={labelCls}>Signer Title / Position</label>
+                <input type="text" value={form.saikiweb_signer_title} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_title: e.target.value }))} className={inputCls} placeholder="e.g. Managing Director" />
+              </div>
             </div>
+            {form.saikiweb_signer_name && (
+              <div className="pt-2 text-center">
+                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{form.saikiweb_signer_name}</span>
+                {form.saikiweb_signer_title && <p className="text-[10px] text-gray-400 mt-0.5">{form.saikiweb_signer_title}</p>}
+              </div>
+            )}
           </div>
 
           {/* Custom Fields */}

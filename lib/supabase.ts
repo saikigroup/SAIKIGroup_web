@@ -157,6 +157,7 @@ export interface SaikiwebInvoice {
   saikiweb_payment_account?: string;
   saikiweb_payment_recipient?: string;
   saikiweb_signer_name?: string;
+  saikiweb_signer_title?: string;
   saikiweb_verification_token?: string;
   saikiweb_sent_at?: string;
   saikiweb_custom_fields?: Record<string, string>;
@@ -211,6 +212,7 @@ export interface SaikiwebReceipt {
   saikiweb_payment_method: string;
   saikiweb_receipt_date: string;
   saikiweb_signer_name?: string;
+  saikiweb_signer_title?: string;
   saikiweb_verification_token?: string;
   saikiweb_sent_at?: string;
   saikiweb_custom_fields?: Record<string, string>;
