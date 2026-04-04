@@ -71,6 +71,22 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
       badgeColor: brandInfo.primary,
       value: `${receipt.saikiweb_receipt_number} (${new Date(receipt.saikiweb_receipt_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })})`,
     });
+    // Add linked invoice as reference
+    if (invoice) {
+      defaultRefs.push({
+        label: 'Invoice',
+        badgeColor: '#374151',
+        value: `${invoice.saikiweb_invoice_number} (${new Date(invoice.saikiweb_issued_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })})`,
+      });
+    }
+    // Add SPK/reference if available
+    if (receipt.saikiweb_reference) {
+      defaultRefs.push({
+        label: 'SPK',
+        badgeColor: '#1e40af',
+        value: receipt.saikiweb_reference,
+      });
+    }
     defaultAmounts.push({
       label: 'Payment Received',
       value: formatCurrency(receipt.saikiweb_amount, receipt.saikiweb_currency),
@@ -81,20 +97,16 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
         value: formatCurrency(receipt.saikiweb_package_value, receipt.saikiweb_currency),
       });
     }
-  }
-
-  if (invoice) {
+  } else if (invoice) {
     defaultRefs.push({
       label: 'Invoice',
       badgeColor: '#374151',
       value: `${invoice.saikiweb_invoice_number} (${new Date(invoice.saikiweb_issued_date).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })})`,
     });
-    if (!receipt) {
-      defaultAmounts.push({
-        label: 'Total Amount',
-        value: formatCurrency(invoice.saikiweb_grand_total, invoice.saikiweb_currency),
-      });
-    }
+    defaultAmounts.push({
+      label: 'Total Amount',
+      value: formatCurrency(invoice.saikiweb_grand_total, invoice.saikiweb_currency),
+    });
   }
 
   const defaultClosing = receipt
@@ -172,59 +184,71 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
   const inputCls = 'w-full px-3 py-2 rounded-lg border border-gray-200 bg-white focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 outline-none transition text-sm';
   const labelCls = 'block text-xs font-medium text-gray-600 mb-1';
 
-  // Preview HTML
-  const previewHtml = `
-    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background: #f8fafc;">
-      <div style="height: 6px; background: linear-gradient(to right, ${brandInfo.primary} 50%, ${brandInfo.accent} 50%);"></div>
-      <div style="background: #ffffff; padding: 32px;">
-        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px;">
-          <div>
-            <h2 style="margin: 0; font-size: 22px; color: #1a1a2e; font-weight: 700;">SAIKI<span style="color: #94a3b8; font-weight: 400;">GROUP</span></h2>
-            <p style="margin: 2px 0 0; color: #94a3b8; font-size: 11px;">Beyond Your Needs</p>
+  // Preview HTML - matches the actual email template
+  const refsHtml = refs.filter(r => r.label && r.value).length > 0 ? `
+    <div style="margin: 28px 0; border-radius: 8px; overflow: hidden; border: 1px solid #e2e8f0;">
+      <div style="background: ${brandInfo.primary}08; padding: 14px 20px; border-bottom: 1px solid #e2e8f0;">
+        <p style="margin: 0; color: ${brandInfo.primary}; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">Document References</p>
+      </div>
+      <div style="padding: 16px 20px;">
+        ${refs.filter(r => r.label && r.value).map(ref => `
+          <div style="margin-bottom: 10px;">
+            <span style="display: inline-block; background: ${ref.badgeColor}; color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; margin-right: 10px;">${ref.label}</span>
+            <span style="color: #334155; font-size: 14px;">${ref.value}</span>
           </div>
-          <div style="text-align: right;">
-            <p style="margin: 0; font-size: 13px; color: #1a1a2e;"><strong>SAIKI</strong> Group</p>
-            <p style="margin: 2px 0 0; font-size: 13px;">
-              <span style="display: inline-block; background: ${brandInfo.primary}; color: #fff; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600;">SAIKI</span>
-              <span style="color: #1a1a2e; margin-left: 4px;">${brandInfo.sublabel}</span>
-            </p>
-          </div>
-        </div>
-        <div style="color: #1a1a2e; font-size: 15px; line-height: 1.7;">${form.emailBody}</div>
-        ${refs.length > 0 ? `
-          <div style="margin: 24px 0; padding: 20px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
-            <p style="margin: 0 0 12px; color: #94a3b8; font-size: 13px;">Payment References</p>
-            ${refs.filter(r => r.label && r.value).map(ref => `
-              <div style="margin-bottom: 8px;">
-                <span style="display: inline-block; background: ${ref.badgeColor}; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; margin-right: 8px;">${ref.label}</span>
-                <span style="color: #1a1a2e; font-size: 14px;">${ref.value}</span>
+        `).join('')}
+        ${amounts.filter(a => a.label && a.value).length > 0 ? `
+          <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+            ${amounts.filter(a => a.label && a.value).map(a => `
+              <div style="margin-bottom: 4px; display: flex; justify-content: space-between;">
+                <span style="color: #64748b; font-size: 14px;">${a.label}</span>
+                <span style="color: ${brandInfo.primary}; font-size: 14px; font-weight: 700;">${a.value}</span>
               </div>
             `).join('')}
-            ${amounts.filter(a => a.label && a.value).length > 0 ? `
-              <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
-                ${amounts.filter(a => a.label && a.value).map(a => `
-                  <div style="margin-bottom: 4px;">
-                    <span style="color: #64748b; font-size: 14px; margin-right: 16px;">${a.label}</span>
-                    <span style="color: #1a1a2e; font-size: 14px; font-weight: 600; float: right;">${a.value}</span>
-                  </div>
-                `).join('')}
-              </div>
-            ` : ''}
-            ${form.attachedDocsList ? `
-              <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
-                <p style="margin: 0; color: #94a3b8; font-size: 12px;">${form.attachedDocsList}</p>
-              </div>
-            ` : ''}
           </div>
         ` : ''}
-        ${form.closingMessage ? `<div style="color: #1a1a2e; font-size: 15px; line-height: 1.7; margin-top: 20px;">${form.closingMessage}</div>` : ''}
-        <div style="margin-top: 28px; color: #1a1a2e; font-size: 15px;">
-          <p style="margin: 0;">Sincerely,</p>
-          <p style="margin: 4px 0 0;"><strong style="color: ${brandInfo.primary};">SAIKI</strong> <strong>Group</strong></p>
+        ${form.attachedDocsList ? `
+          <div style="margin-top: 14px; padding-top: 14px; border-top: 1px solid #e2e8f0;">
+            <p style="margin: 0; color: #94a3b8; font-size: 12px; font-style: italic;">${form.attachedDocsList}</p>
+          </div>
+        ` : ''}
+      </div>
+    </div>
+  ` : '';
+
+  const previewHtml = `
+    <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 640px; margin: 0 auto; background: #f1f5f9; border-radius: 12px; overflow: hidden;">
+      <!-- Colored header -->
+      <div style="background: ${brandInfo.primary}; padding: 24px 32px; display: flex; justify-content: space-between; align-items: center;">
+        <img src="/brand/${brand === 'consultancy' ? 'saiki-consultancy-white-01' : brand === 'technology' ? 'saiki-technology-white-01' : 'SAIKI-IMAGERY-WHITE-01'}.svg" alt="${brandInfo.label}" style="height: 22px; filter: brightness(0) invert(1);" />
+        <span style="color: rgba(255,255,255,0.5); font-size: 10px; letter-spacing: 1px; text-transform: uppercase;">Official Correspondence</span>
+      </div>
+      <!-- Sub-header -->
+      <div style="padding: 14px 32px; background: #fafbfc; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; gap: 10px;">
+        <img src="/brand/saiki-main-logo-01.svg" alt="SAIKI Group" style="height: 20px;" />
+        <span style="width: 1px; height: 14px; background: #e2e8f0; display: inline-block;"></span>
+        <span style="color: #94a3b8; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">SAIKI Group</span>
+        <span style="margin-left: auto; color: #cbd5e1; font-size: 10px;">${brandInfo.label}</span>
+      </div>
+      <!-- Body -->
+      <div style="background: #ffffff; padding: 32px;">
+        <div style="color: #1e293b; font-size: 15px; line-height: 1.75;">${form.emailBody}</div>
+        ${refsHtml}
+        ${form.closingMessage ? `<div style="color: #1e293b; font-size: 15px; line-height: 1.75; margin-top: 24px;">${form.closingMessage}</div>` : ''}
+        <div style="border-top: 1px solid #f0f0f0; padding-top: 24px; margin-top: 28px;">
+          <p style="margin: 0; color: #64748b; font-size: 14px;">Sincerely,</p>
+          <p style="margin: 6px 0 0;"><strong style="color: ${brandInfo.primary}; font-size: 15px;">SAIKI</strong> <strong style="color: #1e293b; font-size: 15px;">Group</strong></p>
+          <p style="margin: 4px 0 0; color: #94a3b8; font-size: 11px;">Beyond Your Needs</p>
+          <div style="margin-top: 10px;">
+            <a href="https://saiki.id" style="color: ${brandInfo.primary}; font-size: 12px; text-decoration: none; margin-right: 16px;">saiki.id</a>
+            <a href="mailto:info@saiki.id" style="color: ${brandInfo.primary}; font-size: 12px; text-decoration: none;">info@saiki.id</a>
+          </div>
         </div>
       </div>
-      <div style="padding: 16px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
-        <p style="color: #94a3b8; font-size: 11px; margin: 0;">This email is intended for ${clientName}. If you received this in error, please notify the sender.</p>
+      <!-- Footer -->
+      <div style="background: #f8fafc; padding: 16px 32px; text-align: center; border-top: 1px solid #f0f0f0;">
+        <p style="color: #94a3b8; font-size: 11px; margin: 0; line-height: 1.5;">This email is intended for <strong>${clientName}</strong>. If you received this in error, please notify the sender immediately.</p>
+        <p style="color: #cbd5e1; font-size: 10px; margin: 6px 0 0;">&copy; ${new Date().getFullYear()} SAIKI Group — Consultancy • Technology • Imagery</p>
       </div>
     </div>
   `;

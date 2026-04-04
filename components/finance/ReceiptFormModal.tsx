@@ -40,6 +40,7 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
     saikiweb_payment_method: receipt?.saikiweb_payment_method || 'Bank transfer',
     saikiweb_receipt_date: receipt?.saikiweb_receipt_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
     saikiweb_signer_name: receipt?.saikiweb_signer_name || '',
+    saikiweb_signer_title: receipt?.saikiweb_signer_title || '',
     saikiweb_is_legacy: receipt?.saikiweb_is_legacy || false,
     saikiweb_legacy_notes: receipt?.saikiweb_legacy_notes || '',
   });
@@ -226,13 +227,17 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
           </div>
 
           {/* Signer */}
-          <div>
-            <label className={labelCls}>Signer Name (for signature)</label>
-            <div className="flex items-center gap-3">
-              <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={`${inputCls} flex-1`} placeholder="e.g. Dimas Budi Ramadhan" />
-              {form.saikiweb_signer_name && (
-                <span style={{ fontFamily: "'Bastliga One', cursive", fontSize: '22px', color: '#1a1a2e' }}>{form.saikiweb_signer_name}</span>
-              )}
+          <div className="bg-gray-50 rounded-xl p-4 space-y-3">
+            <h3 className="text-sm font-semibold text-gray-700">Signature</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className={labelCls}>Signer Name</label>
+                <input type="text" value={form.saikiweb_signer_name} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_name: e.target.value }))} className={inputCls} placeholder="e.g. Dimas Budi Ramadhan" />
+              </div>
+              <div>
+                <label className={labelCls}>Signer Title / Position</label>
+                <input type="text" value={form.saikiweb_signer_title} onChange={(e) => setForm((f) => ({ ...f, saikiweb_signer_title: e.target.value }))} className={inputCls} placeholder="e.g. Managing Director" />
+              </div>
             </div>
           </div>
 

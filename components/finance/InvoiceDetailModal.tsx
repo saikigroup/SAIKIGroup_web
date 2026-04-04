@@ -118,6 +118,7 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
             customFields={invoice.saikiweb_custom_fields || undefined}
             verificationToken={invoice.saikiweb_verification_token || undefined}
             signerName={invoice.saikiweb_signer_name || undefined}
+            signerTitle={invoice.saikiweb_signer_title || undefined}
           />
           </div>
         </div>
