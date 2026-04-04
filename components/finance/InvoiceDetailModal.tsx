@@ -74,7 +74,7 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
     return (
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
         <div className="absolute inset-0 bg-black/60" onClick={() => setShowPreview(false)} />
-        <div className="relative my-8 w-full max-w-[210mm]">
+        <div className="relative my-8 w-full max-w-[794px]">
           <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
             <button
               onClick={async (e) => {

@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
   const { data: invoice, error } = await supabase
     .from(TABLES.INVOICES)
-    .select('saikiweb_invoice_number, saikiweb_service_brand, saikiweb_status, saikiweb_client_name, saikiweb_issued_date, saikiweb_grand_total, saikiweb_currency')
+    .select('saikiweb_invoice_number, saikiweb_service_brand, saikiweb_status, saikiweb_client_name, saikiweb_issued_date, saikiweb_grand_total, saikiweb_currency, saikiweb_reference_docs')
     .eq('saikiweb_verification_token', token)
     .single();
 
@@ -35,6 +35,7 @@ export async function GET(request: NextRequest) {
       issued_date: invoice.saikiweb_issued_date,
       grand_total: invoice.saikiweb_grand_total,
       currency: invoice.saikiweb_currency,
+      reference_docs: invoice.saikiweb_reference_docs || [],
     },
   });
 }

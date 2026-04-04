@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { SERVICE_BRANDS, generateInvoiceNumber } from '@/lib/finance';
 import type { SaikiwebInvoice, ServiceBrand } from '@/lib/supabase';
+import ReferenceDocUpload from './ReferenceDocUpload';
 
 interface LineItem {
   description: string;
@@ -50,6 +51,9 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
 
   const [items, setItems] = useState<LineItem[]>([{ description: '', quantity: 1, unit_price: 0 }]);
   const [customFields, setCustomFields] = useState<CustomField[]>([]);
+  const [referenceDocs, setReferenceDocs] = useState<{ name: string; url: string }[]>(
+    invoice?.saikiweb_reference_docs || []
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -111,6 +115,7 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
     const payload = {
       ...form,
       saikiweb_custom_fields: Object.keys(cfObj).length > 0 ? cfObj : null,
+      saikiweb_reference_docs: referenceDocs.length > 0 ? referenceDocs : null,
       saikiweb_related_invoice_id: form.saikiweb_related_invoice_id || null,
       saikiweb_legacy_notes: form.saikiweb_legacy_notes || null,
       items: items.filter((it) => it.description.trim()),
@@ -351,6 +356,11 @@ export default function InvoiceFormModal({ invoice, onClose, onSaved }: InvoiceF
                 {form.saikiweb_signer_title && <p className="text-[10px] text-gray-400 mt-0.5">{form.saikiweb_signer_title}</p>}
               </div>
             )}
+          </div>
+
+          {/* Reference Documents */}
+          <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
+            <ReferenceDocUpload docs={referenceDocs} onChange={setReferenceDocs} />
           </div>
 
           {/* Custom Fields */}

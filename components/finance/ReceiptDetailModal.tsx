@@ -89,8 +89,21 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEma
     return (
       <div className="fixed inset-0 z-50 flex items-start justify-center p-4 overflow-y-auto">
         <div className="absolute inset-0 bg-black/60" onClick={() => setShowPreview(false)} />
-        <div className="relative my-8 w-full max-w-[210mm]">
+        <div className="relative my-8 w-full max-w-[794px]">
           <div className="absolute -top-2 -right-2 z-10 flex items-center gap-2">
+            {/* If stamped PDF exists, download that instead */}
+            {isStamped && stampedFileUrl ? (
+              <a
+                href={stampedFileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-green-600 text-white rounded-full p-2.5 shadow-lg hover:bg-green-700 cursor-pointer flex items-center gap-1.5 pr-3.5 text-xs font-medium"
+                title="Download Stamped PDF"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                Stamped
+              </a>
+            ) : null}
             <button
               onClick={async (e) => {
                 e.stopPropagation();
@@ -104,7 +117,7 @@ export default function ReceiptDetailModal({ receipt, onClose, onEdit, onSendEma
               }}
               disabled={downloading}
               className="bg-teal-600 text-white rounded-full p-2.5 shadow-lg hover:bg-teal-700 disabled:opacity-50 cursor-pointer"
-              title="Download PDF"
+              title={isStamped ? 'Download Draft (without stamp)' : 'Download PDF'}
               type="button"
             >
               {downloading ? (
