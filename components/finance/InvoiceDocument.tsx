@@ -119,7 +119,7 @@ export default function InvoiceDocument({
       {/* Sub-header */}
       <div className="relative z-10 pl-8 pr-10 py-2 flex items-center gap-2" style={{ backgroundColor: `${brand.color}06`, borderBottom: `1px solid ${brand.color}0D` }}>
         <SaikiLogoMark size={12} />
-        <span className="text-[8px] text-gray-400 tracking-[0.15em] uppercase font-semibold">SAIKI Group — Official Document</span>
+        <span className="text-[8px] text-gray-400 tracking-[0.15em] uppercase font-semibold">SAIKI Group | Official Document</span>
       </div>
 
       {/* ===== BILLED TO ===== */}

@@ -35,9 +35,26 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Missing required fields: to, subject, emailBody' }, { status: 400 });
     }
 
-    // Fetch stamped file URLs for attachments
+    // Fetch file URLs for attachments
     const attachments: { filename: string; path?: string; href?: string }[] = [];
 
+    // Attach invoice PDF if uploaded
+    if (invoiceId) {
+      const { data: inv } = await supabase
+        .from(TABLES.INVOICES)
+        .select('saikiweb_invoice_number, saikiweb_signed_file_url')
+        .eq('saikiweb_invoice_id', invoiceId)
+        .single();
+
+      if (inv?.saikiweb_signed_file_url) {
+        attachments.push({
+          filename: `${inv.saikiweb_invoice_number}.pdf`,
+          href: inv.saikiweb_signed_file_url,
+        });
+      }
+    }
+
+    // Attach receipt stamped PDF if available
     if (receiptId) {
       const { data: receipt } = await supabase
         .from(TABLES.RECEIPTS)

@@ -79,7 +79,7 @@ export async function sendVisitorConfirmation(data: {
         </div>
         <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
           <p style="color: #94a3b8; font-size: 13px; margin: 0;">
-            SAIKI Group &mdash; Consultancy, Imagery & Technology<br/>
+            SAIKI Group | Consultancy, Imagery & Technology<br/>
             <a href="https://saiki.id" style="color: #0d9488;">saiki.id</a> &bull;
             <a href="mailto:info@saiki.id" style="color: #0d9488;">info@saiki.id</a>
           </p>
@@ -116,7 +116,7 @@ export async function sendVisitorConfirmation(data: {
         </div>
         <div style="background: #f8fafc; padding: 20px 32px; text-align: center; border-top: 1px solid #e2e8f0;">
           <p style="color: #94a3b8; font-size: 13px; margin: 0;">
-            SAIKI Group &mdash; Consultancy, Imagery & Technology<br/>
+            SAIKI Group | Consultancy, Imagery & Technology<br/>
             <a href="https://saiki.id" style="color: #0d9488;">saiki.id</a> &bull;
             <a href="mailto:info@saiki.id" style="color: #0d9488;">info@saiki.id</a>
           </p>
@@ -399,7 +399,7 @@ export async function sendFinanceEmail(data: FinanceEmailData) {
                   <br/>Unauthorized use, disclosure, or distribution is prohibited.
                 </p>
                 <p style="color: #cbd5e1; font-size: 10px; margin: 8px 0 0; text-align: center;">
-                  &copy; ${new Date().getFullYear()} SAIKI Group &mdash; Consultancy &bull; Technology &bull; Imagery
+                  &copy; ${new Date().getFullYear()} SAIKI Group | Consultancy &bull; Technology &bull; Imagery
                 </p>
               </td>
             </tr>
