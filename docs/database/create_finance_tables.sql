@@ -47,6 +47,11 @@ CREATE TABLE IF NOT EXISTS saikiweb_invoices (
   saikiweb_sent_at          TIMESTAMPTZ,
   saikiweb_custom_fields    JSONB,
 
+  -- Legacy / historical data (for pre-system invoices)
+  saikiweb_is_legacy        BOOLEAN DEFAULT FALSE,
+  saikiweb_legacy_notes     TEXT,
+  saikiweb_related_invoice_id BIGINT REFERENCES saikiweb_invoices(saikiweb_invoice_id) ON DELETE SET NULL,
+
   -- Timestamps
   saikiweb_created_at       TIMESTAMPTZ DEFAULT NOW(),
   saikiweb_updated_at       TIMESTAMPTZ DEFAULT NOW()
@@ -154,6 +159,10 @@ CREATE TABLE IF NOT EXISTS saikiweb_receipts (
   saikiweb_stamp_status     TEXT DEFAULT 'not_required'
                             CHECK (saikiweb_stamp_status IN ('not_required', 'needs_stamp', 'stamped')),
   saikiweb_stamped_file_url TEXT,
+
+  -- Legacy / historical data (for pre-system receipts)
+  saikiweb_is_legacy        BOOLEAN DEFAULT FALSE,
+  saikiweb_legacy_notes     TEXT,
 
   -- Timestamps
   saikiweb_created_at       TIMESTAMPTZ DEFAULT NOW()

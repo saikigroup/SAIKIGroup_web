@@ -160,6 +160,9 @@ export interface SaikiwebInvoice {
   saikiweb_verification_token?: string;
   saikiweb_sent_at?: string;
   saikiweb_custom_fields?: Record<string, string>;
+  saikiweb_is_legacy?: boolean;
+  saikiweb_legacy_notes?: string;
+  saikiweb_related_invoice_id?: number;
   saikiweb_created_at?: string;
   saikiweb_updated_at?: string;
 }
@@ -213,5 +216,7 @@ export interface SaikiwebReceipt {
   saikiweb_custom_fields?: Record<string, string>;
   saikiweb_stamp_status?: 'not_required' | 'needs_stamp' | 'stamped';
   saikiweb_stamped_file_url?: string;
+  saikiweb_is_legacy?: boolean;
+  saikiweb_legacy_notes?: string;
   saikiweb_created_at?: string;
 }

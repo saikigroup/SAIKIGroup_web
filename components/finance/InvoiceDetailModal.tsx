@@ -134,6 +134,22 @@ export default function InvoiceDetailModal({ invoice, onClose, onEdit, onDelete,
         </div>
 
         <div className="p-6 space-y-5">
+          {/* Legacy badge */}
+          {invoice.saikiweb_is_legacy && (
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="inline-block px-2 py-0.5 bg-amber-200 text-amber-800 text-[10px] font-bold rounded uppercase">Legacy</span>
+                <span className="text-xs text-amber-700">Data historis - dibuat sebelum sistem ini</span>
+              </div>
+              {invoice.saikiweb_legacy_notes && (
+                <p className="text-xs text-amber-600 mt-1">{invoice.saikiweb_legacy_notes}</p>
+              )}
+              {invoice.saikiweb_related_invoice_id && (
+                <p className="text-xs text-amber-600 mt-1">Terkait Invoice ID: #{invoice.saikiweb_related_invoice_id}</p>
+              )}
+            </div>
+          )}
+
           {/* Top info */}
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
             <div>

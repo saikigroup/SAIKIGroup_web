@@ -40,6 +40,8 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
     saikiweb_payment_method: receipt?.saikiweb_payment_method || 'Bank transfer',
     saikiweb_receipt_date: receipt?.saikiweb_receipt_date?.slice(0, 10) || new Date().toISOString().slice(0, 10),
     saikiweb_signer_name: receipt?.saikiweb_signer_name || '',
+    saikiweb_is_legacy: receipt?.saikiweb_is_legacy || false,
+    saikiweb_legacy_notes: receipt?.saikiweb_legacy_notes || '',
   });
 
   const [customFields, setCustomFields] = useState<CustomField[]>(
@@ -72,6 +74,7 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
       saikiweb_invoice_id: form.saikiweb_invoice_id || null,
       saikiweb_package_value: form.saikiweb_package_value || null,
       saikiweb_custom_fields: Object.keys(cfObj).length > 0 ? cfObj : null,
+      saikiweb_legacy_notes: form.saikiweb_legacy_notes || null,
       ...(isEdit ? { saikiweb_receipt_id: receipt?.saikiweb_receipt_id } : {}),
     };
 
@@ -125,6 +128,34 @@ export default function ReceiptFormModal({ receipt, prefill, onClose, onSaved }:
               <label className={labelCls}>Receipt Date</label>
               <input type="date" value={form.saikiweb_receipt_date} onChange={(e) => setForm((f) => ({ ...f, saikiweb_receipt_date: e.target.value }))} className={inputCls} required />
             </div>
+          </div>
+
+          {/* Legacy Toggle */}
+          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.saikiweb_is_legacy}
+                onChange={(e) => setForm((f) => ({ ...f, saikiweb_is_legacy: e.target.checked }))}
+                className="w-4 h-4 rounded border-amber-300 text-amber-600 focus:ring-amber-500"
+              />
+              <div>
+                <span className="text-sm font-semibold text-amber-800">Historical / Legacy Data</span>
+                <p className="text-xs text-amber-600">Centang jika receipt ini dibuat sebelum sistem ini</p>
+              </div>
+            </label>
+            {form.saikiweb_is_legacy && (
+              <div className="pt-3">
+                <label className={labelCls}>Catatan Legacy</label>
+                <textarea
+                  value={form.saikiweb_legacy_notes}
+                  onChange={(e) => setForm((f) => ({ ...f, saikiweb_legacy_notes: e.target.value }))}
+                  className={inputCls}
+                  rows={2}
+                  placeholder="Contoh: Receipt asli dikirim manual via email pada 31 Des 2025"
+                />
+              </div>
+            )}
           </div>
 
           <div className="bg-gray-50 rounded-xl p-4 space-y-3">
