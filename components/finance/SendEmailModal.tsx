@@ -378,13 +378,15 @@ export default function SendEmailModal({ invoice, receipt, onClose, onSent }: Se
               <button type="button" onClick={addRef} className="text-xs text-teal-600 hover:text-teal-700 font-medium">+ Add Reference</button>
             </div>
             {refs.map((ref, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <input type="text" placeholder="Label (e.g. Receipt)" value={ref.label} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, label: e.target.value } : r))} className={`${inputCls} w-24 shrink-0`} />
-                <input type="color" value={ref.badgeColor} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, badgeColor: e.target.value } : r))} className="w-8 h-8 rounded cursor-pointer border border-gray-200 shrink-0" />
-                <input type="text" placeholder="Value" value={ref.value} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, value: e.target.value } : r))} className={`${inputCls} flex-1`} />
-                <button type="button" onClick={() => removeRef(idx)} className="text-red-400 hover:text-red-600 shrink-0">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
-                </button>
+              <div key={idx} className="bg-white border border-gray-200 rounded-lg p-3 space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="text" placeholder="Label (e.g. Receipt, Invoice, SPK)" value={ref.label} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, label: e.target.value } : r))} className={`${inputCls} flex-1`} />
+                  <input type="color" value={ref.badgeColor} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, badgeColor: e.target.value } : r))} className="w-8 h-8 rounded cursor-pointer border border-gray-200 shrink-0" title="Badge color" />
+                  <button type="button" onClick={() => removeRef(idx)} className="text-red-400 hover:text-red-600 shrink-0" title="Remove">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+                <input type="text" placeholder="Value (e.g. INV215-SC.ITDEV-2025 (30 Dec 2025))" value={ref.value} onChange={(e) => setRefs((prev) => prev.map((r, i) => i === idx ? { ...r, value: e.target.value } : r))} className={inputCls} />
               </div>
             ))}
 
