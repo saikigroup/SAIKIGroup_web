@@ -11,33 +11,39 @@ interface Props {
 }
 
 export default function PdfStampModal({ document: doc, onClose, onStamped }: Props) {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const [pdfDataUrl, setPdfDataUrl] = useState('');
-  const [pdfArrayBuffer, setPdfArrayBuffer] = useState<ArrayBuffer | null>(null);
-  const [pdfLoaded, setPdfLoaded] = useState(false);
-  const [pdfError, setPdfError] = useState('');
+  // PDF state
+  const [pdfBytes, setPdfBytes] = useState<ArrayBuffer | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const pdfjsDocRef = useRef<any>(null);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState({ width: 595, height: 842 }); // default A4
+  const [rendering, setRendering] = useState(false);
+  const [pdfLoaded, setPdfLoaded] = useState(false);
+  const [pdfError, setPdfError] = useState('');
 
-  // QR overlay state
+  // Canvas/page dimensions (display pixels)
+  const [canvasWidth, setCanvasWidth] = useState(0);
+  const [canvasHeight, setCanvasHeight] = useState(0);
+  // PDF page dimensions (PDF points)
+  const [pdfPageWidth, setPdfPageWidth] = useState(0);
+  const [pdfPageHeight, setPdfPageHeight] = useState(0);
+
+  // QR overlay state (in display pixels)
   const [qrImageUrl, setQrImageUrl] = useState('');
-  const [qrPosition, setQrPosition] = useState({ x: 420, y: 700 }); // bottom-right default
+  const [qrPosition, setQrPosition] = useState({ x: 0, y: 0 });
   const [qrSize, setQrSize] = useState(80);
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
+  const [initialized, setInitialized] = useState(false);
 
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
   const verifyUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/verify/document?token=${doc.saikiweb_verification_token}`;
-
-  // Container display dimensions (fixed preview size)
-  const PREVIEW_WIDTH = 595;
-  const displayScale = pageSize.width > 0 ? PREVIEW_WIDTH / pageSize.width : 1;
-  const displayHeight = pageSize.height * displayScale;
 
   // Generate QR code image
   useEffect(() => {
@@ -46,64 +52,104 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
       .catch(() => {});
   }, [verifyUrl]);
 
-  // Load PDF and extract metadata using pdf-lib
+  // Load PDF
   useEffect(() => {
     if (!doc.saikiweb_original_file_url) return;
+    let cancelled = false;
 
     const loadPdf = async () => {
       try {
+        // Fetch PDF bytes
         const response = await fetch(doc.saikiweb_original_file_url!);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const arrayBuffer = await response.arrayBuffer();
-        setPdfArrayBuffer(arrayBuffer);
+        const buffer = await response.arrayBuffer();
+        if (cancelled) return;
+        setPdfBytes(buffer);
 
-        // Use pdf-lib to get page info
-        const { PDFDocument } = await import('pdf-lib');
-        const pdfDoc = await PDFDocument.load(arrayBuffer);
-        const pages = pdfDoc.getPages();
-        setTotalPages(pages.length);
+        // Load with pdfjs
+        const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+        pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
-        if (pages.length > 0) {
-          const firstPage = pages[0];
-          const { width, height } = firstPage.getSize();
-          setPageSize({ width, height });
-          // Position QR at bottom-right by default
-          setQrPosition({ x: width - 100, y: height - 100 });
-        }
+        const loadingTask = pdfjs.getDocument({ data: buffer.slice(0) });
+        const pdfDoc = await loadingTask.promise;
+        if (cancelled) return;
 
-        // Create blob URL for preview
-        const blob = new Blob([arrayBuffer], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        setPdfDataUrl(url);
+        pdfjsDocRef.current = pdfDoc;
+        setTotalPages(pdfDoc.numPages);
         setPdfLoaded(true);
       } catch (err) {
-        console.error('Failed to load PDF:', err);
-        setPdfError('Failed to load PDF file.');
+        console.error('PDF load error:', err);
+        if (!cancelled) setPdfError('Failed to load PDF file.');
       }
     };
     loadPdf();
-
-    return () => {
-      if (pdfDataUrl) URL.revokeObjectURL(pdfDataUrl);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => { cancelled = true; };
   }, [doc.saikiweb_original_file_url]);
 
-  // Handle QR drag - mouse
+  // Render current page to canvas
+  const renderPage = useCallback(async (pageNum: number) => {
+    const pdfDoc = pdfjsDocRef.current;
+    if (!pdfDoc || !canvasRef.current || !containerRef.current) return;
+
+    setRendering(true);
+    try {
+      const page = await pdfDoc.getPage(pageNum);
+      const containerWidth = containerRef.current.clientWidth - 4; // border
+      const baseViewport = page.getViewport({ scale: 1 });
+      const scale = containerWidth / baseViewport.width;
+      const viewport = page.getViewport({ scale });
+
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext('2d')!;
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      setCanvasWidth(viewport.width);
+      setCanvasHeight(viewport.height);
+      setPdfPageWidth(baseViewport.width);
+      setPdfPageHeight(baseViewport.height);
+
+      const renderContext = {
+        canvasContext: ctx,
+        viewport,
+      };
+      await (page.render(renderContext) as { promise: Promise<void> }).promise;
+
+      // Set initial QR position (bottom-right) only on first render
+      if (!initialized) {
+        setQrPosition({
+          x: viewport.width - qrSize - 40,
+          y: viewport.height - qrSize - 40,
+        });
+        setInitialized(true);
+      }
+    } catch (err) {
+      console.error('Page render error:', err);
+    }
+    setRendering(false);
+  }, [initialized, qrSize]);
+
+  useEffect(() => {
+    if (pdfLoaded) renderPage(currentPage);
+  }, [pdfLoaded, currentPage, renderPage]);
+
+  // Handle page change
+  const goToPage = (page: number) => {
+    if (page < 1 || page > totalPages) return;
+    setCurrentPage(page);
+  };
+
+  // ---- Drag handlers (display pixel coordinates) ----
   const handleMouseDown = (e: React.MouseEvent) => {
-    if (!overlayRef.current) return;
-    const rect = overlayRef.current.getBoundingClientRect();
+    const rect = overlayRef.current?.getBoundingClientRect();
+    if (!rect) return;
     const mx = e.clientX - rect.left;
     const my = e.clientY - rect.top;
 
-    // Convert to PDF coordinates
-    const pdfX = mx / displayScale;
-    const pdfY = my / displayScale;
-
-    if (pdfX >= qrPosition.x && pdfX <= qrPosition.x + qrSize &&
-        pdfY >= qrPosition.y && pdfY <= qrPosition.y + qrSize) {
+    if (mx >= qrPosition.x && mx <= qrPosition.x + qrSize &&
+        my >= qrPosition.y && my <= qrPosition.y + qrSize) {
       setIsDragging(true);
-      setDragOffset({ x: pdfX - qrPosition.x, y: pdfY - qrPosition.y });
+      setDragOffset({ x: mx - qrPosition.x, y: my - qrPosition.y });
       e.preventDefault();
     }
   };
@@ -111,39 +157,38 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging || !overlayRef.current) return;
     const rect = overlayRef.current.getBoundingClientRect();
-    const pdfX = (e.clientX - rect.left) / displayScale - dragOffset.x;
-    const pdfY = (e.clientY - rect.top) / displayScale - dragOffset.y;
+    const x = e.clientX - rect.left - dragOffset.x;
+    const y = e.clientY - rect.top - dragOffset.y;
     setQrPosition({
-      x: Math.max(0, Math.min(pdfX, pageSize.width - qrSize)),
-      y: Math.max(0, Math.min(pdfY, pageSize.height - qrSize)),
+      x: Math.max(0, Math.min(x, canvasWidth - qrSize)),
+      y: Math.max(0, Math.min(y, canvasHeight - qrSize)),
     });
-  }, [isDragging, dragOffset, displayScale, pageSize, qrSize]);
+  }, [isDragging, dragOffset, canvasWidth, canvasHeight, qrSize]);
 
   const handleMouseUp = useCallback(() => setIsDragging(false), []);
 
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
+    if (!isDragging) return;
+    window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+    };
   }, [isDragging, handleMouseMove, handleMouseUp]);
 
-  // Handle touch drag
+  // Touch drag
   const handleTouchStart = (e: React.TouchEvent) => {
-    if (!overlayRef.current) return;
+    const rect = overlayRef.current?.getBoundingClientRect();
+    if (!rect) return;
     const touch = e.touches[0];
-    const rect = overlayRef.current.getBoundingClientRect();
-    const pdfX = (touch.clientX - rect.left) / displayScale;
-    const pdfY = (touch.clientY - rect.top) / displayScale;
+    const mx = touch.clientX - rect.left;
+    const my = touch.clientY - rect.top;
 
-    if (pdfX >= qrPosition.x && pdfX <= qrPosition.x + qrSize &&
-        pdfY >= qrPosition.y && pdfY <= qrPosition.y + qrSize) {
+    if (mx >= qrPosition.x && mx <= qrPosition.x + qrSize &&
+        my >= qrPosition.y && my <= qrPosition.y + qrSize) {
       setIsDragging(true);
-      setDragOffset({ x: pdfX - qrPosition.x, y: pdfY - qrPosition.y });
+      setDragOffset({ x: mx - qrPosition.x, y: my - qrPosition.y });
     }
   };
 
@@ -152,58 +197,56 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
     e.preventDefault();
     const touch = e.touches[0];
     const rect = overlayRef.current.getBoundingClientRect();
-    const pdfX = (touch.clientX - rect.left) / displayScale - dragOffset.x;
-    const pdfY = (touch.clientY - rect.top) / displayScale - dragOffset.y;
+    const x = touch.clientX - rect.left - dragOffset.x;
+    const y = touch.clientY - rect.top - dragOffset.y;
     setQrPosition({
-      x: Math.max(0, Math.min(pdfX, pageSize.width - qrSize)),
-      y: Math.max(0, Math.min(pdfY, pageSize.height - qrSize)),
+      x: Math.max(0, Math.min(x, canvasWidth - qrSize)),
+      y: Math.max(0, Math.min(y, canvasHeight - qrSize)),
     });
-  }, [isDragging, dragOffset, displayScale, pageSize, qrSize]);
+  }, [isDragging, dragOffset, canvasWidth, canvasHeight, qrSize]);
 
   useEffect(() => {
-    if (isDragging) {
-      window.addEventListener('touchmove', handleTouchMove, { passive: false });
-      window.addEventListener('touchend', handleMouseUp);
-      return () => {
-        window.removeEventListener('touchmove', handleTouchMove);
-        window.removeEventListener('touchend', handleMouseUp);
-      };
-    }
+    if (!isDragging) return;
+    window.addEventListener('touchmove', handleTouchMove, { passive: false });
+    window.addEventListener('touchend', handleMouseUp);
+    return () => {
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleMouseUp);
+    };
   }, [isDragging, handleTouchMove, handleMouseUp]);
 
-  // Save stamped PDF using pdf-lib
+  // ---- Stamp & Save ----
   const handleStamp = async () => {
-    if (!pdfArrayBuffer || !qrImageUrl) return;
+    if (!pdfBytes || !qrImageUrl || !canvasWidth || !pdfPageWidth) return;
 
     setSaving(true);
     setError('');
 
     try {
       const { PDFDocument } = await import('pdf-lib');
-      const pdfDocument = await PDFDocument.load(pdfArrayBuffer);
-
+      const pdfDocument = await PDFDocument.load(pdfBytes);
       const page = pdfDocument.getPage(currentPage - 1);
-      const { height: pdfPageHeight } = page.getSize();
+      const { height: pageH } = page.getSize();
 
-      // qrPosition is in PDF points (top-left origin)
-      // pdf-lib uses bottom-left origin, so convert Y
-      const pdfQrX = qrPosition.x;
-      const pdfQrY = pdfPageHeight - qrPosition.y - qrSize;
+      // Convert display pixels -> PDF points
+      const scale = pdfPageWidth / canvasWidth;
+      const pdfQrX = qrPosition.x * scale;
+      const pdfQrSize = qrSize * scale;
+      // PDF Y is bottom-up, display Y is top-down
+      const pdfQrY = pageH - (qrPosition.y * scale) - pdfQrSize;
 
-      // Embed QR code image
       const qrImageBytes = await fetch(qrImageUrl).then(r => r.arrayBuffer());
       const qrImage = await pdfDocument.embedPng(qrImageBytes);
 
       page.drawImage(qrImage, {
         x: pdfQrX,
         y: pdfQrY,
-        width: qrSize,
-        height: qrSize,
+        width: pdfQrSize,
+        height: pdfQrSize,
       });
 
       const modifiedPdfBytes = await pdfDocument.save();
 
-      // Upload stamped PDF
       const pw = sessionStorage.getItem('admin_pw');
       if (!pw) throw new Error('Not authenticated');
 
@@ -220,7 +263,6 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
       const uploadData = await uploadRes.json();
       if (!uploadData.success) throw new Error(uploadData.error || 'Upload failed');
 
-      // Update document with stamped file URL and history
       const newStampEntry: DocumentStampEntry = {
         stamped_at: new Date().toISOString(),
         page: currentPage,
@@ -262,7 +304,7 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
         <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between rounded-t-2xl z-10">
           <div>
             <h2 className="text-lg font-bold text-gray-900">Stamp QR Code on PDF</h2>
-            <p className="text-xs text-gray-500 mt-0.5">Drag the QR code to position it on the document, then save</p>
+            <p className="text-xs text-gray-500 mt-0.5">Navigate to the page, drag QR to position, then save</p>
           </div>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -272,36 +314,29 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
         <div className="p-6 space-y-4">
           {/* Controls */}
           <div className="flex flex-wrap items-center gap-4">
-            {totalPages > 1 && (
-              <div className="flex items-center gap-2">
-                <button onClick={() => setCurrentPage(p => Math.max(1, p - 1))} disabled={currentPage <= 1} className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40">Prev</button>
-                <span className="text-sm text-gray-600">Page {currentPage} / {totalPages}</span>
-                <button onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages} className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40">Next</button>
-              </div>
-            )}
-
+            {/* Page Navigation */}
             <div className="flex items-center gap-2">
-              <label className="text-sm text-gray-600">QR Size:</label>
-              <input
-                type="range"
-                min={30}
-                max={200}
-                value={qrSize}
-                onChange={(e) => setQrSize(Number(e.target.value))}
-                className="w-32 accent-teal-600"
-              />
-              <span className="text-sm text-gray-500 w-10">{qrSize}pt</span>
+              <button onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1 || rendering} className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <span className="text-sm text-gray-600 min-w-[80px] text-center">
+                {pdfLoaded ? `${currentPage} / ${totalPages}` : '...'}
+              </span>
+              <button onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= totalPages || rendering} className="px-3 py-1.5 text-sm border border-gray-200 rounded-lg hover:bg-gray-50 disabled:opacity-40 transition">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+              </button>
             </div>
 
-            {totalPages > 0 && (
-              <span className="text-xs text-gray-400">
-                Page size: {Math.round(pageSize.width)} x {Math.round(pageSize.height)} pt
-              </span>
-            )}
+            {/* QR Size */}
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-600">QR Size:</label>
+              <input type="range" min={30} max={200} value={qrSize} onChange={(e) => setQrSize(Number(e.target.value))} className="w-28 accent-teal-600" />
+              <span className="text-sm text-gray-500 w-12">{qrSize}px</span>
+            </div>
           </div>
 
-          {/* PDF Preview with QR Overlay */}
-          <div ref={containerRef} className="border border-gray-200 rounded-xl overflow-hidden bg-gray-100">
+          {/* PDF Canvas with QR Overlay */}
+          <div ref={containerRef} className="border-2 border-gray-200 rounded-xl overflow-hidden bg-gray-100">
             {pdfError ? (
               <div className="p-16 text-center">
                 <p className="text-red-500 text-sm">{pdfError}</p>
@@ -312,34 +347,29 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
                 <p className="text-gray-500 text-sm">Loading PDF...</p>
               </div>
             ) : (
-              <div className="relative mx-auto" style={{ width: PREVIEW_WIDTH, height: displayHeight }}>
-                {/* PDF rendered by browser via embed */}
-                <embed
-                  src={`${pdfDataUrl}#page=${currentPage}&toolbar=0&navpanes=0&scrollbar=0`}
-                  type="application/pdf"
-                  style={{ width: PREVIEW_WIDTH, height: displayHeight, border: 'none' }}
-                />
-                {/* Transparent overlay for drag interaction */}
+              <div className="relative inline-block w-full">
+                <canvas ref={canvasRef} className="block w-full" />
+                {rendering && (
+                  <div className="absolute inset-0 bg-white/60 flex items-center justify-center">
+                    <div className="w-6 h-6 border-2 border-teal-600 border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+                {/* Drag overlay */}
                 <div
                   ref={overlayRef}
                   onMouseDown={handleMouseDown}
                   onTouchStart={handleTouchStart}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    cursor: isDragging ? 'grabbing' : 'default',
-                    zIndex: 10,
-                  }}
+                  className="absolute inset-0"
+                  style={{ cursor: isDragging ? 'grabbing' : 'default', zIndex: 10 }}
                 >
-                  {/* QR Code draggable element */}
-                  {qrImageUrl && (
+                  {qrImageUrl && canvasWidth > 0 && (
                     <div
                       style={{
                         position: 'absolute',
-                        left: qrPosition.x * displayScale,
-                        top: qrPosition.y * displayScale,
-                        width: qrSize * displayScale,
-                        height: qrSize * displayScale,
+                        left: qrPosition.x,
+                        top: qrPosition.y,
+                        width: qrSize,
+                        height: qrSize,
                         cursor: isDragging ? 'grabbing' : 'grab',
                         border: '2px dashed #0d9488',
                         borderRadius: 4,
@@ -370,12 +400,12 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
               {saving ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  Stamping...
+                  Stamping page {currentPage}...
                 </>
               ) : (
                 <>
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-                  Stamp & Save PDF
+                  Stamp Page {currentPage} & Save
                 </>
               )}
             </button>
