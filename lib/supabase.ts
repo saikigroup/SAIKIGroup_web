@@ -36,6 +36,7 @@ export const TABLES = {
   INVOICE_ITEMS: 'saikiweb_invoice_items',
   PAYMENTS: 'saikiweb_payments',
   RECEIPTS: 'saikiweb_receipts',
+  DOCUMENTS: 'saikiweb_documents',
 } as const;
 
 // Type for the saikiweb_articles table
@@ -224,4 +225,48 @@ export interface SaikiwebReceipt {
   saikiweb_is_legacy?: boolean;
   saikiweb_legacy_notes?: string;
   saikiweb_created_at?: string;
+}
+
+// Type for saikiweb_documents table (QR code document verification)
+export type DocumentStatus = 'active' | 'revoked' | 'expired';
+export type DocumentType =
+  | 'surat_keputusan'
+  | 'sertifikat'
+  | 'kontrak'
+  | 'surat_keterangan'
+  | 'proposal'
+  | 'berita_acara'
+  | 'surat_tugas'
+  | 'lainnya';
+
+export interface DocumentStampEntry {
+  stamped_at: string;
+  page: number;
+  x: number;
+  y: number;
+  size: number;
+  file_url: string;
+}
+
+export interface SaikiwebDocument {
+  saikiweb_document_id?: number;
+  saikiweb_document_number: string;
+  saikiweb_document_name: string;
+  saikiweb_document_type: DocumentType;
+  saikiweb_document_date: string;
+  saikiweb_service_brand: ServiceBrand;
+  saikiweb_status: DocumentStatus;
+  saikiweb_issued_to: string;
+  saikiweb_issued_by: string;
+  saikiweb_description?: string;
+  saikiweb_signer_name?: string;
+  saikiweb_signer_title?: string;
+  saikiweb_valid_until?: string;
+  saikiweb_verification_token: string;
+  saikiweb_original_file_url?: string;
+  saikiweb_stamped_file_url?: string;
+  saikiweb_stamp_history?: DocumentStampEntry[];
+  saikiweb_notes?: string;
+  saikiweb_created_at?: string;
+  saikiweb_updated_at?: string;
 }
