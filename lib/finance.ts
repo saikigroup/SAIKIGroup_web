@@ -64,6 +64,31 @@ export function generateReceiptNumber(brand: ServiceBrand, sequence?: number): s
   return `RCP.${seq}-${brandCode}-${year}`;
 }
 
+export function generateDocumentNumber(brand: ServiceBrand, sequence?: number): string {
+  const brandCode = { consultancy: 'SC', technology: 'ST', imagery: 'SI' }[brand];
+  const year = new Date().getFullYear();
+  const month = String(new Date().getMonth() + 1).padStart(2, '0');
+  const seq = sequence ? String(sequence).padStart(3, '0') : '001';
+  return `DOC.${seq}-${brandCode}-${month}/${year}`;
+}
+
+export const DOCUMENT_TYPE_LABELS: Record<string, string> = {
+  surat_keputusan: 'Surat Keputusan',
+  sertifikat: 'Sertifikat',
+  kontrak: 'Kontrak',
+  surat_keterangan: 'Surat Keterangan',
+  proposal: 'Proposal',
+  berita_acara: 'Berita Acara',
+  surat_tugas: 'Surat Tugas',
+  lainnya: 'Lainnya',
+};
+
+export const DOCUMENT_STATUS_LABELS: Record<string, { label: string; color: string; bg: string }> = {
+  active: { label: 'Active', color: 'text-green-700', bg: 'bg-green-100' },
+  revoked: { label: 'Revoked', color: 'text-red-700', bg: 'bg-red-100' },
+  expired: { label: 'Expired', color: 'text-gray-700', bg: 'bg-gray-200' },
+};
+
 export function numberToWords(num: number): string {
   if (num === 0) return 'Zero Rupiah';
 

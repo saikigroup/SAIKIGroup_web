@@ -1509,6 +1509,7 @@ function SocialPostsContent() {
               Prompt Library
             </a>
             <a href="/admin/finance" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Finance</a>
+            <a href="/admin/documents" className="px-3 py-1.5 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition whitespace-nowrap">Documents</a>
           </nav>
         </div>
       </header>
