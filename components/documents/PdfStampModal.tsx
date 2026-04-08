@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import type { SaikiwebDocument, DocumentStampEntry } from '@/lib/supabase';
 import QRCodeLib from 'qrcode';
 
-type PdfjsLib = typeof import('pdfjs-dist');
-type PDFDocumentProxy = import('pdfjs-dist').PDFDocumentProxy;
+type PdfjsLib = typeof import('pdfjs-dist/legacy/build/pdf.mjs');
+type PDFDocumentProxy = import('pdfjs-dist/legacy/build/pdf.mjs').PDFDocumentProxy;
 
 interface Props {
   document: SaikiwebDocument;
@@ -47,24 +47,29 @@ export default function PdfStampModal({ document: doc, onClose, onStamped }: Pro
       .catch(() => {});
   }, [verifyUrl]);
 
-  // Load PDF (dynamic import to avoid SSR issues)
+  // Load PDF (fetch as ArrayBuffer first to avoid CORS, then pass to pdfjs)
   useEffect(() => {
     if (!doc.saikiweb_original_file_url) return;
 
     const loadPdf = async () => {
       try {
-        const pdfjs = await import('pdfjs-dist');
+        // Fetch PDF as binary data first (avoids CORS issues with pdfjs direct URL loading)
+        const response = await fetch(doc.saikiweb_original_file_url!);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const arrayBuffer = await response.arrayBuffer();
+
+        const pdfjs = await import('pdfjs-dist/legacy/build/pdf.mjs');
         pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.mjs`;
         pdfjsRef.current = pdfjs;
 
-        const loadingTask = pdfjs.getDocument(doc.saikiweb_original_file_url!);
+        const loadingTask = pdfjs.getDocument({ data: arrayBuffer });
         const pdf = await loadingTask.promise;
         setPdfDoc(pdf);
         setTotalPages(pdf.numPages);
         setCurrentPage(1);
       } catch (err) {
         console.error('Failed to load PDF:', err);
-        setError('Failed to load PDF file');
+        setError('Failed to load PDF file. Check that the file URL is accessible.');
       }
     };
     loadPdf();
