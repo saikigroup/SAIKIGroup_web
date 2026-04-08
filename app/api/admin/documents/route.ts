@@ -80,6 +80,18 @@ export async function POST(request: NextRequest) {
     // Generate verification token
     body.saikiweb_verification_token = generateVerificationToken();
 
+    // Clean empty strings to null for optional fields
+    const nullableFields = [
+      'saikiweb_description', 'saikiweb_signer_name', 'saikiweb_signer_title',
+      'saikiweb_valid_until', 'saikiweb_original_file_url', 'saikiweb_stamped_file_url',
+      'saikiweb_notes',
+    ];
+    for (const field of nullableFields) {
+      if (body[field] === '' || body[field] === undefined) {
+        body[field] = null;
+      }
+    }
+
     const { data, error } = await supabase
       .from(TABLES.DOCUMENTS)
       .insert(body)
@@ -88,11 +100,12 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       console.error('Document insert error:', error);
-      return NextResponse.json({ success: false, error: 'Failed to create document' }, { status: 500 });
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, data });
-  } catch {
+  } catch (err) {
+    console.error('Document POST error:', err);
     return NextResponse.json({ success: false, error: 'Invalid request body' }, { status: 400 });
   }
 }
@@ -114,6 +127,18 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ success: false, error: 'Document ID required' }, { status: 400 });
     }
 
+    // Clean empty strings to null for optional fields
+    const nullableFields = [
+      'saikiweb_description', 'saikiweb_signer_name', 'saikiweb_signer_title',
+      'saikiweb_valid_until', 'saikiweb_original_file_url', 'saikiweb_stamped_file_url',
+      'saikiweb_notes',
+    ];
+    for (const field of nullableFields) {
+      if (field in updateData && (updateData[field] === '' || updateData[field] === undefined)) {
+        updateData[field] = null;
+      }
+    }
+
     updateData.saikiweb_updated_at = new Date().toISOString();
 
     const { data, error } = await supabase
@@ -124,11 +149,13 @@ export async function PUT(request: NextRequest) {
       .single();
 
     if (error) {
-      return NextResponse.json({ success: false, error: 'Failed to update document' }, { status: 500 });
+      console.error('Document update error:', error);
+      return NextResponse.json({ success: false, error: error.message }, { status: 500 });
     }
 
     return NextResponse.json({ success: true, data });
-  } catch {
+  } catch (err) {
+    console.error('Document PUT error:', err);
     return NextResponse.json({ success: false, error: 'Invalid request body' }, { status: 400 });
   }
 }
