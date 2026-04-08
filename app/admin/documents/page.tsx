@@ -225,19 +225,27 @@ export default function DocumentsPage() {
                   const st = DOCUMENT_STATUS_LABELS[doc.saikiweb_status] || DOCUMENT_STATUS_LABELS.active;
                   const brand = SERVICE_BRANDS[doc.saikiweb_service_brand];
                   return (
-                    <button key={doc.saikiweb_document_id} onClick={() => setModal({ type: 'detail', document: doc })} className="w-full text-left px-4 py-4 hover:bg-gray-50/50 transition">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${st.bg} ${st.color}`}>{st.label}</span>
-                        <span className="text-xs text-gray-400">{formatDate(doc.saikiweb_document_date)}</span>
-                      </div>
-                      <div className="text-sm font-semibold text-gray-900">{doc.saikiweb_document_name}</div>
-                      <div className="text-xs text-gray-500 font-mono">{doc.saikiweb_document_number}</div>
-                      <div className="flex items-center gap-2 mt-1">
-                        <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: brand.bgColor, color: brand.color }}>{brand.label}</span>
-                        <span className="text-xs text-gray-400">{DOCUMENT_TYPE_LABELS[doc.saikiweb_document_type]}</span>
-                      </div>
-                      <div className="text-xs text-gray-500 mt-1">To: {doc.saikiweb_issued_to}</div>
-                    </button>
+                    <div key={doc.saikiweb_document_id} className="px-4 py-4 hover:bg-gray-50/50 transition">
+                      <button onClick={() => setModal({ type: 'detail', document: doc })} className="w-full text-left">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${st.bg} ${st.color}`}>{st.label}</span>
+                          <span className="text-xs text-gray-400">{formatDate(doc.saikiweb_document_date)}</span>
+                        </div>
+                        <div className="text-sm font-semibold text-gray-900">{doc.saikiweb_document_name}</div>
+                        <div className="text-xs text-gray-500 font-mono">{doc.saikiweb_document_number}</div>
+                        <div className="flex items-center gap-2 mt-1">
+                          <span className="text-xs px-2 py-0.5 rounded-full" style={{ backgroundColor: brand.bgColor, color: brand.color }}>{brand.label}</span>
+                          <span className="text-xs text-gray-400">{DOCUMENT_TYPE_LABELS[doc.saikiweb_document_type]}</span>
+                        </div>
+                        <div className="text-xs text-gray-500 mt-1">To: {doc.saikiweb_issued_to}</div>
+                      </button>
+                      {doc.saikiweb_original_file_url && !doc.saikiweb_stamped_file_url && (
+                        <button onClick={() => setModal({ type: 'stamp', document: doc })} className="mt-2 inline-flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-3 py-1.5 rounded-full font-medium">
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                          Stamp QR
+                        </button>
+                      )}
+                    </div>
                   );
                 })}
               </div>
@@ -277,12 +285,15 @@ export default function DocumentsPage() {
                           </td>
                           <td className="px-6 py-4">
                             {doc.saikiweb_stamped_file_url ? (
-                              <span className="inline-flex items-center gap-1 text-xs text-green-600">
+                              <a href={doc.saikiweb_stamped_file_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-green-600 hover:text-green-800 font-medium">
                                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                                 Stamped
-                              </span>
+                              </a>
                             ) : doc.saikiweb_original_file_url ? (
-                              <span className="text-xs text-amber-600">Pending</span>
+                              <button onClick={() => setModal({ type: 'stamp', document: doc })} className="inline-flex items-center gap-1 text-xs text-amber-600 hover:text-amber-800 font-medium bg-amber-50 px-2.5 py-1 rounded-full">
+                                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
+                                Stamp QR
+                              </button>
                             ) : (
                               <span className="text-xs text-gray-400">No file</span>
                             )}
